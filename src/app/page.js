@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div className="">Hi I am Nazrul Islam. What are you doing now?</div>;
+  return <div className="">Hi I am Nazrul Islam and masud. What are you doing now?</div>;
 }
