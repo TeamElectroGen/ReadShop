@@ -1,9 +1,22 @@
+import Navbar from "@/components/Navbar";
 import React from "react";
 
 const HomePage = () => {
   return (
     <div>
-      <h1>Home</h1>
+       {/*Banner*/}
+      <section>
+        <div>
+          <Navbar></Navbar>
+        </div>
+      </section>
+
+      {/*All books card*/}
+      <section>
+        <div>
+
+        </div>
+      </section>
     </div>
   );
 };
