@@ -1,3 +1,9 @@
+import HomePage from "@/pages/HomePage";
+
 export default function Home() {
-  return <div className="">Hi I am Nazrul Islam. What are you doing now?</div>;
+  return (
+    <>
+      <HomePage />
+    </>
+  );
 }
