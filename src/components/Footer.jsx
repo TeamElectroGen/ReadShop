@@ -1,28 +1,28 @@
 import React from "react";
 
 const Footer = () => {
-    return (
-        <footer className="bg-mediumGray-500/50 mt-10 pt-3 w-full text-xs">
-            <div className="w-11/12 mx-auto">
-                <div className="flex justify-between gap-3 flex-col md:flex-row">
-                    <div className="w-full bg-lightGray-200 min-h-32 px-2 py-2 text-center flex items-center justify-center">
-                        Logo & Address
-                    </div>
-                    <div className="w-full text-center flex flex-col gap-3">
-                        <div className="bg-lightGray-200 min-h-16 md:min-h-20 py-2 w-full">
-                            Newsletter
-                        </div>
-                        <div className="bg-lightGray-200 min-h-10 py-2 w-full">
-                            Social Links
-                        </div>
-                    </div>
-                </div>
+  return (
+    <footer className="mt-10 w-full bg-mediumGray-500/50 pt-3 text-xs">
+      <div className="mx-auto w-11/12">
+        <div className="flex flex-col justify-between gap-3 md:flex-row">
+          <div className="flex min-h-32 w-full items-center justify-center bg-lightGray-200 px-2 py-2 text-center">
+            Logo & Address
+          </div>
+          <div className="flex w-full flex-col gap-3 text-center">
+            <div className="min-h-16 w-full bg-lightGray-200 py-2 md:min-h-20">
+              Newsletter
             </div>
-            <div className="flex bg-mediumGray-500 items-center justify-center py-2 mt-3 text-xs text-white">
-                <p>Copyright</p>
+            <div className="min-h-10 w-full bg-lightGray-200 py-2">
+              Social Links
             </div>
-        </footer>
-    );
+          </div>
+        </div>
+      </div>
+      <div className="mt-3 flex items-center justify-center bg-mediumGray-500 py-2 text-xs text-white">
+        <p>Copyright</p>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;
