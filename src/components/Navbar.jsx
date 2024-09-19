@@ -1,5 +1,7 @@
 import Link from "next/link";
 import React from "react";
+import { FaBurger, FaCartShopping, FaCircleUser } from "react-icons/fa6";
+import { IoMdMenu } from "react-icons/io";
 
 const Navbar = () => {
   return (
@@ -7,7 +9,7 @@ const Navbar = () => {
       <nav className="w-full h-16 bg-background">
         <div className="flex items-center h-full w-11/12 justify-between mx-auto">
           <div>
-            <button className="font-sans font-bold text-2xl">ReadShop</button>
+            <Link href={'/'} className="font-sans font-bold text-2xl">ReadShop</Link>
           </div>
 
           <div>
@@ -18,50 +20,20 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="hidden md:flex gap-2">
-            <button className="bg-primary/30 text-xs border w-10 h-10 rounded-md">Cart</button>
-            <button className="text-lightGray-100 px-4 py-1 rounded-md bg-primary">Login</button>
+            <button className="text-2xl w-10 h-10 flex items-center justify-center rounded-md"><FaCartShopping /></button>
+            <button className="text-lightGray-100 px-4 py-1 rounded-md bg-mediumGray-500">Login</button>
           </div>
+
+          {/* for mobile devices */}
           <div className="md:hidden flex gap-3 text-[.1rem]">
-            <button className="bg-primary/30 text-xs border w-10 h-10 rounded-md">Cart</button>
-            <button className="bg-primary/30 text-xs border w-10 h-10 rounded-md">Profile</button>
-            <button className="bg-primary/30 text-xs border w-10 h-10 rounded-md">Menu</button>
+            <button className="text-2xl flex justify-center items-center w-10 h-10 rounded-md"><FaCartShopping /></button>
+            <button className="text-2xl flex justify-center items-center w-10 h-10 rounded-md"><FaCircleUser /></button>
+            <button className="text-2xl flex justify-center items-center w-10 h-10 rounded-md"><IoMdMenu /></button>
 
           </div>
         </div>
 
       </nav>
-      <div className="hidden">
-        <div className="bg-gray-200">
-          {/* Navbar */}
-          <nav className="flex items-center justify-between bg-gray-800 px-6">
-            <div className="text-xl text-white">Logo</div>
-            <div className="flex items-center">
-              <div className="ml-4 h-8 w-8 bg-purple-400"></div>
-              <div className="ml-4 h-8 w-8 rounded-full bg-orange-400"></div>
-            </div>
-          </nav>
-
-          {/* Search Bar */}
-          <div className="bg-gray-500 py-4">
-            <div className="flex justify-center gap-2">
-              <div>
-                <input
-                  className="rounded-sm p-1"
-                  type="text"
-                  placeholder="Search book"
-                />
-              </div>
-              <button className="rounded-sm bg-orange-400 p-1 font-bold">
-                Search
-              </button>
-            </div>
-          </div>
-          {/*Section*/}
-          <section>
-            <h1 className="text-center font-bold">All Books</h1>
-          </section>
-        </div>
-      </div>
     </>
   );
 };
