@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'custom-gray': 'rgba(43, 43, 43, 0.7)',
       },
     },
   },
