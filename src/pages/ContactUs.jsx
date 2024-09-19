@@ -1,16 +1,18 @@
+import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import React from "react";
 
 const ContactUs = () => {
   return (
-    <div className="mb-5">
-      {/* there will be a backgorund image next ..youhave to add a bg image down */}
-      <div className="bg-custom-gray h-[20vh]">
-        <Image src="" alt="" height={300} width={600} />
-      </div>
+    <div className="max-w-6xl mx-auto">
+     <Navbar/>
 
       {/*  */}
-      <div className="mt-4 h-full max-w-7xl gap-4 md:flex lg:flex">
+      <div className="bg-lightGray-400 p-4">
+        <div className="bg-lightGray-500 text-center w-1/4 mx-auto ">
+             write something
+        </div>
+      <div className="mt-4 h-full flex-row-reverse max-w-7xl gap-4 md:flex lg:flex">
         <div className="ml-6 w-1/2">
           <form className="flex flex-col gap-4">
             <input
@@ -74,10 +76,40 @@ const ContactUs = () => {
           </form>
         </div>
         <div className="w-1/2">
-          {/* map will be add here */}
-          map will be add here
+         {/* image will be added here */}
+         <div class="relative w-24 h-24">
+  
+</div>
         </div>
       </div>
+      </div>
+
+
+{/* map section */}
+
+ 
+<section>
+  <div className="bg-lightGray-400 mt-5 h-[70vh] border">
+
+    <div className="bg-lightGray-500 text-center w-1/4 mx-auto mt-4 p-3">
+      <h1>Text will appear</h1>
+    </div>
+
+    <div className="flex gap-4 items-center mx-auto w-full p-2 mt-4">
+      <div className="bg-lightGray-500 w-1/2 h-72">
+        {/* Content for this div */}
+      </div>
+      <div className="bg-lightGray-100 w-1/2 h-72 flex items-center justify-center">
+        <h1>Map</h1>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+      
     </div>
   );
 };
