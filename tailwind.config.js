@@ -8,11 +8,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-<<<<<<< HEAD
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        'custom-gray': 'rgba(43, 43, 43, 0.7)',
-=======
         // background: "var(--background)", // Default Background
         background: "#f9fafb", // Light Background Color
         foreground: "var(--foreground)", //Default Foreground Color
@@ -36,7 +31,6 @@ module.exports = {
         sans: ["Montserrat", "sans-serif"],
         display: ["Shadows Into Light", "cursive"],
         mono: ["Roboto Mono", "monospace"],
->>>>>>> f6c855c3d77af0a9ff29ad92e63d271f234ea3d4
       },
     },
   },
