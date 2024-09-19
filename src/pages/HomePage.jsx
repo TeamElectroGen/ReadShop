@@ -4,7 +4,7 @@ import React from "react";
 const HomePage = () => {
   return (
     <div>
-       {/*Banner*/}
+      {/*Banner*/}
       <section>
         <div>
           <Navbar></Navbar>
@@ -13,9 +13,7 @@ const HomePage = () => {
 
       {/*All books card*/}
       <section>
-        <div>
-
-        </div>
+        <div></div>
       </section>
     </div>
   );
