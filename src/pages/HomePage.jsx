@@ -7,12 +7,6 @@ import Card from "@/components/Card";
 const HomePage = () => {
   const a = [...Array(2).keys()];
   return (
-<<<<<<< HEAD
-    <div>
-      {/*Banner*/}
-      <section>
-        <div></div>
-=======
     <div className="space-y-4">
       {/*Search & Filter Banner*/}
       <section className="flex h-[233px] items-center justify-center bg-[#d9d9d9] px-5 lg:mx-0 lg:h-[325px] lg:bg-[#8b8585]">
@@ -26,7 +20,6 @@ const HomePage = () => {
           {/* filter button */}
           <button className="w-[177px] bg-white p-5">Filter</button>
         </div>
->>>>>>> b53e0add1f1412b7cc98eeff009ef666daf28b43
       </section>
 
       {/*Popular books cards*/}
