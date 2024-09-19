@@ -6,9 +6,7 @@ const HomePage = () => {
     <div>
       {/*Banner*/}
       <section>
-        <div>
-          <Navbar></Navbar>
-        </div>
+        <div></div>
       </section>
 
       {/*All books card*/}

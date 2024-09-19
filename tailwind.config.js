@@ -25,7 +25,7 @@ module.exports = {
           800: "#1f2937", // Dark Gray
         },
       },
-      
+
       fontFamily: {
         serif: ["Merriweather", "serif"],
         sans: ["Montserrat", "sans-serif"],
