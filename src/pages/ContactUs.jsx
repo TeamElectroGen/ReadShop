@@ -33,30 +33,24 @@ const ContactUs = () => {
                 className="border border-gray-300 p-2"
                 name="issues"
                 id=""
+                defaultValue={"Select Subject"}
                 required
               >
-                <option disabled selected>
-                  Select Subject
-                </option>
+                <option value="Select Subject">Select Subject</option>
                 <option value=" Order Related Issue ">
-                  {" "}
-                  Order Related Issue{" "}
+                  Order Related Issue
                 </option>
                 <option value=" Payment/Balance/Wallet/Refund ">
-                  {" "}
-                  Payment/Balance/Wallet/Refund{" "}
+                  Payment/Balance/Wallet/Refund
                 </option>
                 <option value=" Delivery Related Issue ">
-                  {" "}
-                  Delivery Related Issue{" "}
+                  Delivery Related Issue
                 </option>
                 <option value=" Product-Related info ">
-                  {" "}
-                  Product-Related info{" "}
+                  Product-Related info
                 </option>
                 <option value=" Product Info Missing/Mistake ">
-                  {" "}
-                  Product Info Missing/Mistake{" "}
+                  Product Info Missing/Mistake
                 </option>
               </select>
               <textarea
@@ -73,7 +67,7 @@ const ContactUs = () => {
           </div>
           <div className="w-1/2">
             {/* image will be added here */}
-            <div class="relative h-24 w-24"></div>
+            <div className="relative h-24 w-24"></div>
           </div>
         </div>
       </div>
