@@ -17,12 +17,12 @@ module.exports = {
         lightGray: {
           100: "#f9fafb", // Very Light Gray
           200: "#f3f4f6", // Light Gray
-          400: "#d1d5db",    // Medium Light Gray
-  500: "#9ca3af",    // Medium Gray
-  600: "#6b7280",    // Darker Gray
-  700: "#4b5563",    // Even Darker Gray
-  800: "#374151",    // Very Dark Gray
-  900: "#1f2937",
+          400: "#d1d5db", // Medium Light Gray
+          500: "#9ca3af", // Medium Gray
+          600: "#6b7280", // Darker Gray
+          700: "#4b5563", // Even Darker Gray
+          800: "#374151", // Very Dark Gray
+          900: "#1f2937",
         },
         mediumGray: {
           500: "#6b7280", // Medium Gray
