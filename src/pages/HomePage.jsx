@@ -14,6 +14,7 @@ const HomePage = () => {
   const a = [...Array(2).keys()];
   const b = [...Array(4).keys()];
   const c = [...Array(7).keys()];
+  
   return (
     <div className="space-y-5">
       {/*Search & Filter Banner*/}
