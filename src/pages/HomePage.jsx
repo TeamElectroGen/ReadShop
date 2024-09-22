@@ -12,6 +12,8 @@ import WideCard from "@/components/WideCard";
 
 const HomePage = () => {
   const a = [...Array(2).keys()];
+  const b = [...Array(4).keys()];
+  const c = [...Array(7).keys()];
   return (
     <div className="space-y-5">
       {/*Search & Filter Banner*/}
@@ -44,8 +46,20 @@ const HomePage = () => {
           </div>
         </div>
         {/* cards */}
-        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {a.map((data, idx) => (
+            <Card data={data} key={idx} />
+          ))}
+        </div>
+        {/* cards for mobile */}
+        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+          {b.map((data, idx) => (
+            <Card data={data} key={idx} />
+          ))}
+        </div>
+        {/* cards for desktop */}
+        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+          {c.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
@@ -66,9 +80,21 @@ const HomePage = () => {
             </button>
           </div>
         </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        {/* cards for mobile */}
+        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {a.map((data, idx) => (
+            <Card data={data} key={idx} />
+          ))}
+        </div>
+        {/* cards for tablet */}
+        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+          {b.map((data, idx) => (
+            <Card data={data} key={idx} />
+          ))}
+        </div>
+        {/* cards for lg */}
+        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+          {c.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
@@ -126,9 +152,21 @@ const HomePage = () => {
             </button>
           </div>
         </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        {/* cards for mobile */}
+        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {a.map((data, idx) => (
+            <Card data={data} key={idx} />
+          ))}
+        </div>
+        {/* cards for tablet */}
+        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+          {b.map((data, idx) => (
+            <Card data={data} key={idx} />
+          ))}
+        </div>
+        {/* cards for lg */}
+        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+          {c.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
