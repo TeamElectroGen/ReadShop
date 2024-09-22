@@ -9,8 +9,9 @@ const About = () => {
           <div>
             <h1 className="text-3xl font-bold text-darkGray-800">About Us</h1>
             <p className="py-3 text-center text-sm font-medium text-mediumGray-500">
-              Home / About us
+              Home / About us/
             </p>
+            
           </div>
         </header>
 
