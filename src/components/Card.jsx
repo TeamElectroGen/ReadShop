@@ -2,7 +2,7 @@ import React from "react";
 
 const Card = () => {
   return (
-    <div className="w-[164px] mx-auto">
+    <div className="mx-auto w-[164px]">
       {/* TODO: div => image */}
       <div className="h-[229px] bg-[#f3f2f2]"></div>
       {/* description */}

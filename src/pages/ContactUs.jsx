@@ -1,15 +1,14 @@
-import Image from "next/image";
 import React from "react";
 
 const ContactUs = () => {
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="mx-auto max-w-6xl">
       {/*  */}
       <div className="bg-lightGray-400 p-4">
-        <div className="bg-lightGray-500 text-center w-1/4 mx-auto ">
+        <div className="mx-auto w-1/4 bg-lightGray-500 text-center">
           write something
         </div>
-        <div className="mt-4 h-full flex-row-reverse max-w-7xl gap-4 md:flex lg:flex">
+        <div className="mt-4 h-full max-w-7xl flex-row-reverse gap-4 md:flex lg:flex">
           <div className="ml-6 w-1/2">
             <form className="flex flex-col gap-4">
               <input
@@ -34,30 +33,24 @@ const ContactUs = () => {
                 className="border border-gray-300 p-2"
                 name="issues"
                 id=""
+                defaultValue={"Select Subject"}
                 required
               >
-                <option disabled selected>
-                  Select Subject
-                </option>
+                <option value="Select Subject">Select Subject</option>
                 <option value=" Order Related Issue ">
-                  {" "}
-                  Order Related Issue{" "}
+                  Order Related Issue
                 </option>
                 <option value=" Payment/Balance/Wallet/Refund ">
-                  {" "}
-                  Payment/Balance/Wallet/Refund{" "}
+                  Payment/Balance/Wallet/Refund
                 </option>
                 <option value=" Delivery Related Issue ">
-                  {" "}
-                  Delivery Related Issue{" "}
+                  Delivery Related Issue
                 </option>
                 <option value=" Product-Related info ">
-                  {" "}
-                  Product-Related info{" "}
+                  Product-Related info
                 </option>
                 <option value=" Product Info Missing/Mistake ">
-                  {" "}
-                  Product Info Missing/Mistake{" "}
+                  Product Info Missing/Mistake
                 </option>
               </select>
               <textarea
@@ -74,39 +67,29 @@ const ContactUs = () => {
           </div>
           <div className="w-1/2">
             {/* image will be added here */}
-            <div class="relative w-24 h-24">
-
-            </div>
+            <div className="relative h-24 w-24"></div>
           </div>
         </div>
       </div>
 
-
       {/* map section */}
 
-
       <section>
-        <div className="bg-lightGray-400 mt-5 h-[70vh] border">
-
-          <div className="bg-lightGray-500 text-center w-1/4 mx-auto mt-4 p-3">
+        <div className="mt-5 h-[70vh] border bg-lightGray-400">
+          <div className="mx-auto mt-4 w-1/4 bg-lightGray-500 p-3 text-center">
             <h1>Text will appear</h1>
           </div>
 
-          <div className="flex gap-4 items-center mx-auto w-full p-2 mt-4">
-            <div className="bg-lightGray-500 w-1/2 h-72">
+          <div className="mx-auto mt-4 flex w-full items-center gap-4 p-2">
+            <div className="h-72 w-1/2 bg-lightGray-500">
               {/* Content for this div */}
             </div>
-            <div className="bg-lightGray-100 w-1/2 h-72 flex items-center justify-center">
+            <div className="flex h-72 w-1/2 items-center justify-center bg-lightGray-100">
               <h1>Map</h1>
             </div>
           </div>
-
         </div>
       </section>
-
-
-
-
     </div>
   );
 };

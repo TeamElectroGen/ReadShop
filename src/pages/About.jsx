@@ -95,14 +95,6 @@ const About = () => {
             </div>
           </div>
         </div>
-
-        {/* last section */}
-        <div className="mt-12 flex justify-between gap-4">
-          <div className="w-3/5 bg-lightGray-400 p-6">
-            <div className="h-16 bg-lightGray-500"></div>
-          </div>
-          <div className="w-2/5 bg-lightGray-400 p-6">{/*  */}</div>
-        </div>
       </div>
     </section>
   );
