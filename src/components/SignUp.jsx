@@ -1,5 +1,5 @@
 import React from "react";
-import Link from 'next/link';
+import Link from "next/link";
 
 const SignUp = () => {
   return (
@@ -11,7 +11,11 @@ const SignUp = () => {
             Sign up to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Already have an account? <Link href='/login' className="font-bold text-sky-400">Sign in</Link></p>
+            Already have an account?{" "}
+            <Link href="/login" className="font-bold text-sky-400">
+              Sign in
+            </Link>
+          </p>
           <form className="mt-8" method="POST" action="#">
             <div className="space-y-5">
               {/*Username*/}
@@ -61,13 +65,6 @@ const SignUp = () => {
                   <label className="text-base font-medium text-gray-900">
                     Password
                   </label>
-                  <a
-                    className="text-sm font-semibold text-black hover:underline"
-                    title=""
-                    href="#"
-                  >
-                    Forgot password?
-                  </a>
                 </div>
                 <div className="mt-2">
                   <input
