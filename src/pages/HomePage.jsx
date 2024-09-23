@@ -119,6 +119,29 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+
+      {/*New published books Section*/}
+      <section className="relative container mx-auto  bg-[#d9d9d9] p-5">
+        <div className="flex items-center justify-center">
+          {/* label */}
+          <Label name="New published books" />
+          {/* pagination / carousel */}
+          
+            <button onClick={handlePrev} disabled={currentIndex === 0} className="absolute left-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {currentIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
+            </button>
+            <button onClick={handleNext} disabled={currentIndex >= books.length - 6} className="absolute right-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {currentIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
+            </button>
+          
+        </div>
+        {/* cards */}
+        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        {books.slice(currentIndex,currentIndex+7).map((book, idx) => (
+            <Card key={idx} book={book} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 };
