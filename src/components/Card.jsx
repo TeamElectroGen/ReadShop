@@ -11,13 +11,12 @@ const Card = ({ book }) => {
       {/* Book Info */}
       <div className="mt-5 space-y-1">
         <p className="text-sm font-bold">{book.BookName}</p>
-        <p className="text-sm">AuthorName: {book.AuthorName}</p>
-        <p className="text-sm ">PublicationName: {book.PublicationName}</p>
-        <p className="text-sm ">Description: {book.Description}</p>
-        <p className="text-sm ">PublicationName: {book.PublicationName}</p>
-        <p className="text-sm ">PublishDate: {book.PublishDate}</p>
-        <p className="text-sm ">Price: {book.Price}</p>
-        <p className="text-sm ">Rating: {book.Rating}</p>
+        <p className="text-sm"><span className="font-medium">AuthorName:</span> {book.AuthorName}</p>
+        <p className="text-sm "><span className="font-medium">PublicationName:</span> {book.PublicationName}</p>
+        <p className="text-sm "><span className="font-medium">Description:</span> {book.Description}</p>
+        <p className="text-sm "><span className="font-medium">PublishDate:</span> {book.PublishDate}</p>
+        <p className="text-sm "><span className="font-medium">Price:</span> {book.Price}</p>
+        <p className="text-sm "><span className="font-medium">Rating:</span> {book.Rating}</p>
       </div>
     </div>
   );
