@@ -48,7 +48,7 @@ const Navbar = () => {
           <div>
             <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon">
               <FaCartShopping className="size-5" />
             </Button>
@@ -85,7 +85,7 @@ const Navbar = () => {
                 </DropdownMenu>
               </>
             ) : (
-              <Button>Get Started</Button>
+              <Button size="sm">Get Started</Button>
             )}
             <HamburgerMenu navLinks={navLinks} />
           </div>
