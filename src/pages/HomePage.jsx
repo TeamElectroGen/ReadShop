@@ -14,21 +14,18 @@ const HomePage = () => {
   const a = [...Array(2).keys()];
   const b = [...Array(4).keys()];
   const c = [...Array(7).keys()];
-  
+
   return (
     <div className="space-y-5">
       {/*Search & Filter Banner*/}
-      <section className="flex h-[233px] items-center justify-center bg-[#d9d9d9] px-5 lg:mx-0 lg:h-[325px] lg:bg-[#8b8585]">
-        <div className="flex items-center justify-center gap-5 bg-[#d9d9d9] lg:h-[110px] lg:w-[942px]">
-          <div className="relative bg-white lg:w-[708px]">
-            {/* search input */}
-            <input type="text" className="w-full p-5" placeholder="Search" />
-            {/* search icon */}
-            <IoIosSearch className="absolute right-5 top-[30%] text-3xl" />
-          </div>
-          {/* filter button */}
-          <button className="w-[177px] bg-white p-5">Filter</button>
-        </div>
+      <section className="container border mt-16 text-center flex flex-col items-center justify-center">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight sm:text-6xl">
+          Discover & Explore <br /> <span className="yellow_gradient">A world of books</span>
+        </h1>
+        <p className="mt-5 text-lg sm:text-xl max-w-2xl text-muted-foreground">
+          Discover a diverse collection of books to suit every reader. Explore,
+          shop, and enjoy stories that inspire and entertain.
+        </p>
       </section>
 
       {/*Popular books cards*/}
@@ -47,19 +44,19 @@ const HomePage = () => {
           </div>
         </div>
         {/* cards */}
-        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 grid grid-cols-2 gap-5 md:hidden md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {a.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
         {/* cards for mobile */}
-        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 hidden grid-cols-2 gap-5 md:grid md:grid-cols-4 lg:hidden lg:grid-cols-5 xl:grid-cols-7">
           {b.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
         {/* cards for desktop */}
-        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 hidden grid-cols-2 gap-5 md:grid-cols-4 lg:grid lg:grid-cols-5 xl:grid-cols-7">
           {c.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
@@ -82,19 +79,19 @@ const HomePage = () => {
           </div>
         </div>
         {/* cards for mobile */}
-        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 grid grid-cols-2 gap-5 md:hidden md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {a.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
         {/* cards for tablet */}
-        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 hidden grid-cols-2 gap-5 md:grid md:grid-cols-4 lg:hidden lg:grid-cols-5 xl:grid-cols-7">
           {b.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
         {/* cards for lg */}
-        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 hidden grid-cols-2 gap-5 md:grid-cols-4 lg:grid lg:grid-cols-5 xl:grid-cols-7">
           {c.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
@@ -154,19 +151,19 @@ const HomePage = () => {
           </div>
         </div>
         {/* cards for mobile */}
-        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 grid grid-cols-2 gap-5 md:hidden md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {a.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
         {/* cards for tablet */}
-        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 hidden grid-cols-2 gap-5 md:grid md:grid-cols-4 lg:hidden lg:grid-cols-5 xl:grid-cols-7">
           {b.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
         </div>
         {/* cards for lg */}
-        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="mt-5 hidden grid-cols-2 gap-5 md:grid-cols-4 lg:grid lg:grid-cols-5 xl:grid-cols-7">
           {c.map((data, idx) => (
             <Card data={data} key={idx} />
           ))}
