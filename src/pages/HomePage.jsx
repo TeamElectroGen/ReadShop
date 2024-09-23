@@ -78,17 +78,17 @@ const HomePage = () => {
           <Label name="Books" />
           {/* pagination / carousel */}
           
-            <button className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
-              <FaAngleLeft />
+            <button onClick={handlePrev} disabled={currentIndex === 0} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
+            {currentIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
             </button>
-            <button className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
-              <FaAngleRight />
+            <button onClick={handleNext} disabled={currentIndex >= books.length - 6} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
+            {currentIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
             </button>
           
         </div>
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-        {books.map((book, idx) => (
+        {books.slice(currentIndex,currentIndex+7).map((book, idx) => (
             <Card key={idx} book={book} />
           ))}
         </div>
@@ -104,17 +104,17 @@ const HomePage = () => {
           <Label name="Books" />
           {/* pagination / carousel */}
           
-            <button className="absolute left-0 top-1/2 h-24 text-3xl bg-white p-2">
-              <FaAngleLeft />
+            <button onClick={handlePrev} disabled={currentIndex === 0} className="absolute left-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {currentIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
             </button>
-            <button className="absolute right-0 top-1/2 h-24 text-3xl bg-white p-2">
-              <FaAngleRight />
+            <button onClick={handleNext} disabled={currentIndex >= books.length - 6} className="absolute right-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {currentIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
             </button>
           
         </div>
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-        {books.map((book, idx) => (
+        {books.slice(currentIndex,currentIndex+7).map((book, idx) => (
             <Card key={idx} book={book} />
           ))}
         </div>
