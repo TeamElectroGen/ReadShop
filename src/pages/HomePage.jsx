@@ -97,11 +97,11 @@ const HomePage = () => {
       {/* TODO: a Hero Type Section */}
       <section></section>
 
-      {/*Another Section cards*/}
+      {/*Best sellers Books Section cards*/}
       <section className="relative container mx-auto  bg-[#d9d9d9] p-5">
         <div className="flex items-center justify-center">
           {/* label */}
-          <Label name="Books" />
+          <Label name="Best sellers Books" />
           {/* pagination / carousel */}
           
             <button onClick={handlePrev} disabled={currentIndex === 0} className="absolute left-0 top-1/2 h-24 text-3xl bg-white p-2">
