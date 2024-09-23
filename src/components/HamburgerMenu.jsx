@@ -1,21 +1,15 @@
-"use client"
+"use client";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "./ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+// import { Button } from "./ui/button";
 import { IoMdMenu } from "react-icons/io";
 
-const HamburgerMenu = ({navLinks}) => {
+const HamburgerMenu = ({ navLinks }) => {
   return (
     <div>
       <Sheet>
-        <SheetTrigger>
-          <Button className="md:hidden" variant="outline" size="icon">
-            <IoMdMenu className="size-6" />
-          </Button>
+        <SheetTrigger className="md:hidden border mt-1.5 rounded-sm border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground" size="icon">
+          <IoMdMenu className="size-7" />
         </SheetTrigger>
         <SheetContent className="w-[300px]">
           {/* <SheetHeader>
