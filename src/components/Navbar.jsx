@@ -33,7 +33,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="h-16 w-full bg-background">
+      <nav className="h-16 w-full">
         <div className="container flex h-full items-center justify-between">
           <Link
             href={"/"}
