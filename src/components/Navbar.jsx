@@ -15,7 +15,7 @@ import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
 
 const Navbar = () => {
-  const user = false;
+  const user = true;
 
   const navLinks = (
     <>
@@ -39,9 +39,9 @@ const Navbar = () => {
             href={"/"}
             className="flex items-center gap-2 font-sans text-2xl font-bold"
           >
-            <FaBookOpenReader className="text-primary" />
+          <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
             <span className="text-xl font-serif font-semibold tracking-wide">
-              READShop
+              Read Shop
             </span>
           </Link>
 

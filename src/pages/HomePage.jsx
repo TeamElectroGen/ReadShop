@@ -33,7 +33,7 @@ const HomePage = () => {
             Explore, shop, and enjoy stories that inspire and entertain.
           </p>
           {/* Search and filter */}
-          <div className="mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl bg-background/50 px-5 py-4 backdrop-blur-md">
+          <div className="mt-8 flex border-2 border-white/50 w-full max-w-lg items-center justify-center gap-2 rounded-xl bg-background/50 px-5 py-4 backdrop-blur-md">
             <div className="relative ml-auto flex-1 md:grow-0">
               <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
               <Input
