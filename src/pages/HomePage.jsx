@@ -24,7 +24,7 @@ const HomePage = () => {
       <div className="space-y-5">
         {/*Search & Filter Banner*/}
         <section className="container mt-16 flex flex-col items-center justify-center text-center">
-          <h1 className="font-sans scroll-m-20 text-4xl font-extrabold tracking-tight sm:text-6xl">
+          <h1 className="scroll-m-20 font-sans text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
             Discover & Explore <br />{" "}
             <span className="yellow_gradient">A world of books</span>
           </h1>
@@ -33,7 +33,7 @@ const HomePage = () => {
             Explore, shop, and enjoy stories that inspire and entertain.
           </p>
           {/* Search and filter */}
-          <div className="mt-8 flex w-full max-w-lg items-center justify-center gap-2 bg-background/50 backdrop-blur-md py-4 px-5 rounded-xl">
+          <div className="mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl bg-background/50 px-5 py-4 backdrop-blur-md">
             <div className="relative ml-auto flex-1 md:grow-0">
               <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
               <Input
