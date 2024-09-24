@@ -85,23 +85,10 @@ const Navbar = () => {
                 </DropdownMenu>
               </>
             ) : (
-              <Button size="sm">Get Started</Button>
+              <Button size="sm" className="font-semibold">Get Started</Button>
             )}
             <HamburgerMenu navLinks={navLinks} />
           </div>
-
-          {/* for mobile devices */}
-          {/* <div className="flex gap-3 text-[.1rem] md:hidden">
-            <button className="flex h-10 w-10 items-center justify-center rounded-md text-2xl">
-              <FaCartShopping />
-            </button>
-            <button className="flex h-10 w-10 items-center justify-center rounded-md text-2xl">
-              <FaCircleUser />
-            </button>
-            <button className="flex h-10 w-10 items-center justify-center rounded-md text-2xl">
-              <IoMdMenu />
-            </button>
-          </div> */}
         </div>
       </nav>
     </>
