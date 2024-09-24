@@ -1,12 +1,13 @@
 "use client";
 import Label from "@/components/Label";
 import React, { useEffect, useState } from "react";
-import { IoIosSearch } from "react-icons/io";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { FaTimes } from "react-icons/fa";
 import Card from "@/components/Card";
-// import books from "@/data/books.json";
-
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { IoMdSearch } from "react-icons/io";
+import { IoFilter } from "react-icons/io5";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
@@ -61,22 +62,33 @@ const HomePage = () => {
     }
   }
   return (
-    <div className="space-y-4">
-      {/*Search & Filter Banner*/}
-      <section className="flex h-[233px] items-center justify-center bg-[#d9d9d9] px-5 lg:mx-0 lg:h-[325px] lg:bg-[#8b8585]">
-        <div className="flex items-center justify-center gap-5 bg-[#d9d9d9] lg:h-[110px] lg:w-[942px]">
-          <div className="relative bg-white lg:w-[708px]">
-            {/* search input */}
-            <input type="text" className="w-full p-5" placeholder="Search" />
-            {/* search icon */}
-            <IoIosSearch className="absolute right-5 top-[30%] text-3xl" />
+      <div className="space-y-5">
+        {/*Search & Filter Banner*/}
+        <section className="container mt-16 flex flex-col items-center justify-center text-center">
+          <h1 className="scroll-m-20 font-sans text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
+            Discover & Explore <br />{" "}
+            <span className="yellow_gradient">A world of books</span>
+          </h1>
+          <p className="text-md mt-5 max-w-2xl text-muted-foreground sm:text-xl">
+            Discover a diverse collection of books to suit every reader.
+            Explore, shop, and enjoy stories that inspire and entertain.
+          </p>
+          {/* Search and filter */}
+          <div className="mt-8 flex border-2 border-white/50 w-full max-w-lg items-center justify-center gap-2 rounded-xl bg-background/50 px-5 py-4 backdrop-blur-md">
+            <div className="relative ml-auto flex-1 md:grow-0">
+              <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search by name, author.."
+                className="w-full rounded-lg bg-background p-6 pl-9 md:w-[370px] lg:w-[360px]"
+              />
+            </div>
+            <Button variant="secondary" size="lg" className="p-6">
+              <IoFilter className="mr-2 size-4" />
+              Filter
+            </Button>
           </div>
-          {/* filter button */}
-          <button className="w-[177px] bg-white p-5">Filter</button>
-          
-        </div>
-      </section>
-     
+        </section>
 
       {/*Popular books cards*/}
       <section className="relative container mx-auto bg-[#d9d9d9] p-5">
@@ -156,7 +168,7 @@ const HomePage = () => {
       </section>
 
       {/*New published books Section*/}
-      <section className="relative container mx-auto  bg-[#d9d9d9] p-5">
+      <div className="relative container mx-auto  bg-[#d9d9d9] p-5">
         <div className="flex items-center justify-center">
           {/* label */}
           <Label name="New published books" />
@@ -178,7 +190,7 @@ const HomePage = () => {
             <Card key={idx} book={book} />
           ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 };

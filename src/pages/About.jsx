@@ -24,6 +24,7 @@ const About = () => {
           </div>
         </header>
 
+        {/* Welcome section */}
         <div className="mt-12 flex flex-col gap-4 rounded-2xl bg-background p-6 lg:flex-row lg:gap-6">
           <div className="relative flex items-center justify-center border bg-white lg:w-1/2">
             <Image
@@ -59,6 +60,7 @@ const About = () => {
           </div>
         </div>
 
+        {/* Our team section */}
         <div className="mt-12 gap-4 rounded-2xl bg-lightGray-200 p-6 lg:flex-row lg:gap-6">
           <h3 className="text-center text-2xl font-semibold">Our team</h3>
 
