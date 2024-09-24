@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: ["class"],

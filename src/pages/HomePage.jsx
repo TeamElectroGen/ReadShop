@@ -1,21 +1,67 @@
+"use client";
 import Label from "@/components/Label";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
-import {
-  FaAngleDown,
-  FaAngleLeft,
-  FaAngleRight,
-  FaAngleUp,
-} from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { FaTimes } from "react-icons/fa";
 import Card from "@/components/Card";
-import WideCard from "@/components/WideCard";
+// import books from "@/data/books.json";
+
 
 const HomePage = () => {
-  const a = [...Array(2).keys()];
-  const b = [...Array(4).keys()];
-  const c = [...Array(7).keys()];
+  const [books, setBooks] = useState([]);
+  // const [currentIndex,setCurrentIndex]= useState(0)
+  const [popularIndex,setPopularIndex]=useState(0)
+  const [allBooksIndex,setAllBooksIndex]=useState(0)
+  const [bestSellersIndex,setBestSellersIndex]=useState(0)
+  const [newPublishedIndex,setNewPublishedIndex]=useState(0)
+
+  useEffect(() => {
+    // Fetching books.json from the public folder
+    const fetchBooks = async () => {
+      const res = await fetch("/books.json"); // public/books.json path
+      const data = await res.json();
+      setBooks(data);
+    };
+
+    fetchBooks();
+  }, []);
+  // const handlePrev= ()=>{
+  //   setCurrentIndex((prevIndex)=>(prevIndex > 0 ? prevIndex - 1 : 0));
+  // }
+  // const handleNext=()=>{
+  //   setCurrentIndex((prevIndex)=>(prevIndex < books.length - 6 ? prevIndex + 1 : prevIndex));
+  // }
+  const handlePrev=(section)=>{
+    if(section==="popular"){
+      setPopularIndex((prevIndex)=>prevIndex>0?prevIndex-1:0)
+    }else if(section==="allBooks"){
+      setAllBooksIndex((prevIndex)=>prevIndex>0?prevIndex-1:0)
+    }else if(section==="bestSellers"){
+      setBestSellersIndex((prevIndex)=>prevIndex>0?prevIndex-1:0)
+    }else if(section==="newPublished"){
+      setNewPublishedIndex((prevIndex)=>prevIndex>0?prevIndex-1:0)
+    }
+  }
+  const handleNext=(section,length)=>{
+    if(section==="popular"){
+      setPopularIndex((prevIndex)=>prevIndex<length-6?prevIndex+1:prevIndex)
+    }else if(section==="allBooks"){
+      setAllBooksIndex((prevIndex) =>
+        prevIndex < length - 7 ? prevIndex + 1 : prevIndex
+      );
+    }else if (section === "bestSellers") {
+      setBestSellersIndex((prevIndex) =>
+        prevIndex < length - 7 ? prevIndex + 1 : prevIndex
+      );
+    } else if (section === "newPublished") {
+      setNewPublishedIndex((prevIndex) =>
+        prevIndex < length - 7 ? prevIndex + 1 : prevIndex
+      );
+    }
+  }
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       {/*Search & Filter Banner*/}
       <section className="flex h-[233px] items-center justify-center bg-[#d9d9d9] px-5 lg:mx-0 lg:h-[325px] lg:bg-[#8b8585]">
         <div className="flex items-center justify-center gap-5 bg-[#d9d9d9] lg:h-[110px] lg:w-[942px]">
@@ -27,147 +73,109 @@ const HomePage = () => {
           </div>
           {/* filter button */}
           <button className="w-[177px] bg-white p-5">Filter</button>
+          
         </div>
       </section>
+     
 
       {/*Popular books cards*/}
-      <section className="container mx-auto h-[391px] bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-between">
+      <section className="relative container mx-auto bg-[#d9d9d9] p-5">
+        <div className="flex items-center justify-center">
           {/* label */}
           <Label name="Popular Books" />
           {/* pagination / carousel */}
-          <div className="flex items-center gap-2 *:bg-white *:p-2">
-            <button>
-              <FaAngleLeft />
+          
+            <button onClick={()=>handlePrev('popular')} disabled={popularIndex === 0}  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
+            {popularIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
             </button>
-            <button>
-              <FaAngleRight />
+             
+            <button onClick={()=>handleNext("popular",books.length)} disabled={popularIndex >= books.length-6} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
+            {popularIndex >= books.length - 6 ? <FaTimes /> : <FaAngleRight />}
             </button>
-          </div>
+            
+         
         </div>
         {/* cards */}
-        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {a.map((data, idx) => (
-            <Card data={data} key={idx} />
-          ))}
-        </div>
-        {/* cards for mobile */}
-        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {b.map((data, idx) => (
-            <Card data={data} key={idx} />
-          ))}
-        </div>
-        {/* cards for desktop */}
-        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {c.map((data, idx) => (
-            <Card data={data} key={idx} />
+        <div className="mt-5 grid justify-center items-center grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        {books.slice(popularIndex,popularIndex+6).map((book, idx) => (
+            <Card key={idx} book={book} />
           ))}
         </div>
       </section>
 
       {/*All books cards*/}
-      <section className="container mx-auto h-[391px] bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-between">
+      <section className="relative container mx-auto  bg-[#d9d9d9] p-5">
+        <div className="flex items-center justify-center">
           {/* label */}
           <Label name="Books" />
           {/* pagination / carousel */}
-          <div className="flex items-center gap-2 *:bg-white *:p-2">
-            <button>
-              <FaAngleLeft />
+          
+            <button onClick={()=>handlePrev("allBooks")} disabled={allBooksIndex === 0} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
+            {allBooksIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
             </button>
-            <button>
-              <FaAngleRight />
+            <button onClick={() => handleNext("allBooks", books.length)}
+            disabled={allBooksIndex >= books.length - 7} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-24 text-3xl bg-white p-2">
+            {allBooksIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
             </button>
-          </div>
+          
         </div>
-        {/* cards for mobile */}
-        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {a.map((data, idx) => (
-            <Card data={data} key={idx} />
-          ))}
-        </div>
-        {/* cards for tablet */}
-        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {b.map((data, idx) => (
-            <Card data={data} key={idx} />
-          ))}
-        </div>
-        {/* cards for lg */}
-        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {c.map((data, idx) => (
-            <Card data={data} key={idx} />
+        {/* cards */}
+        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        {books.slice(allBooksIndex,allBooksIndex+7).map((book, idx) => (
+            <Card key={idx} book={book} />
           ))}
         </div>
       </section>
 
       {/* TODO: a Hero Type Section */}
-      <section className="container mx-auto flex flex-col items-center justify-between gap-5 lg:flex-row">
-        <div className="relative h-[348px] w-[394px] bg-[#d9d9d9] p-3 lg:h-[911px] lg:w-[582px] lg:p-6">
-          <div className="space-y-4">
-            <Label name="Most"></Label>
-            <div className="hidden flex-col gap-4 lg:flex">
-              {[...Array(6).keys()].map((data, idx) => (
-                <WideCard data={data} key={idx} />
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center gap-2 *:bg-white *:p-2 lg:hidden">
-            <button>
-              <FaAngleLeft />
+      <section></section>
+
+      {/*Best sellers Books Section cards*/}
+      <section className="relative container mx-auto  bg-[#d9d9d9] p-5">
+        <div className="flex items-center justify-center">
+          {/* label */}
+          <Label name="Best sellers Books" />
+          {/* pagination / carousel */}
+          
+            <button onClick={() => handlePrev("bestSellers")}
+            disabled={bestSellersIndex === 0} className="absolute left-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {bestSellersIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
             </button>
-            <button>
-              <FaAngleRight />
+            <button  onClick={() => handleNext("bestSellers", books.length)}
+            disabled={bestSellersIndex >= books.length - 7} className="absolute right-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {bestSellersIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
             </button>
-          </div>
-          {/* large devices */}
-          <div className="absolute right-5 top-5 flex h-[880px] flex-col items-center justify-between gap-2 *:bg-white *:p-2">
-            <button>
-              <FaAngleUp />
-            </button>
-            <button>
-              <FaAngleDown />
-            </button>
-          </div>
+          
         </div>
-        <div className="flex justify-between gap-4 *:w-[123px] *:bg-[#d9d9d9] lg:flex-col lg:gap-5 *:lg:w-[573px]">
-          <div className="h-[124px] lg:h-[265px]"></div>
-          <div className="h-[124px] lg:h-[298px]"></div>
-          <div className="h-[124px] lg:h-[306px]"></div>
+        {/* cards */}
+        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        {books.slice(bestSellersIndex,bestSellersIndex+7).map((book, idx) => (
+            <Card key={idx} book={book} />
+          ))}
         </div>
-        <div className="h-[141px] w-[394px] bg-[#d9d9d9] lg:h-[911px] lg:w-[265px]"></div>
       </section>
 
-      {/*Another Section cards*/}
-      <section className="container mx-auto h-[391px] bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-between">
+      {/*New published books Section*/}
+      <section className="relative container mx-auto  bg-[#d9d9d9] p-5">
+        <div className="flex items-center justify-center">
           {/* label */}
-          <Label name="Books" />
+          <Label name="New published books" />
           {/* pagination / carousel */}
-          <div className="flex items-center gap-2 *:bg-white *:p-2">
-            <button>
-              <FaAngleLeft />
+          
+            <button onClick={() => handlePrev("newPublished")}
+            disabled={newPublishedIndex === 0} className="absolute left-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {newPublishedIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
             </button>
-            <button>
-              <FaAngleRight />
+            <button  onClick={() => handleNext("newPublished", books.length)}
+            disabled={newPublishedIndex >= books.length - 7} className="absolute right-0 top-1/2 h-24 text-3xl bg-white p-2">
+            {newPublishedIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
             </button>
-          </div>
+          
         </div>
-        {/* cards for mobile */}
-        <div className="mt-5 md:hidden grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {a.map((data, idx) => (
-            <Card data={data} key={idx} />
-          ))}
-        </div>
-        {/* cards for tablet */}
-        <div className="mt-5 hidden lg:hidden md:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {b.map((data, idx) => (
-            <Card data={data} key={idx} />
-          ))}
-        </div>
-        {/* cards for lg */}
-        <div className="mt-5 hidden lg:grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {c.map((data, idx) => (
-            <Card data={data} key={idx} />
+        {/* cards */}
+        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        {books.slice(newPublishedIndex,newPublishedIndex+7).map((book, idx) => (
+            <Card key={idx} book={book} />
           ))}
         </div>
       </section>
