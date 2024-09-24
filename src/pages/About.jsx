@@ -5,10 +5,19 @@ const About = () => {
   return (
     <section>
       <div className="container mx-auto px-4 2xl:px-36">
-        <header className="mt-12 flex h-40 items-center justify-center rounded-2xl bg-lightGray-200">
-          <div>
-            <h1 className="text-3xl font-bold text-darkGray-800">About Us</h1>
-            <p className="py-3 text-center text-sm font-medium text-mediumGray-500">
+        <header style={{ borderRadius: '32px' }} className="relative mt-12 flex h-72 w-full items-center justify-center bg-lightGray-200"
+       
+        >
+          <Image
+             src="/assets/custom banner.png"
+              alt="Custom banner"
+               layout="fill" 
+    
+  
+              />
+          <div className="relative z-10" >
+            <h1 className="text-3xl font-bold text-darkGray-800 font-display">About Us</h1>
+            <p className="py-3 text-center text-sm font-medium text-mediumGray-500 font-mono">
               Home / About us
             </p>
           </div>
@@ -55,7 +64,7 @@ const About = () => {
                 <Image   sizes="(max-width: 768px) 100vw, 50vw" className="rounded-full object-cover" layout="fill" src="	https://images.pexels.com/photos/7641824/pexels-photo-7641824.jpeg?auto=compress&cs=tinysrgb&w=600" alt="team member" />
               </div>
               <div className="mt-2 h-10 w-full bg-white hover:bg-[#33C24D] rounded-2xl">
-                <h1 className="text-center text-2xl text-[#33C24D] hover:text-white">Ayub</h1>
+                <h1 className="text-center font-mono text-2xl text-[#33C24D] hover:text-white">Ayub</h1>
               </div>
             </div>
             {/* team card */}
@@ -64,7 +73,7 @@ const About = () => {
                 <Image className="rounded-full object-cover"    sizes="(max-width: 768px) 100vw, 50vw" layout="fill" src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=600" alt="team member" />
               </div>
               <div className="mt-2 h-10 w-full bg-white hover:bg-[#33C24D] rounded-2xl">
-                <h1 className="text-center text-2xl text-[#33C24D] hover:text-white">Nazrul</h1>
+                <h1 className="text-center font-mono text-2xl text-[#33C24D] hover:text-white">Nazrul</h1>
               </div>
             </div>
             {/* team card */}
@@ -73,7 +82,7 @@ const About = () => {
                 <Image  className="rounded-full object-cover"   sizes="(max-width: 768px) 100vw, 50vw" layout="fill" src="	https://images.pexels.com/photos/1300402/pexels-photo-1300402.jpeg?auto=compress&cs=tinysrgb&w=600" alt="team member" />
               </div>
               <div className="mt-2 h-10 w-full bg-white hover:bg-[#33C24D] rounded-2xl">
-                <h1 className="text-center text-2xl text-[#33C24D] hover:text-white">Albab</h1>
+                <h1 className="text-center font-mono text-2xl text-[#33C24D] hover:text-white">Albab</h1>
               </div>
             </div>
             {/* team card */}
@@ -82,7 +91,7 @@ const About = () => {
                 <Image  className="rounded-full object-cover"   sizes="(max-width: 768px) 100vw, 50vw" layout="fill" src="https://images.pexels.com/photos/874158/pexels-photo-874158.jpeg?auto=compress&cs=tinysrgb&w=600" alt="team member" />
               </div>
               <div className="mt-2 h-10 w-full bg-white hover:bg-[#33C24D] rounded-2xl">
-                <h1 className="text-center text-2xl text-[#33C24D] hover:text-white">Imran</h1>
+                <h1 className="text-center font-mono text-2xl text-[#33C24D] hover:text-white">Imran</h1>
               </div>
             </div>
             {/* team card */}
@@ -91,7 +100,7 @@ const About = () => {
                 <Image  className="rounded-full object-cover"   sizes="(max-width: 768px) 100vw, 50vw" layout="fill" src="	https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=600" alt="team member" />
               </div>
               <div className="mt-2 h-10 w-full bg-white hover:bg-[#33C24D] rounded-2xl">
-                <h1 className="text-center text-2xl text-[#33C24D] hover:text-white">Abdullah</h1>
+                <h1 className="text-center font-mono text-2xl text-[#33C24D] hover:text-white">Abdullah</h1>
               </div>
             </div>
             {/* team card */}
@@ -100,7 +109,7 @@ const About = () => {
                 <Image  className="rounded-full object-cover"   sizes="(max-width: 768px) 100vw, 50vw" layout="fill" src="	https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600" alt="team member" />
               </div>
               <div className="mt-2 h-10 w-full bg-white hover:bg-[#33C24D] rounded-2xl">
-                <h1 className="text-center text-2xl text-[#33C24D] hover:text-white">Masud</h1>
+                <h1 className="text-center font-mono text-2xl text-[#33C24D] hover:text-white">Masud</h1>
               </div>
             </div>
           </div>
