@@ -142,3 +142,7 @@
 .app {
   @apply relative z-20;
 }
+
+footer {
+  @apply relative z-20;
+}
