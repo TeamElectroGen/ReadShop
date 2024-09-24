@@ -40,8 +40,8 @@ const Navbar = () => {
             className="flex items-center gap-2 font-sans text-2xl font-bold"
           >
             <FaBookOpenReader className="text-primary" />
-            <span className="text-xl font-semibold tracking-wide">
-              ReadShop
+            <span className="text-xl font-serif font-semibold tracking-wide">
+              READShop
             </span>
           </Link>
 

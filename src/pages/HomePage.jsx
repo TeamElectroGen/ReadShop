@@ -24,7 +24,7 @@ const HomePage = () => {
       <div className="space-y-5">
         {/*Search & Filter Banner*/}
         <section className="container mt-16 flex flex-col items-center justify-center text-center">
-          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight sm:text-6xl">
+          <h1 className="font-sans scroll-m-20 text-4xl font-extrabold tracking-tight sm:text-6xl">
             Discover & Explore <br />{" "}
             <span className="yellow_gradient">A world of books</span>
           </h1>
@@ -32,16 +32,17 @@ const HomePage = () => {
             Discover a diverse collection of books to suit every reader.
             Explore, shop, and enjoy stories that inspire and entertain.
           </p>
-          <div className="mt-8 flex w-full max-w-sm items-center justify-center space-x-2">
+          {/* Search and filter */}
+          <div className="mt-8 flex w-full max-w-lg items-center justify-center gap-2 bg-background/50 backdrop-blur-md py-4 px-5 rounded-xl">
             <div className="relative ml-auto flex-1 md:grow-0">
-              <IoMdSearch className="absolute left-2.5 top-2.5 size-5 text-muted-foreground" />
+              <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search by name, author.."
-                className="w-full rounded-lg bg-background p-5 pl-9 md:w-[250px] lg:w-[350px]"
+                className="w-full rounded-lg bg-background p-6 pl-9 md:w-[370px] lg:w-[360px]"
               />
             </div>
-            <Button variant="secondary" size="lg">
+            <Button variant="secondary" size="lg" className="p-6">
               <IoFilter className="mr-2 size-4" />
               Filter
             </Button>
