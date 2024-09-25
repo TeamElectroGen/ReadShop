@@ -1,7 +1,38 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const SignUp = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const phone = form.phone.value;
+    const confirmPassword = form.confirmPassword.value;
+    const password = form.password.value;
+    if (password !== confirmPassword)
+      return toast.error("Password does't match!");
+    const userData = { name, email, phone, password };
+    try {
+      const res = await axios.post("/signup/api", userData);
+      console.log(res);
+      if (res.status === 200) {
+        form.reset();
+        if (res.data.status === 200) {
+          return toast.success(res.data.message);
+        }
+        if (res.data.status === 304) {
+          return toast.error(res.data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!");
+    }
+  };
   return (
     <section>
       <div className="flex items-center justify-center bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-8">
@@ -16,9 +47,9 @@ const SignUp = () => {
               Sign in
             </Link>
           </p>
-          <form className="mt-8" method="POST" action="#">
+          <form className="mt-8" onSubmit={handleSubmit}>
             <div className="space-y-5">
-              {/*Username*/}
+              {/*Name*/}
               <div>
                 <label className="text-base font-medium text-gray-900">
                   Name
@@ -27,6 +58,7 @@ const SignUp = () => {
                   <input
                     placeholder="Name"
                     type="text"
+                    name="name"
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -40,6 +72,7 @@ const SignUp = () => {
                   <input
                     placeholder="Email"
                     type="email"
+                    name="email"
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -54,6 +87,7 @@ const SignUp = () => {
                   <input
                     placeholder="Phone"
                     type="tel"
+                    name="phone"
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -70,6 +104,7 @@ const SignUp = () => {
                   <input
                     placeholder="Password"
                     type="password"
+                    name="password"
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -85,6 +120,7 @@ const SignUp = () => {
                   <input
                     placeholder="Password"
                     type="password"
+                    name="confirmPassword"
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -93,7 +129,7 @@ const SignUp = () => {
               <div>
                 <button
                   className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
-                  type="button"
+                  type="submit"
                 >
                   Get started
                 </button>

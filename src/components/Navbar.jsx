@@ -15,7 +15,7 @@ import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
 
 const Navbar = () => {
-  const user = true;
+  const user = false;
 
   const navLinks = (
     <>
@@ -39,8 +39,8 @@ const Navbar = () => {
             href={"/"}
             className="flex items-center gap-2 font-sans text-2xl font-bold"
           >
-          <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
-            <span className="text-xl font-serif font-semibold tracking-wide">
+            <FaBookOpenReader className="size-7 rounded-sm bg-primary p-1.5 text-foreground" />
+            <span className="font-serif text-xl font-semibold tracking-wide">
               Read Shop
             </span>
           </Link>
@@ -85,7 +85,11 @@ const Navbar = () => {
                 </DropdownMenu>
               </>
             ) : (
-              <Button size="sm" className="font-semibold">Get Started</Button>
+              <Link href={"/login"}>
+                <Button size="sm" className="font-semibold">
+                  Get Started
+                </Button>
+              </Link>
             )}
             <HamburgerMenu navLinks={navLinks} />
           </div>
