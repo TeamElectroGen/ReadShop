@@ -29,12 +29,12 @@ export default function RootLayout({ children }) {
         <div className="main">
           <div className="gradient" />
         </div>
-        
+
         <main className="app">
           <Navbar />
-          {children}
+          <div className="main_content">{children}</div>
+          <Footer />
         </main>
-        <Footer />
       </body>
     </html>
   );
