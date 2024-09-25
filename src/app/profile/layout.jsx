@@ -21,14 +21,19 @@ const ProfileLayout = ({ children }) => {
         {/* Dashboard container */}
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           {/* navigation */}
-          <aside className="-mr-4 lg:w-1/4 py-8 rounded-lg bg-popover shadow-sm">
-            <header className="flex flex-col gap-2 text-center items-center justify-center">
+          <aside className="-mr-4 rounded-lg bg-popover py-8 shadow-sm lg:w-1/4">
+            <header className="flex flex-col items-center justify-center gap-2 text-center">
               <Avatar className="size-16">
                 <AvatarImage src="https://github.com/shadcn.pn" />
                 <AvatarFallback>A</AvatarFallback>
               </Avatar>
-              <h1 className="text-lg font-bold text-primary text-gradient">Albab ibn Makbul</h1>
-              <p>Reader</p>
+              <h1 className="text-primary text-xl font-bold">
+                Albab ibn Makbul
+              </h1>
+              <div className="text-sm space-y-1 font-medium text-muted-foreground">
+                <p>albabmakbul@gmail.com</p>
+                <p>+8801612103500</p>
+              </div>
             </header>
             <Separator className="my-4" />
             <UserMenu />
