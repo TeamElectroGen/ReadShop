@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import React from "react";
 import { FaCartShopping, FaCircleUser } from "react-icons/fa6";
@@ -13,9 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
-  const user = false;
+  const { data } = useSession();
 
   const navLinks = (
     <>
@@ -52,7 +54,7 @@ const Navbar = () => {
             <Button variant="ghost" size="icon">
               <FaCartShopping className="size-5" />
             </Button>
-            {user ? (
+            {data?.user ? (
               <>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -61,7 +63,7 @@ const Navbar = () => {
                       size="icon"
                       className="overflow-hidden rounded-full"
                     >
-                      {user?.photoURL ? (
+                      {data?.user?.photoURL ? (
                         <Image
                           src="/placeholder-user.jpg"
                           width={36}
@@ -80,7 +82,9 @@ const Navbar = () => {
                     <DropdownMenuItem>Settings</DropdownMenuItem>
                     <DropdownMenuItem>Support</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => signOut()}>
+                      Logout
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
