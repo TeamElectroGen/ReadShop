@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-const SignIn = () => {
+const Login = () => {
     return (
         <section>
         <div className="flex items-center justify-center bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-8">
@@ -99,4 +99,4 @@ const SignIn = () => {
     );
 }
 
-export default SignIn;
+export default Login;
