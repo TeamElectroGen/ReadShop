@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
+import AuthProvider from "@/AuthProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,20 +25,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="main">
-          <div className="gradient" />
-        </div>
+      <AuthProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <div className="main">
+            <div className="gradient" />
+          </div>
 
-        <main className="app">
-          <Navbar />
-          {children}
-          <Toaster position="top-center" reverseOrder={true} />
-        </main>
-        <Footer />
-      </body>
+          <main className="app">
+            <Navbar />
+            {children}
+            <Toaster position="top-center" reverseOrder={true} />
+          </main>
+          <Footer />
+        </body>
+      </AuthProvider>
     </html>
   );
 }
