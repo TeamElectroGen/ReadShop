@@ -2,7 +2,7 @@ import React from "react";
 
 const Label = ({ name }) => {
   return (
-    <div className="flex h-[29px] w-[164px] items-center justify-center bg-[#aba7a7] text-center">
+    <div className="flex h-[40px] w-auto items-center justify-center text-center font-bold text-3xl">
       {name}
     </div>
   );

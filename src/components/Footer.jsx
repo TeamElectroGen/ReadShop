@@ -33,7 +33,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="w-full bg-primary-foreground pt-10 rounded-t-sm -mt-2">
+    <footer className="w-full bg-secondary pt-10 rounded-t-sm -mt-2">
       <div className="mx-auto w-11/12 md:container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-accent-foreground">
           {/* Logo and Address */}
@@ -114,7 +114,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-center bg-yellow-400 py-2 text-xs text-primary">
+      <div className="mt-3 flex items-center justify-center bg-primary py-2 text-xs text-secondary-foreground">
         <p>
           Copyright © {new Date().getFullYear()} by{" "}
           <Link href={'/'} className="underline">

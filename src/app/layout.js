@@ -26,8 +26,14 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
+        <div className="main">
+          <div className="gradient" />
+        </div>
+        
+        <main className="app">
+          <Navbar />
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
