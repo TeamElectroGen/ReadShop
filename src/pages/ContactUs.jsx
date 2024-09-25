@@ -41,12 +41,14 @@ const ContactUs = () => {
   return (
     <section className="">
       <Toaster />
-      <div className="flex justify-end relative h-[600px] items-end overflow-clip -mt-16">
 
+      {/* Form part */}
+      <div className="flex justify-end relative h-[600px] items-end overflow-clip -mt-16">
+        {/* Pages Feature Images */}
         <div className="-z-50 hidden lg:flex relative -left-10 lg:-left-10 -bottom-[380px]">
           <Image className="" height={1500} src={contactBg} alt="Contact Form Background" />
         </div>
-
+        {/* Contact Form Part */}
         <main className="w-[800px] lg:pr-10 bg-[url('../../public/assets/contact-us.svg')] lg:bg-none bg-cover bg-opacity-50">
           <div className="bg-white/20 backdrop-blur-sm mx-4 mb-2">
             <div className="p-8 rounded-b-lg shadow-md">
@@ -130,25 +132,26 @@ const ContactUs = () => {
         </main>
       </div>
 
+      {/* Divider */}
       <div className="relative">
-        <hr className="border-2 border-purple-900 z-0" />
+        <hr className="border-2 border-yellow-900 z-0" />
         <div className="bg-lightGray-400 w-fit p-2 rounded-full absolute z-10 -bottom-3.5 left-1/2">
           <FaAngleDown />
         </div>
       </div>
 
-      <div className="bg-purple-100">
+      <div className="bg-yellow-100">
         <div className="w-11/12 md:container mx-auto flex flex-col lg:flex-row py-10 rounded-sm gap-5">
 
           <div className="w-full flex flex-col gap-5">
 
-            <div className="bg-violet-200/50 rounded-sm p-5">
+            <div className="bg-orange-200/50 shadow-md rounded-sm p-5">
               <div className="flex gap-3 mb-5">
-                <div className="w-1  bg-purple-800">
+                <div className="w-1  bg-yellow-800">
                 </div>
                 <div>
                   <h2 className="font-semibold text-2xl">Connect</h2>
-                  <p className="text-purple-950">Reach us with your question!</p>
+                  <p className="text-yellow-950">Reach us with your question!</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-3">
@@ -178,15 +181,15 @@ const ContactUs = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-yellow-200/50 rounded-sm p-5">
+
+            <div className="bg-red-200/50 shadow-md rounded-sm p-5">
               <div className="flex gap-3 mb-5">
                 <div className="w-1  bg-yellow-800">
 
                 </div>
                 <div>
-
                   <h2 className="font-semibold text-2xl">Address</h2>
-                  <p className="text-purple-950">Where we live!</p>
+                  <p className="text-yellow-950">Where we live!</p>
                 </div>
               </div>
               <div className="gap-3">
@@ -200,6 +203,8 @@ const ContactUs = () => {
             </div>
 
           </div>
+
+          {/* Map */}
           <div className="w-full">
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d51905.734490399715!2d90.40939901317851!3d23.801212593519956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1727093620013!5m2!1sen!2sbd" allowfullscreen="" loading="lazy" className="rounded-sm border shadow w-full h-80 lg:h-full" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>

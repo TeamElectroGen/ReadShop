@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import { FaFacebook, FaInstagram, FaLocationArrow, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { FaBookOpenReader, FaFacebook, FaInstagram, FaLocationArrow, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import toast, { Toaster } from "react-hot-toast";
@@ -33,20 +33,20 @@ const Footer = () => {
   };
 
   return (
-    <footer className="w-full bg-darkGray-800 pt-10 rounded-t-sm -mt-2">
+    <footer className="w-full bg-primary-foreground pt-10 rounded-t-sm -mt-2">
       <div className="mx-auto w-11/12 md:container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-accent">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-accent-foreground">
           {/* Logo and Address */}
           <div className="w-full">
             <div className="flex flex-col">
-              <Link href={'/'} className="text-3xl font-bold font-sans relative w-fit">
-                <h2>
-                  ReadSh<span className="text-red-100">op</span>
-                </h2>
-                <span className="min-w-20 min-h-1 bg-red-600 absolute bottom-0"></span>
-                <span className="min-w-6 min-h-6 border-2 border-red-600 rounded-full  absolute right-[1.15rem] bottom-1 rotate-12"></span>
-                <span className="min-w-6 min-h-6 border-2 border-red-600 rounded-full  absolute -right-[.1rem] bottom-1 rotate-6"></span>
-                <span className="min-w-5 min-h-5 border-b-4 border-red-600 rounded-full  absolute right-[.81rem] -bottom-2 rotate-12"></span>
+              <Link
+                href={"/"}
+                className="flex items-center gap-2 font-sans text-2xl font-bold"
+              >
+                <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
+                <span className="text-xl font-serif font-semibold tracking-wide">
+                  Read Shop
+                </span>
               </Link>
               <div className="pt-2 flex items-center gap-2">
                 <FaLocationArrow />
@@ -83,7 +83,7 @@ const Footer = () => {
           <div className="w-full">
             <div className="border px-5 pb-2 rounded-md w-full mb-4">
               <h2 className="md:text-sm lg:text-lg font-bold pt-5 text-center">
-                Subscribe to get our <span className="text-red-600">Newsletter</span> weekly!
+                Subscribe to get our <span className="text-accent-foreground">Newsletter</span> weekly!
               </h2>
               <p className="text-xs text-center pb-5">We don't send any spam mail, your email will be safe with us!</p>
               <div className="flex flex-col lg:flex-row border rounded-md py-0.5 px-0.5">
@@ -94,7 +94,7 @@ const Footer = () => {
                   onChange={handleEmailChange}
                 />
                 <Button
-                  className="bg-red-600"
+                  className="bg-yellow-600"
                   onClick={handleSubscribe}
                   disabled={!isValidEmail}
                 >
@@ -114,7 +114,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-center bg-mediumGray-500 py-2 text-xs text-white">
+      <div className="mt-3 flex items-center justify-center bg-yellow-400 py-2 text-xs text-primary">
         <p>
           Copyright © {new Date().getFullYear()} by{" "}
           <Link href={'/'} className="underline">
