@@ -17,7 +17,10 @@ const SignUp = () => {
       return toast.error("Password does't match!");
     const userData = { name, email, phone, password };
     try {
-      const res = await axios.post("/signup/api", userData);
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/signup/api`,
+        userData
+      );
       console.log(res);
       if (res.status === 200) {
         form.reset();
@@ -35,8 +38,8 @@ const SignUp = () => {
   };
   return (
     <section>
-      <div className="flex items-center justify-center bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-8">
-        <div className="p-4 shadow-md xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
+      <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-8">
+        <div className="rounded-md bg-white p-4 shadow-md xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
           <div className="mb-2 flex justify-center"></div>
           <h2 className="text-center text-2xl font-bold leading-tight text-black">
             Sign up to your account
@@ -47,6 +50,7 @@ const SignUp = () => {
               Sign in
             </Link>
           </p>
+          {/* TODO: REGEX implementation */}
           <form className="mt-8" onSubmit={handleSubmit}>
             <div className="space-y-5">
               {/*Name*/}
