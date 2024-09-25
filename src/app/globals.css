@@ -140,9 +140,9 @@
 }
 
 .app {
-  @apply relative z-20;
+  @apply relative z-20 flex flex-col min-h-screen;
 }
 
-footer {
-  @apply relative z-20;
+.main_content {
+  @apply flex-1;
 }
