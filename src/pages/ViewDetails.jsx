@@ -1,11 +1,7 @@
 import React from 'react';
 
 const ViewDetails = () => {
-    return (
-        <div>
-            <p className="text-red-700">view details page</p>
-        </div>
-    );
+    return <div className="text-3xl text-blue-500">Testing Tailwind</div>;
 }
 
 export default ViewDetails;
