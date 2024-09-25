@@ -1,11 +1,23 @@
-import React from 'react';
+"use client";
+import { getBookDetails } from "@/services/getBooksData";
+import React, { useEffect, useState } from "react";
 
-const ViewDetails = () => {
-    return (
-        <div className="bg-blue-500 text-white p-4">
-          <p className="text-3xl">view details</p>
-        </div>
-      );
-}
+const ViewDetails = ({ bookid }) => {
+  const [detailsBook, setDetailsBook] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { bookDetails } = await getBookDetails(bookid);
+      setDetailsBook(bookDetails);
+    };
+    fetch();
+  }, [bookid]);
+  console.log(detailsBook);
+  return (
+    <div>
+      <p className="text-red-700">view details page</p>
+    </div>
+  );
+};
 
 export default ViewDetails;
