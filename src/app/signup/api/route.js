@@ -8,8 +8,9 @@ export const POST = async (request) => {
     const db = await connectDB();
     const userCollection = db.collection("users");
     const exist = await userCollection.findOne({
-      or: [{ email: newUser.email }, { phone: newUser.phone }],
+      $or: [{ email: newUser.email }, { phone: newUser.phone }],
     });
+    console.log(exist);
     if (exist)
       return NextResponse.json({ message: "User already exists", status: 304 });
     const hashedPassword = bcrypt.hashSync(newUser.password, 14);
