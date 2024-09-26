@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const ViewDetails = ({ bookid }) => {
-  const [detailsBook, setDetailsBook] = useState([]);
+  const [detailsBook, setDetailsBook] = useState({}); // Initialize as an empty object
 
   useEffect(() => {
     const fetch = async () => {
@@ -13,39 +13,74 @@ const ViewDetails = ({ bookid }) => {
     };
     fetch();
   }, [bookid]);
-  console.log(detailsBook);
+
   return (
-    <div>
-      <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="flex justify-center bg-green-100">
-        <Image src={detailsBook.CoverImage} alt={detailsBook.BookName} width={200} height={300} />
-      </div>
-      <div className="p-5">
-        <div className="flex justify-between items-center">
-          <span className="text-green-600 text-xs font-semibold">{detailsBook.category}</span>
-          <span className="bg-red-200 text-red-800 text-xs px-2 inline-block rounded-full">{detailsBook.discount}% OFF</span>
+    <div className="max-w-4xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
+        {/* Left Side - Book Image */}
+        <div className="flex justify-center items-center">
+          <Image
+            src={detailsBook.CoverImage}
+            alt={detailsBook.BookName}
+            width={400}
+            height={550}
+            className="rounded-lg shadow-md"
+          />
         </div>
-        <h3 className="mt-2 text-lg font-bold">{detailsBook.title} ({detailsBook.language})</h3>
-        <div className="flex items-center mt-2">
-          <div className="bg-yellow-400 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
-            {detailsBook.rating} Stars ({detailsBook.reviews} Reviews)
+
+        {/* Right Side - Book Details */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold text-gray-800">{detailsBook.BookName}</h1>
+          <p className="text-gray-600 mt-2">by {detailsBook.AuthorName}</p>
+          <div className="flex items-center mt-4">
+            <span className="bg-yellow-400 text-sm font-semibold px-2.5 py-0.5 rounded">
+              {detailsBook.Rating} Stars
+            </span>
+            <span className="text-gray-500 ml-2 font-bold">| 3 Reviews</span>
           </div>
-          <div className="text-sm text-gray-500">by {detailsBook.author}</div>
-        </div>
-        <div className="flex justify-between items-center mt-3">
-          <span className="text-xl font-bold text-green-800">৳{detailsBook.price}</span>
-          <span className="text-xs text-gray-500">You Save ৳{detailsBook.discountAmount} ({detailsBook.discount}%)</span>
-        </div>
-        <div className="mt-3">
-          <button className="text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-            Add to Cart
-          </button>
-          <button className="text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2">
-            Add to Booklist
-          </button>
+
+          {/* Book Description */}
+          <p className="mt-4 text-gray-600">{detailsBook.Description}</p>
+
+          {/* Additional Details */}
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold">Published by:</span> {detailsBook.PublicationName}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              <span className="font-semibold">Publish Date:</span> {new Date(detailsBook.PublishDate).toDateString()}
+            </p>
+          </div>
+
+          {/* Price & Add to Cart Buttons */}
+          <div className="flex items-center justify-between mt-6">
+            <span className="text-2xl font-bold text-green-700">৳{detailsBook.Price}</span>
+          </div>
+
+          <div className="mt-4 flex space-x-4">
+           {/* Add to Cart Button */}
+           <button className="flex-1 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              Add to Cart
+            </button>
+
+            {/* Add to Wish List Button */}
+            <button className="flex-1 text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              Add to Wish List
+            </button>
+
+            {/* Add to Read List Button */}
+            <button className="flex-1 text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              Add to Read List
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Additional Section Below (if needed) */}
+      <div className="mt-6 p-4 bg-white rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold text-gray-800">More Details</h2>
+        <p className="text-gray-600 mt-2">Explore more information about the book, author, and publication here.</p>
+      </div>
     </div>
   );
 };
