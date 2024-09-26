@@ -7,20 +7,19 @@ const About = () => {
       <div className="container mx-auto px-4 2xl:px-36">
         <header
           style={{ borderRadius: "32px" }}
-          className="relative mt-12 flex h-72 w-full items-center justify-center bg-lightGray-200"
+          className="relative mt-12 flex h-96 w-full items-center justify-center bg-lightGray-200"
         >
           <Image
-            src="/assets/custom banner.png"
+            className="object-cover w-full h-auto"
+            src="/assets/banner1.jpg"
             alt="Custom banner"
             layout="fill"
           />
-          <div className="relative z-10">
-            <h1 className="font-display text-3xl font-bold text-darkGray-800">
+          <div className="absolute text-center top-4 z-10">
+            <h1 className="text-3xl font-bold text-white font-display">
               About Us
             </h1>
-            <p className="py-3 text-center font-mono text-sm font-medium text-mediumGray-500">
-              Home / About us
-            </p>
+           
           </div>
         </header>
 
