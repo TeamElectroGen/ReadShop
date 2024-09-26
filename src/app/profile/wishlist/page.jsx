@@ -1,6 +1,4 @@
 import React from "react";
-// import { DataTable } from "./data-table";
-// import { columns } from "./columns";
 import {
   Table,
   TableBody,
