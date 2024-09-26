@@ -106,6 +106,15 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/*High to low and Low to high*/}
+        {/* Price Sorting */}
+        <div className='lg:flex justify-center mt-4 lg:mt-0'>
+                <button 
+                    className='px-8 py-3 text-lg font-semibold border rounded bg-orange-400 dark:border-gray-800 hover:bg-orange-500 duration-1000 ease-in-out hover:text-black border-none'>
+                   <p>High to Low</p>
+                </button>
+            </div>
+
       {/* TODO: Show search results with searchItems. condition {searchItems.length > 0} */}
 
       {/*Popular books cards*/}

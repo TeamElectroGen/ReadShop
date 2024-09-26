@@ -34,17 +34,18 @@ const About = () => {
               alt="About image"
             />
           </div>
+          {/*Content about the about page*/}
           <div className="flex-1">
             <h2 className="mb-6 text-3xl font-semibold">Welcome to ReadShop</h2>
             <div className="text-md space-y-5 text-darkGray-800">
-              <p>
+              <p className="text-justify">
                 At ReadShop, we believe in the magic of books and the power they
                 hold to inspire, educate, and transform lives. Whether you’re a
                 lifelong reader or just beginning your journey, we’re here to
                 offer a carefully curated collection of books that caters to
                 every kind of reader.
               </p>
-              <p>
+              <p className="text-justify">
                 With a focus on quality and variety, we offer a wide range of
                 genres—from fiction, non-fiction, and textbooks to self-help,
                 spirituality, and more. Our platform makes it easy to discover,
