@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import contactBg from "../../public/assets/contactUs.svg";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
