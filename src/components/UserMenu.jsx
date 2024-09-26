@@ -17,7 +17,7 @@ const userMenuItems = [
   },
   {
     title: "Wishlist",
-    href: "/profile/wishlist/account",
+    href: "/profile/wishlist",
     icon: Heart,
   },
   {
