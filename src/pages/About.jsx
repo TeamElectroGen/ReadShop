@@ -23,35 +23,7 @@ const About = () => {
           </div>
         </header>
 
-        {/* <div className="mt-12 flex flex-col gap-4 rounded-2xl bg-background p-6 lg:flex-row lg:gap-6">
-          <div className=" relative flex items-center justify-center border bg-white lg:w-1/2">
-            <Image  layout="fill" className="object-cover" src="/assets/about.png" alt="About image" />
-          </div>
-          <div className="flex-1">
-            <h2 className="mb-6 text-3xl font-semibold">Welcome to ReadShop</h2>
-            <div className="text-md space-y-5 text-darkGray-800">
-              <p>
-                At ReadShop, we believe in the magic of books and the power they
-                hold to inspire, educate, and transform lives. Whether you’re a
-                lifelong reader or just beginning your journey, we’re here to
-                offer a carefully curated collection of books that caters to
-                every kind of reader.
-              </p>
-              <p>
-                With a focus on quality and variety, we offer a wide range of
-                genres—from fiction, non-fiction, and textbooks to self-help,
-                spirituality, and more. Our platform makes it easy to discover,
-                explore, and purchase books with just a few clicks. We are
-                committed to creating a seamless and enjoyable experience for
-                every book lover.
-              </p>
-              <p>
-                Let us be part of your reading adventure—wherever it may lead
-                you.
-              </p>
-            </div>
-          </div>
-        </div> */}
+        
 
 <section className="overflow-hidden pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] bg-white dark:bg-dark">
         <div className="container mx-auto">
