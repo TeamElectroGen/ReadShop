@@ -2,14 +2,19 @@
 import { getBookDetails } from "@/services/getBooksData";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { FaBookOpen } from "react-icons/fa";
+import { FaBookOpen, FaLongArrowAltRight } from "react-icons/fa";
 import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
 // import { FaShoppingCart } from "react-icons/fa";
 
 
 const ViewDetails = ({ bookid }) => {
   const [detailsBook, setDetailsBook] = useState({}); // Initialize as an empty object
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
 
+  const handleAddToCartClick = () => {
+    setIsAddedToCart(true);
+  };
+  
   useEffect(() => {
     const fetch = async () => {
       const { bookDetails } = await getBookDetails(bookid);
@@ -63,9 +68,25 @@ const ViewDetails = ({ bookid }) => {
 
           <div className="mt-4 flex space-x-4">
            {/* Add to Cart Button */}
-           <button className="flex-1 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 text-center text-xl">
+           
+           <button
+      className={`flex flex-1 items-center justify-center text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center  duration-300 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
+      onClick={handleAddToCartClick}
+    >
+      {isAddedToCart ? (
+        <>
+         <FaCartShopping className="mr-3 size-5"/> Go to Cart <FaLongArrowAltRight className="ml-3 size-5"/>
+        </>
+      ) : (
+        <>
+         <FaCartShopping className="mr-3 size-5"/> Add to Cart 
+        </>
+      )}
+    </button>
+
+           {/* <button className="flex-1 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 text-center text-xl">
            <FaCartShopping className="mr-3 size-6" /> Add to Cart
-        </button>
+        </button> */}
 
             {/* Add to Read List Button */}
             <button className="flex-1 flex items-center justify-center text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-ms px-2 py-2.5 text-center">
