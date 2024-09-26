@@ -42,14 +42,19 @@ const ContactUs = () => {
     <section className="">
       {/* Form part */}
       <div className="flex justify-between items-center overflow-clip -mt-2 container mx-auto gap-4">
-        <Image className="" height={520} src={contactBg} alt="Contact Form Background" />
+        <Image className="hidden lg:flex" height={520} src={contactBg} alt="Contact Form Background" />
         <main className="w-full">
           <div className="bg-white/20 backdrop-blur-sm mb-2">
             <div className="p-8 rounded-b-lg shadow-md">
               <div className="flex justify-center gap-2 mb-4">
-                <div className="w-full">
-                  <h2 className="text-right text-sm">Get in touch</h2>
-                  <h2 className="text-right text-2xl font-semibold mb-4">Send a message</h2>
+                <div className="w-full flex items-stretch justify-end gap-2">
+                  <div>
+                    <h2 className="text-right text-sm">Get in touch</h2>
+                    <h2 className="text-right text-2xl font-semibold mb-4">Send a message</h2>
+                  </div>
+                  <div className="w-1 h-full bg-primary">
+
+                  </div>
                 </div>
               </div>
               <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
