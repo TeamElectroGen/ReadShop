@@ -10,6 +10,8 @@ export const books = [
     PublishDate: "2022-05-14",
     Price: 15.99,
     Rating: 4.5,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "WORM$",
@@ -22,6 +24,8 @@ export const books = [
     PublishDate: "2021-10-10",
     Price: 13.5,
     Rating: 4.3,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "Knot by Knot",
@@ -34,6 +38,8 @@ export const books = [
     PublishDate: "2020-08-22",
     Price: 17.99,
     Rating: 4.7,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "The Countryside Orphanage",
@@ -46,6 +52,8 @@ export const books = [
     PublishDate: "2023-03-17",
     Price: 19.25,
     Rating: 4.6,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "A Good Day For A Hike",
@@ -58,6 +66,8 @@ export const books = [
     PublishDate: "2022-07-05",
     Price: 12.99,
     Rating: 4.4,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "Of Friction",
@@ -70,6 +80,8 @@ export const books = [
     PublishDate: "2021-11-29",
     Price: 14.75,
     Rating: 4.2,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "Tunnel of Mirrors",
@@ -82,6 +94,8 @@ export const books = [
     PublishDate: "2019-12-05",
     Price: 16.99,
     Rating: 4.8,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "The Day I Had a Dinosaur",
@@ -94,6 +108,8 @@ export const books = [
     PublishDate: "2022-09-12",
     Price: 9.99,
     Rating: 4.1,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "Returning to Carthage",
@@ -106,6 +122,8 @@ export const books = [
     PublishDate: "2021-02-18",
     Price: 18.5,
     Rating: 4.5,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "Samah The Seed",
@@ -118,6 +136,8 @@ export const books = [
     PublishDate: "2020-06-09",
     Price: 11.99,
     Rating: 4.7,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "It Ate One Hundred",
@@ -130,6 +150,8 @@ export const books = [
     PublishDate: "2023-04-03",
     Price: 16.75,
     Rating: 4.3,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "Eternal Seas (The Relic Hunters)",
@@ -142,6 +164,8 @@ export const books = [
     PublishDate: "2022-01-27",
     Price: 14.99,
     Rating: 4.6,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "What to Eat During the Apocalypse",
@@ -154,6 +178,8 @@ export const books = [
     PublishDate: "2023-08-22",
     Price: 13.99,
     Rating: 4.4,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "The Big Shot Trader",
@@ -166,6 +192,8 @@ export const books = [
     PublishDate: "2021-05-30",
     Price: 17.5,
     Rating: 4.5,
+    wishList: [],
+    readList: [],
   },
   {
     BookName: "Question Mark: The Freshman Experience",
@@ -178,5 +206,7 @@ export const books = [
     PublishDate: "2020-11-12",
     Price: 12.99,
     Rating: 4.1,
+    wishList: [],
+    readList: [],
   },
 ];
