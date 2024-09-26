@@ -2,6 +2,10 @@
 import { getBookDetails } from "@/services/getBooksData";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { FaBookOpen } from "react-icons/fa";
+import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
+// import { FaShoppingCart } from "react-icons/fa";
+
 
 const ViewDetails = ({ bookid }) => {
   const [detailsBook, setDetailsBook] = useState({}); // Initialize as an empty object
@@ -15,7 +19,7 @@ const ViewDetails = ({ bookid }) => {
   }, [bookid]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+    <div className="max-w-5xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
         {/* Left Side - Book Image */}
         <div className="flex justify-center items-center">
@@ -59,20 +63,21 @@ const ViewDetails = ({ bookid }) => {
 
           <div className="mt-4 flex space-x-4">
            {/* Add to Cart Button */}
-           <button className="flex-1 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-              Add to Cart
-            </button>
-
-            {/* Add to Wish List Button */}
-            <button className="flex-1 text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-              Add to Wish List
-            </button>
+           <button className="flex-1 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 text-center text-xl">
+           <FaCartShopping className="mr-3 size-6" /> Add to Cart
+        </button>
 
             {/* Add to Read List Button */}
-            <button className="flex-1 text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-              Add to Read List
+            <button className="flex-1 flex items-center justify-center text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-ms px-2 py-2.5 text-center">
+            <FaBookOpen className="mr-3 size-5" />Add to Read List
             </button>
           </div>
+          {/* Add to Wish List Button */}
+          <div className="mt-4">
+        <button className=" flex items-center justify-center text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center">
+        <FaRegHeart className="mr-3 size-6" /> Add to Wishlist
+        </button>
+      </div>
         </div>
       </div>
 
