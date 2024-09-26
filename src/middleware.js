@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 // Middleware function to handle authentication
-export const middleware = (request) => {
+export const middleware = async (request) => {
   // TODO: when deploying on Vercel add suffix: __Secure-next-auth.session-token
   const token = cookies(request).get("next-auth.session-token");
   const pathname = request.nextUrl.pathname;
