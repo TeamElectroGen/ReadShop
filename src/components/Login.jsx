@@ -4,8 +4,11 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import SocialLogin from "./SocialLogin";
+import { useSearchParams } from "next/navigation";
 const Login = () => {
   // const router = useRouter();
+  const searchParams = useSearchParams();
+  const path = searchParams.get("redirect");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -16,7 +19,7 @@ const Login = () => {
         emailOrPhone,
         password,
         redirect: true,
-        callbackUrl: "/",
+        callbackUrl: path || "/",
       });
       console.log(res);
       // if (res.status === 200) {

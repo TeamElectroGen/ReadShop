@@ -1,12 +1,15 @@
 "use client";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 // import { useRouter } from "next/navigation";
 import React from "react";
 
 const SocialLogin = () => {
+  const searchParams = useSearchParams();
+  const path = searchParams.get("redirect");
   // const router = useRouter();
   const handleGoogleLogin = () => {
-    const res = signIn("google", { redirect: true, callbackUrl: "/" });
+    const res = signIn("google", { redirect: true, callbackUrl: path || "/" });
     console.log(res);
   };
   // if (session?.status === "authenticated") {
