@@ -1,5 +1,7 @@
+"use client"
+
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaCartShopping, FaCircleUser } from "react-icons/fa6";
 import { FaBookOpenReader } from "react-icons/fa6";
 import { Button } from "./ui/button";
@@ -13,9 +15,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
+import ProductCart from "./ProductCart";
 
 const Navbar = () => {
   const user = true;
+  const [isCartOpen, setCartOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartBooks")) || [];
+    setCartCount(storedCartItems.length);
+  }, []);
 
   const navLinks = (
     <>
@@ -39,7 +49,7 @@ const Navbar = () => {
             href={"/"}
             className="flex items-center gap-2 font-sans text-2xl font-bold"
           >
-          <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
+            <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
             <span className="text-xl font-serif font-semibold tracking-wide">
               Read Shop
             </span>
@@ -49,9 +59,15 @@ const Navbar = () => {
             <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon">
-              <FaCartShopping className="size-5" />
+            <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+              <FaCartShopping className="size-7" />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 rounded-sm bg-primary text-black text-xs size-4 font-bold">
+                  {cartCount}
+                </span>
+              )}
             </Button>
+
             {user ? (
               <>
                 <DropdownMenu>
@@ -91,6 +107,9 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+
+      {/* Cart Drawer */}
+      <ProductCart isOpen={isCartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 };
