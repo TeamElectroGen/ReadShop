@@ -2,7 +2,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Toaster } from "@/components/ui/toaster";
+// import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "react-hot-toast";
+import AuthProvider from "@/services/AuthProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,20 +26,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="main">
-          <div className="gradient" />
-        </div>
+      <AuthProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <div className="main">
+            <div className="gradient" />
+          </div>
 
-        <main className="app">
-          <Navbar />
-          <div className="main_content">{children}</div>
+          <main className="app">
+            <Navbar />
+            {children}
+            <Toaster position="top-center" reverseOrder={true} />
+          </main>
           <Footer />
-        </main>
-        <Toaster />
-      </body>
+        </body>
+      </AuthProvider>
     </html>
   );
 }
