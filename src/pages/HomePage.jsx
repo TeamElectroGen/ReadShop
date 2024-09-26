@@ -9,9 +9,12 @@ import { Input } from "@/components/ui/input";
 import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import { getAllBooks } from "@/services/getBooksData";
+import axios from "axios";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
+  const [search, setSearch] = useState("");
+  const [searchItems, setSearchItems] = useState([]);
   // const [currentIndex,setCurrentIndex]= useState(0)
   const [popularIndex, setPopularIndex] = useState(0);
   const [allBooksIndex, setAllBooksIndex] = useState(0);
@@ -25,6 +28,21 @@ const HomePage = () => {
     // Fetching books.json from the public folder
     fetchBooks();
   }, []);
+
+  useEffect(() => {
+    const handleSearch = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${search}`
+        );
+        const { books } = res.data;
+        setSearchItems(books);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleSearch();
+  }, [search]);
 
   const handlePrev = (section) => {
     if (section === "popular") {
@@ -74,6 +92,9 @@ const HomePage = () => {
             <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
             <Input
               type="search"
+              name="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name, author.."
               className="w-full rounded-lg bg-background p-6 pl-9 md:w-[370px] lg:w-[360px]"
             />
@@ -84,6 +105,8 @@ const HomePage = () => {
           </Button>
         </div>
       </section>
+
+      {/* TODO: Show search results with searchItems. condition {searchItems.length > 0} */}
 
       {/*Popular books cards*/}
       <section className="container relative mx-auto bg-[#d9d9d9] p-5">
