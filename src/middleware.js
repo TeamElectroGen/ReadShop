@@ -22,5 +22,5 @@ export const middleware = (request) => {
 
 // Configuration for the middleware
 export const config = {
-  matcher: ["/viewDetails/:path*"],
+  matcher: ["/api/private/:path*"],
 };
