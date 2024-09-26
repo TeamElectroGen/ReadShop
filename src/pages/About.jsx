@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const About = () => {
@@ -654,14 +655,14 @@ const About = () => {
       starting your literary journey, we're here to help you find your perfect
       match.
     </p>
-    <a
-      href="javascript:void(0)"
+    <Link href={'/'}
+      
       className="inline-flex items-center justify-center py-3 text-base font-medium text-center text-white border border-transparent rounded-md px-7 bg-primary hover:bg-opacity-90"   
 
     >
-      {/* add funconality..it will take u to home page */}
+     
       Explore Our Collection
-    </a>
+    </Link>
   </div>
 </div>
           </div>
