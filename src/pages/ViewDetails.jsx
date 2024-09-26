@@ -20,14 +20,14 @@ const ViewDetails = ({ bookid }) => {
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {/* Left Side - Book Image */}
         <div className="flex justify-center items-center">
           <Image
             src={detailsBook.CoverImage}
             alt={detailsBook.BookName}
-            width={400}
-            height={550}
+            width={300}
+            height={500}
             className="rounded-lg shadow-md"
           />
         </div>
