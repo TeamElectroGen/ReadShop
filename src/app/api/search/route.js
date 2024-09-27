@@ -1,11 +1,13 @@
 import { connectDB } from "@/lib/connectDB";
 import { NextResponse } from "next/server";
 
-export const GET = async (request) => {
+export const dynamic = "force-dynamic";
+
+export async function GET(request) {
+  const { searchParams } = request.nextUrl;
   const db = await connectDB();
   const booksCollection = await db.collection("books");
   try {
-    const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get("q");
     console.log(search);
     let query = {};
@@ -23,4 +25,4 @@ export const GET = async (request) => {
     console.log(error);
     return NextResponse.json({ message: "No Data Found!", error });
   }
-};
+}
