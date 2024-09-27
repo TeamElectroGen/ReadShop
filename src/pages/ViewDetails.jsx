@@ -1,4 +1,3 @@
-"use client";
 import {
   getBookDetails,
   getReadWishStatusUser,
@@ -16,7 +15,7 @@ const ViewDetails = ({ bookid }) => {
   const [update, setUpdate] = useState(false);
   const [rWStatus, setRWStatus] = useState({});
   const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const { data } = useSession();
+  const { data } = useSession() || {};
 
   const handleAddToCartClick = () => {
     setIsAddedToCart(true);
@@ -109,7 +108,8 @@ const ViewDetails = ({ bookid }) => {
           <div className="mt-4 flex space-x-4">
             {/* Add to Cart Button */}
 
-            <button disabled={!data?.user?.email}
+            <button
+              disabled={!data?.user?.email}
               className={`flex flex-1 items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-xl font-medium text-white duration-300 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
               onClick={handleAddToCartClick}
             >
@@ -126,21 +126,24 @@ const ViewDetails = ({ bookid }) => {
             </button>
 
             {/* Add to Read List Button */}
-            <button  disabled={!data?.user?.email}
+            <button
+              disabled={!data?.user?.email}
               onClick={() => handleRWList("read")}
               className="text-ms flex flex-1 items-center justify-center rounded-lg bg-green-600 px-2 py-2.5 text-center font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300"
             >
               <FaBookOpen className="mr-3 size-5" />
-              {rWStatus.readList? "Remove":"Add"} to Read List
+              {rWStatus.readList ? "Remove" : "Add"} to Read List
             </button>
           </div>
           {/* Add to Wish List Button */}
           <div className="mt-4">
-            <button  disabled={!data?.user?.email}
+            <button
+              disabled={!data?.user?.email}
               onClick={() => handleRWList("wish")}
               className="flex items-center justify-center rounded-lg bg-gray-600 px-5 py-2.5 text-center text-xl font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300"
             >
-              <FaRegHeart className="mr-3 size-6" /> {rWStatus.wishList? "Remove":"Add"} to Wishlist
+              <FaRegHeart className="mr-3 size-6" />{" "}
+              {rWStatus.wishList ? "Remove" : "Add"} to Wishlist
             </button>
           </div>
         </div>
