@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const Card = ({ book }) => {
   return (
-    <div className="mx-auto flex h-full w-[164px] flex-col">
+    <div className="mx-auto flex h-full w-[164px] flex-col overflow-hidden rounded-lg shadow-lg">
       {/* Book Cover Image */}
-      <div className="h-[229px] bg-[#f3f2f2]">
+      <div className="h-[229px] bg-[#f3f2f2] relative overflow-hidden">
         <Image
           src={book.CoverImage}
           alt={book.BookName}
@@ -18,7 +18,7 @@ const Card = ({ book }) => {
       </div>
       {/* Book Info */}
       <div className="flex flex-grow flex-col justify-between">
-        <div className="mt-5 space-y-1">
+        <div className="mt-5 space-y-1 ml-2">
           <p className="text-sm font-bold">{book.BookName}</p>
           <p className="text-sm">
             <span className="font-medium">AuthorName:</span> {book.AuthorName}
@@ -34,7 +34,7 @@ const Card = ({ book }) => {
           </p>
         </div>
         <Link href={`/view-details/${book._id}`}>
-          <Button variant="outline">View Details</Button>
+          <Button variant="outline" className="mt-2 w-full">View Details</Button>
         </Link>
       </div>
     </div>
