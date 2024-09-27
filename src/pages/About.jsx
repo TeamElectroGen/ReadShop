@@ -14,6 +14,7 @@ const About = () => {
             src="https://images.pexels.com/photos/2177482/pexels-photo-2177482.jpeg?auto=compress&cs=tinysrgb&w=600"
             alt="Custom banner"
             layout="fill"
+            className="rounded-md object-cover"
           />
           <div className="relative z-10">
             <h1 className="font-display text-3xl font-bold text-darkGray-800">
