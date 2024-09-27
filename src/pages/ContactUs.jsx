@@ -39,7 +39,7 @@ const ContactUs = () => {
   };
 
   return (
-    <section className="">
+    <section className="mt-10">
       {/* Form part */}
       <div className="flex justify-between items-center overflow-clip -mt-2 container mx-auto gap-4">
         <Image className="hidden lg:flex" height={520} src={contactBg} alt="Contact Form Background" />
@@ -137,8 +137,8 @@ const ContactUs = () => {
       </div>
 
       {/* Additional Info Section */}
-      <div id="connect" className="duration-150 scroll-smooth bg-yellow-100/30">
-        <div className="w-11/12 md:container mx-auto flex flex-col lg:flex-row py-10 rounded-sm gap-5">
+      <div id="connect" className="duration-150 scroll-smooth bg-yellow-100/20">
+        <div className="w-11/12 md:container mx-auto flex flex-col lg:flex-row py-10 pb-20 rounded-sm gap-5">
           <div className="w-full flex flex-col gap-5">
             <div className="bg-orange-200/50 shadow-md rounded-sm p-5">
               <div className="flex gap-3 mb-5">
