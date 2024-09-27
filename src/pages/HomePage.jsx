@@ -28,7 +28,6 @@ const HomePage = () => {
     setBooks(books);
   };
 
-
   useEffect(() => {
     // Fetching books.json from the public folder
     fetchBooks();
@@ -37,7 +36,7 @@ const HomePage = () => {
   useEffect(() => {
     const selectedBooks = books.slice(0, 5);
     localStorage.setItem("cartBooks", JSON.stringify(selectedBooks));
-  }, [books])
+  }, [books]);
 
   // useEffect(() => {
   //   const handleSearch = async () => {
@@ -74,7 +73,6 @@ const HomePage = () => {
     };
     handleSearch();
   }, [search]);
-
 
   const handlePrev = (section) => {
     if (section === "popular") {
@@ -119,7 +117,7 @@ const HomePage = () => {
           shop, and enjoy stories that inspire and entertain.
         </p>
         {/* Search and filter */}
-        <div className="mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md relative">
+        <div className="relative mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md">
           <div className="relative ml-auto flex-1 md:grow-0">
             <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
             <Input
@@ -137,11 +135,12 @@ const HomePage = () => {
           </Button>
           {/* Show search results dropdown */}
           {showSearchResults && (
-            <div className="absolute top-full left-0 w-full bg-white shadow-lg z-50">
-              {searchItems.map((item, idx) => (
-                <div
+            <div className="absolute left-0 top-full z-50 w-full bg-white shadow-lg">
+              {searchItems?.map((item, idx) => (
+                <Link
+                  href={`/view-details/${item._id}`}
                   key={idx}
-                  className="flex justify-between p-2 border-b hover:bg-gray-100"
+                  className="flex justify-between border-b p-2 hover:bg-gray-100"
                 >
                   <div className="flex">
                     <Image
@@ -156,10 +155,7 @@ const HomePage = () => {
                       <p className="text-sm text-gray-500">{item.AuthorName}</p>
                     </div>
                   </div>
-                  <Link href={`/view-details/${books._id}`}>
-          <Button variant="outline" className="mt-2 w-full">View Details</Button>
-        </Link>
-                </div>
+                </Link>
               ))}
             </div>
           )}
@@ -198,7 +194,7 @@ const HomePage = () => {
       {/* TODO: Show search results with searchItems. condition {searchItems.length > 0} */}
 
       {/*Popular books cards*/}
-      <section className="container relative mx-auto bg-[#d9d9d9] p-5 -z-50 ">
+      <section className="container relative -z-50 mx-auto bg-[#d9d9d9] p-5">
         <div className="flex items-center justify-center">
           {/* label */}
           <Label name="Popular Books" />
@@ -229,7 +225,7 @@ const HomePage = () => {
       </section>
 
       {/*All books cards*/}
-      <section className="container relative mx-auto bg-[#d9d9d9] p-5 -z-50">
+      <section className="container relative -z-50 mx-auto bg-[#d9d9d9] p-5">
         <div className="flex items-center justify-center">
           {/* label */}
           <Label name="Books" />
