@@ -1,14 +1,23 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import SocialLogin from "./SocialLogin";
 import { useSearchParams } from "next/navigation";
+
 const Login = () => {
-  // const router = useRouter();
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
+  );
+};
+
+const LoginContent = () => {
   const searchParams = useSearchParams();
   const path = searchParams.get("redirect");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -22,16 +31,12 @@ const Login = () => {
         callbackUrl: path || "/",
       });
       console.log(res);
-      // if (res.status === 200) {
-      //   router.push("/");
-      //   // form.reset();
-      //   return toast.success("Logged in successfully!");
-      // }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong!");
     }
   };
+
   return (
     <section className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-8">
       <div className="rounded-md bg-white p-4 shadow-md xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
@@ -40,7 +45,7 @@ const Login = () => {
           Sign in to your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Don&apos;t have an account?{" "}
+          Do not have an account?{" "}
           <Link href="/signup" className="font-bold text-sky-400">
             Sign up
           </Link>

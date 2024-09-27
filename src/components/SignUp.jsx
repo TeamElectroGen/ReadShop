@@ -1,11 +1,19 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import axios from "axios";
 import SocialLogin from "./SocialLogin";
 
-const SignUp = () => {
+const Signup = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupContent />
+    </Suspense>
+  );
+};
+
+const SignupContent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -148,4 +156,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Signup;
