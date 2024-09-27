@@ -41,7 +41,7 @@ const UserMenu = ({ className }) => {
   return (
     <nav
       className={cn(
-        "grid items-start px-2 text-sm font-semibold lg:px-4",
+        "grid items-start text-sm font-medium",
         className
       )}
     >
