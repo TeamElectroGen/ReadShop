@@ -19,8 +19,8 @@ const HomePage = () => {
   const [searchItems, setSearchItems] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   // const [currentIndex,setCurrentIndex]= useState(0)
-  const [popularIndex, setPopularIndex] = useState(0);
-  const [allBooksIndex, setAllBooksIndex] = useState(0);
+  // const [popularIndex, setPopularIndex] = useState(0);
+  // const [allBooksIndex, setAllBooksIndex] = useState(0);
   const [bestSellersIndex, setBestSellersIndex] = useState(0);
   const [newPublishedIndex, setNewPublishedIndex] = useState(0);
   const fetchBooks = async () => {
@@ -61,11 +61,12 @@ const HomePage = () => {
     handleSearch();
   }, [search]);
 
+
   const handlePrev = (section) => {
     if (section === "popular") {
-      setPopularIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
+      // setPopularIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
     } else if (section === "allBooks") {
-      setAllBooksIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
+      // setAllBooksIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
     } else if (section === "bestSellers") {
       setBestSellersIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
     } else if (section === "newPublished") {
@@ -74,13 +75,13 @@ const HomePage = () => {
   };
   const handleNext = (section, length) => {
     if (section === "popular") {
-      setPopularIndex((prevIndex) =>
-        prevIndex < length - 6 ? prevIndex + 1 : prevIndex
-      );
+      // setPopularIndex((prevIndex) =>
+      //   prevIndex < length - 6 ? prevIndex + 1 : prevIndex
+      // );
     } else if (section === "allBooks") {
-      setAllBooksIndex((prevIndex) =>
-        prevIndex < length - 7 ? prevIndex + 1 : prevIndex
-      );
+      // setAllBooksIndex((prevIndex) =>
+      //   prevIndex < length - 7 ? prevIndex + 1 : prevIndex
+      // );
     } else if (section === "bestSellers") {
       setBestSellersIndex((prevIndex) =>
         prevIndex < length - 7 ? prevIndex + 1 : prevIndex
@@ -182,69 +183,10 @@ const HomePage = () => {
       {/* TODO: Show search results with searchItems. condition {searchItems.length > 0} */}
 
       {/*Popular books cards*/}
-      <section className="container relative -z-50 mx-auto bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-center">
-          {/* label */}
-          <Label name="Popular Books" />
-          {/* pagination / carousel */}
 
-          <button
-            onClick={() => handlePrev("popular")}
-            disabled={popularIndex === 0}
-            className="absolute left-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {popularIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
-          </button>
-
-          <button
-            onClick={() => handleNext("popular", books.length)}
-            disabled={popularIndex >= books?.length - 6}
-            className="absolute right-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {popularIndex >= books?.length - 6 ? <FaTimes /> : <FaAngleRight />}
-          </button>
-        </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 items-center justify-center md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {books?.slice(popularIndex, popularIndex + 6).map((book, idx) => (
-            <Card key={idx} book={book} />
-          ))}
-        </div>
-      </section>
 
       {/*All books cards*/}
-      <section className="container relative -z-50 mx-auto bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-center">
-          {/* label */}
-          <Label name="Books" />
-          {/* pagination / carousel */}
 
-          <button
-            onClick={() => handlePrev("allBooks")}
-            disabled={allBooksIndex === 0}
-            className="absolute left-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {allBooksIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
-          </button>
-          <button
-            onClick={() => handleNext("allBooks", books.length)}
-            disabled={allBooksIndex >= books?.length - 7}
-            className="absolute right-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {allBooksIndex >= books?.length - 7 ? (
-              <FaTimes />
-            ) : (
-              <FaAngleRight />
-            )}
-          </button>
-        </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {books?.slice(allBooksIndex, allBooksIndex + 7).map((book, idx) => (
-            <Card key={idx} book={book} />
-          ))}
-        </div>
-      </section>
 
       {/* TODO: a Hero Type Section */}
       <section></section>
