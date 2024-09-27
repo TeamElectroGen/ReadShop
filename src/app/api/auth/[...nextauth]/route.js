@@ -24,7 +24,7 @@ const handler = NextAuth({
         const db = await connectDB();
         const currentUser = await db
           .collection("users")
-          .findOne({ or: [{ email: emailOrPhone }, { phone: emailOrPhone }] });
+          .findOne({ $or: [{ email: emailOrPhone }, { phone: emailOrPhone }] });
         if (!currentUser) {
           return null;
         }
@@ -35,6 +35,7 @@ const handler = NextAuth({
         if (!passwordMatched) {
           return null;
         }
+        console.log(currentUser);
         return currentUser;
       },
     }),
@@ -43,6 +44,31 @@ const handler = NextAuth({
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
     }),
   ],
+  pages: {
+    signIn: "/login",
+  },
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account.provider === "google") {
+        const { email } = user;
+        try {
+          const db = await connectDB();
+          const userCollection = db.collection("users");
+          const exist = await userCollection.findOne({ email });
+          if (!exist) {
+            await userCollection.insertOne({ email });
+            return user;
+          } else {
+            return user;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        return user;
+      }
+    },
+  },
 });
 
 export { handler as GET, handler as POST };
