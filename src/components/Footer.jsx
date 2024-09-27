@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import { FaBookOpenReader, FaFacebook, FaInstagram, FaLocationArrow, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import {
+  FaBookOpenReader,
+  FaFacebook,
+  FaInstagram,
+  FaLocationArrow,
+  FaXTwitter,
+  FaYoutube,
+} from "react-icons/fa6";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import toast, { Toaster } from "react-hot-toast";
@@ -22,7 +29,6 @@ const Footer = () => {
     const newEmail = e.target.value;
     setEmail(newEmail);
     setIsValidEmail(validateEmail(newEmail));
-
   };
 
   // Handle form submission
@@ -30,27 +36,27 @@ const Footer = () => {
     if (isValidEmail) {
       console.log(`Subscribed email: ${email}`);
       toast.success("Subscribed successfully!");
-      setEmail("")
+      setEmail("");
     }
   };
 
   return (
-    <footer className="w-full bg-secondary bg-opacity-20 pt-10 rounded-t-sm -mt-2">
-      <div className="mx-auto container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-accent-foreground">
+    <footer className="-mt-2 w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 gap-4 text-accent-foreground md:grid-cols-3">
           {/* Logo and Address */}
           <div className="w-full">
             <div className="flex flex-col">
               <Link
                 href={"/"}
-                className="flex items-center gap-2 font-sans text-2xl font-bold w-fit"
+                className="flex w-fit items-center gap-2 font-sans text-2xl font-bold"
               >
-                <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
-                <span className="text-xl font-serif font-semibold tracking-wide">
+                <FaBookOpenReader className="size-7 rounded-sm bg-primary p-1.5 text-foreground" />
+                <span className="font-serif text-xl font-semibold tracking-wide">
                   Read Shop
                 </span>
               </Link>
-              <div className="pt-2 flex items-center gap-2">
+              <div className="flex items-center gap-2 pt-2">
                 <FaLocationArrow />
                 <p>51/A, Kamal Ataturk Avenue, Dhaka-1218</p>
               </div>
@@ -60,43 +66,71 @@ const Footer = () => {
           <div className="w-full">
             <div className="grid grid-cols-2 text-sm">
               <div className="flex flex-col">
-                <p className="text-lg font-bold pb-3">Pages:</p>
+                <p className="pb-3 text-lg font-bold">Pages:</p>
                 <span></span>
-                <Link href={'/'} className="w-fit">Home</Link>
-                <Link href={'/about'} className="w-fit">About</Link>
-                <Link href={'/contact-us'} className="w-fit">Contact us</Link>
-                <Link href={''} className="w-fit">Page 4</Link>
-                <Link href={''} className="w-fit">Page 5</Link>
-                <Link href={''} className="w-fit">Page 6</Link>
-                <Link href={''} className="w-fit">Page 7</Link>
+                <Link href={"/"} className="w-fit">
+                  Home
+                </Link>
+                <Link href={"/about"} className="w-fit">
+                  About
+                </Link>
+                <Link href={"/contact-us"} className="w-fit">
+                  Contact us
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 4
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 5
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 6
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 7
+                </Link>
                 <span></span>
               </div>
               <div className="flex flex-col">
-                <p className="text-lg font-bold pb-3">Category:</p>
-                <Link href={''} className="w-fit">Page 1</Link>
-                <Link href={''} className="w-fit">Page 2</Link>
-                <Link href={''} className="w-fit">Page 3</Link>
-                <Link href={''} className="w-fit">Page 4</Link>
-                <Link href={''} className="w-fit">Page 5</Link>
+                <p className="pb-3 text-lg font-bold">Category:</p>
+                <Link href={""} className="w-fit">
+                  Page 1
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 2
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 3
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 4
+                </Link>
+                <Link href={""} className="w-fit">
+                  Page 5
+                </Link>
               </div>
             </div>
           </div>
           {/* Newsletter & Social */}
           <div className="w-full">
-            <div className="border px-5 pb-2 rounded-md w-full mb-4">
-              <h2 className="md:text-sm lg:text-lg font-bold pt-5 text-center">
-                Subscribe to get our <span className="text-red-600">Newsletter</span> weekly!
+            <div className="mb-4 w-full rounded-md border px-5 pb-2">
+              <h2 className="pt-5 text-center font-bold md:text-sm lg:text-lg">
+                Subscribe to get our{" "}
+                <span className="text-red-600">Newsletter</span> weekly!
               </h2>
-              <p className="text-xs text-center pb-5">We don't send any spam mail, your email will be safe with us!</p>
-              <div className="flex flex-col lg:flex-row border rounded-sm px-0.5 py-0.5 md:px-0 md:py-0">
+              <p className="pb-5 text-center text-xs">
+                We don&apos;t send any spam mail, your email will be safe with
+                us!
+              </p>
+              <div className="flex flex-col rounded-sm border px-0.5 py-0.5 md:px-0 md:py-0 lg:flex-row">
                 <Input
                   placeholder="Email"
-                  className="border-none w-full rounded-l-sm rounded-b-none md:rounded-bl-sm md:rounded-r-none focus:outline-none focus:border-none"
+                  className="w-full rounded-b-none rounded-l-sm border-none focus:border-none focus:outline-none md:rounded-r-none md:rounded-bl-sm"
                   value={email}
                   onChange={handleEmailChange}
                 />
                 <Button
-                  className="bg-primary rounded-t-none md:rounded-tr-sm md:rounded-l-none"
+                  className="rounded-t-none bg-primary md:rounded-l-none md:rounded-tr-sm"
                   onClick={handleSubscribe}
                   disabled={!isValidEmail}
                 >
@@ -104,13 +138,21 @@ const Footer = () => {
                 </Button>
               </div>
             </div>
-            <div className="flex gap-4 items-center justify-center lg:justify-start">
+            <div className="flex items-center justify-center gap-4 lg:justify-start">
               <p className="">Follow Us:</p>
               <div className="flex gap-4 text-xl">
-                <Link href={''}><FaFacebook /></Link>
-                <Link href={''}><FaInstagram /></Link>
-                <Link href={''}><FaYoutube /></Link>
-                <Link href={''}><FaXTwitter /></Link>
+                <Link href={""}>
+                  <FaFacebook />
+                </Link>
+                <Link href={""}>
+                  <FaInstagram />
+                </Link>
+                <Link href={""}>
+                  <FaYoutube />
+                </Link>
+                <Link href={""}>
+                  <FaXTwitter />
+                </Link>
               </div>
             </div>
           </div>
@@ -119,7 +161,7 @@ const Footer = () => {
       <div className="mt-3 flex items-center justify-center bg-primary py-2 text-xs text-secondary-foreground">
         <p>
           Copyright © {new Date().getFullYear()} by{" "}
-          <Link href={'/'} className="underline">
+          <Link href={"/"} className="underline">
             Readshop Inc.
           </Link>
         </p>
