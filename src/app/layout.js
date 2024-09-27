@@ -36,10 +36,10 @@ export default function RootLayout({ children }) {
 
           <main className="app">
             <Navbar />
-            {children}
+            <div className="main_content">{children}</div>
             <Toaster position="top-center" reverseOrder={true} />
+            <Footer />
           </main>
-          <Footer />
         </body>
       </AuthProvider>
     </html>
