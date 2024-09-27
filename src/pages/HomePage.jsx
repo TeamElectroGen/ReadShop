@@ -34,24 +34,11 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    const selectedBooks = books.slice(0, 5);
-    localStorage.setItem("cartBooks", JSON.stringify(selectedBooks));
+    if (books.length > 0) {
+      const selectedBooks = books.slice(0, 5);
+      localStorage.setItem("cartBooks", JSON.stringify(selectedBooks));
+    }
   }, [books]);
-
-  // useEffect(() => {
-  //   const handleSearch = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${search}`
-  //       );
-  //       const { books } = res.data;
-  //       setSearchItems(books);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   handleSearch();
-  // }, [search]);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -104,6 +91,7 @@ const HomePage = () => {
       );
     }
   };
+
   return (
     <div className="space-y-5">
       {/*Search & Filter Banner*/}
@@ -210,15 +198,15 @@ const HomePage = () => {
 
           <button
             onClick={() => handleNext("popular", books.length)}
-            disabled={popularIndex >= books.length - 6}
+            disabled={popularIndex >= books?.length - 6}
             className="absolute right-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
           >
-            {popularIndex >= books.length - 6 ? <FaTimes /> : <FaAngleRight />}
+            {popularIndex >= books?.length - 6 ? <FaTimes /> : <FaAngleRight />}
           </button>
         </div>
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 items-center justify-center md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {books.slice(popularIndex, popularIndex + 6).map((book, idx) => (
+          {books?.slice(popularIndex, popularIndex + 6).map((book, idx) => (
             <Card key={idx} book={book} />
           ))}
         </div>
@@ -240,15 +228,19 @@ const HomePage = () => {
           </button>
           <button
             onClick={() => handleNext("allBooks", books.length)}
-            disabled={allBooksIndex >= books.length - 7}
+            disabled={allBooksIndex >= books?.length - 7}
             className="absolute right-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
           >
-            {allBooksIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
+            {allBooksIndex >= books?.length - 7 ? (
+              <FaTimes />
+            ) : (
+              <FaAngleRight />
+            )}
           </button>
         </div>
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {books.slice(allBooksIndex, allBooksIndex + 7).map((book, idx) => (
+          {books?.slice(allBooksIndex, allBooksIndex + 7).map((book, idx) => (
             <Card key={idx} book={book} />
           ))}
         </div>
@@ -273,10 +265,10 @@ const HomePage = () => {
           </button>
           <button
             onClick={() => handleNext("bestSellers", books.length)}
-            disabled={bestSellersIndex >= books.length - 7}
+            disabled={bestSellersIndex >= books?.length - 7}
             className="absolute right-0 top-1/2 h-24 bg-white p-2 text-3xl"
           >
-            {bestSellersIndex >= books.length - 7 ? (
+            {bestSellersIndex >= books?.length - 7 ? (
               <FaTimes />
             ) : (
               <FaAngleRight />
@@ -286,7 +278,7 @@ const HomePage = () => {
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {books
-            .slice(bestSellersIndex, bestSellersIndex + 7)
+            ?.slice(bestSellersIndex, bestSellersIndex + 7)
             .map((book, idx) => (
               <Card key={idx} book={book} />
             ))}
@@ -309,10 +301,10 @@ const HomePage = () => {
           </button>
           <button
             onClick={() => handleNext("newPublished", books.length)}
-            disabled={newPublishedIndex >= books.length - 7}
+            disabled={newPublishedIndex >= books?.length - 7}
             className="absolute right-0 top-1/2 h-24 bg-white p-2 text-3xl"
           >
-            {newPublishedIndex >= books.length - 7 ? (
+            {newPublishedIndex >= books?.length - 7 ? (
               <FaTimes />
             ) : (
               <FaAngleRight />
@@ -322,7 +314,7 @@ const HomePage = () => {
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {books
-            .slice(newPublishedIndex, newPublishedIndex + 7)
+            ?.slice(newPublishedIndex, newPublishedIndex + 7)
             .map((book, idx) => (
               <Card key={idx} book={book} />
             ))}
