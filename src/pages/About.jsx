@@ -650,9 +650,9 @@ const About = () => {
                   </p>
                   <p className="text-body-color dark:text-dark-6 mb-8 text-base">
                     From classic literature to modern bestsellers, we have a
-                    wide range of books to suit your taste. Whether you're a
-                    seasoned reader or just starting your literary journey,
-                    we're here to help you find your perfect match.
+                    wide range of books to suit your taste. Whether you&apos;re
+                    a seasoned reader or just starting your literary journey,
+                    we&apos;re here to help you find your perfect match.
                   </p>
                   <Link
                     href={"/"}
