@@ -10,11 +10,14 @@ import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import { getAllBooks } from "@/services/getBooksData";
 import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [searchItems, setSearchItems] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   // const [currentIndex,setCurrentIndex]= useState(0)
   const [popularIndex, setPopularIndex] = useState(0);
   const [allBooksIndex, setAllBooksIndex] = useState(0);
@@ -39,12 +42,18 @@ const HomePage = () => {
 
   useEffect(() => {
     const handleSearch = async () => {
+      if (search.trim() === "") {
+        setSearchItems([]);
+        setShowSearchResults(false);
+        return;
+      }
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${search}`
         );
         const { books } = res.data;
         setSearchItems(books);
+        setShowSearchResults(true);
       } catch (error) {
         console.log(error);
       }
@@ -82,7 +91,7 @@ const HomePage = () => {
       );
     }
   };
-  
+
   return (
     <div className="space-y-5">
       {/*Search & Filter Banner*/}
@@ -96,6 +105,61 @@ const HomePage = () => {
           shop, and enjoy stories that inspire and entertain.
         </p>
         {/* Search and filter */}
+        <div className="relative mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md">
+          <div className="relative ml-auto flex-1 md:grow-0">
+            <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
+            <Input
+              type="search"
+              name="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, author.."
+              className="w-full rounded-lg bg-background p-6 pl-9 md:w-[370px] lg:w-[360px]"
+            />
+          </div>
+          <Button variant="secondary" size="lg" className="p-6">
+            <IoFilter className="mr-2 size-4" />
+            Filter
+          </Button>
+          {/* Show search results dropdown */}
+          {showSearchResults && (
+            <div className="absolute left-0 top-full z-50 w-full bg-white shadow-lg">
+              {searchItems?.map((item, idx) => (
+                <Link
+                  href={`/view-details/${item._id}`}
+                  key={idx}
+                  className="flex justify-between border-b p-2 hover:bg-gray-100"
+                >
+                  <div className="flex">
+                    <Image
+                      src={item.CoverImage}
+                      alt={item.BookName}
+                      width={40}
+                      height={50}
+                      className="mr-2"
+                    />
+                    <div>
+                      <p className="font-semibold">{item.BookName}</p>
+                      <p className="text-sm text-gray-500">{item.AuthorName}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* <section className="container mt-16 flex flex-col items-center justify-center text-center">
+        <h1 className="scroll-m-20 font-sans text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
+          Discover & Explore <br />{" "}
+          <span className="yellow_gradient">A world of books</span>
+        </h1>
+        <p className="text-md mt-5 max-w-2xl text-muted-foreground sm:text-xl">
+          Discover a diverse collection of books to suit every reader. Explore,
+          shop, and enjoy stories that inspire and entertain.
+        </p>
+        Search and filter
         <div className="mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md">
           <div className="relative ml-auto flex-1 md:grow-0">
             <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
@@ -113,12 +177,12 @@ const HomePage = () => {
             Filter
           </Button>
         </div>
-      </section>
+      </section> */}
 
       {/* TODO: Show search results with searchItems. condition {searchItems.length > 0} */}
 
       {/*Popular books cards*/}
-      <section className="container relative mx-auto bg-[#d9d9d9] p-5">
+      <section className="container relative -z-50 mx-auto bg-[#d9d9d9] p-5">
         <div className="flex items-center justify-center">
           {/* label */}
           <Label name="Popular Books" />
@@ -149,7 +213,7 @@ const HomePage = () => {
       </section>
 
       {/*All books cards*/}
-      <section className="container relative mx-auto bg-[#d9d9d9] p-5">
+      <section className="container relative -z-50 mx-auto bg-[#d9d9d9] p-5">
         <div className="flex items-center justify-center">
           {/* label */}
           <Label name="Books" />
@@ -213,7 +277,8 @@ const HomePage = () => {
         </div>
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {books?.slice(bestSellersIndex, bestSellersIndex + 7)
+          {books
+            ?.slice(bestSellersIndex, bestSellersIndex + 7)
             .map((book, idx) => (
               <Card key={idx} book={book} />
             ))}
@@ -248,7 +313,8 @@ const HomePage = () => {
         </div>
         {/* cards */}
         <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {books?.slice(newPublishedIndex, newPublishedIndex + 7)
+          {books
+            ?.slice(newPublishedIndex, newPublishedIndex + 7)
             .map((book, idx) => (
               <Card key={idx} book={book} />
             ))}
