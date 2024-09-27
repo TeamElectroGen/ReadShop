@@ -1,6 +1,8 @@
 "use client";
+"use client"
+
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaCartShopping, FaCircleUser } from "react-icons/fa6";
 import { FaBookOpenReader } from "react-icons/fa6";
 import { Button } from "./ui/button";
@@ -15,9 +17,17 @@ import {
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
 import { signOut, useSession } from "next-auth/react";
+import ProductCart from "./ProductCart";
 
 const Navbar = () => {
   const { data } = useSession();
+  const [isCartOpen, setCartOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartBooks")) || [];
+    setCartCount(storedCartItems.length);
+  }, []);
 
   const navLinks = (
     <>
@@ -51,8 +61,13 @@ const Navbar = () => {
             <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon">
-              <FaCartShopping className="size-5" />
+            <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+              <FaCartShopping className="size-7" />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 rounded-sm bg-primary text-black text-xs size-4 font-bold">
+                  {cartCount}
+                </span>
+              )}
             </Button>
             {data?.user ? (
               <>
@@ -99,6 +114,9 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+
+      {/* Cart Drawer */}
+      <ProductCart isOpen={isCartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 };
