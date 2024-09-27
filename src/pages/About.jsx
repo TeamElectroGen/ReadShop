@@ -666,13 +666,12 @@ const About = () => {
         </section>
 
         {/* team here */}
-        <section className="bg-white py-12">
+        {/* <section className="bg-white py-12">
           <div className="container mx-auto text-center">
             <h2 className="mb-8 text-3xl font-bold">
               Our Professional <span className="text-blue-600">Members</span>
             </h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-              {/* Mentor 1 */}
               <div className="transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
                 <Image
                   src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -691,7 +690,6 @@ const About = () => {
                 </a>
               </div>
 
-              {/* Mentor 2 */}
               <div className="mt-8 transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
                 <Image
                   src="https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -710,7 +708,6 @@ const About = () => {
                 </a>
               </div>
 
-              {/* Mentor 3 */}
               <div className="transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
                 <Image
                   src="	https://images.pexels.com/photos/1212984/pexels-photo-1212984.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -729,7 +726,6 @@ const About = () => {
                 </a>
               </div>
 
-              {/* Mentor 4 */}
               <div className="mt-12 transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
                 <Image
                   src="	https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -751,7 +747,7 @@ const About = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </section>
   );
