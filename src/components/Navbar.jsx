@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
 import { signOut, useSession } from "next-auth/react";
+import UserMenu from "./UserMenu";
 
 const Navbar = () => {
   const { data } = useSession();
@@ -79,9 +80,7 @@ const Navbar = () => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
-                    <DropdownMenuItem>Support</DropdownMenuItem>
-                    <DropdownMenuSeparator />
+                    <UserMenu />
                     <DropdownMenuItem onClick={() => signOut()}>
                       Logout
                     </DropdownMenuItem>
