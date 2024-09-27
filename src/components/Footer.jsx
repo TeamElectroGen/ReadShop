@@ -22,6 +22,7 @@ const Footer = () => {
     const newEmail = e.target.value;
     setEmail(newEmail);
     setIsValidEmail(validateEmail(newEmail));
+
   };
 
   // Handle form submission
@@ -29,19 +30,20 @@ const Footer = () => {
     if (isValidEmail) {
       console.log(`Subscribed email: ${email}`);
       toast.success("Subscribed successfully!");
+      setEmail("")
     }
   };
 
   return (
-    <footer className="w-full bg-secondary pt-10 rounded-t-sm -mt-2">
-      <div className="mx-auto w-11/12 md:container">
+    <footer className="w-full bg-secondary bg-opacity-20 pt-10 rounded-t-sm -mt-2">
+      <div className="mx-auto container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-accent-foreground">
           {/* Logo and Address */}
           <div className="w-full">
             <div className="flex flex-col">
               <Link
                 href={"/"}
-                className="flex items-center gap-2 font-sans text-2xl font-bold"
+                className="flex items-center gap-2 font-sans text-2xl font-bold w-fit"
               >
                 <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
                 <span className="text-xl font-serif font-semibold tracking-wide">
@@ -83,18 +85,18 @@ const Footer = () => {
           <div className="w-full">
             <div className="border px-5 pb-2 rounded-md w-full mb-4">
               <h2 className="md:text-sm lg:text-lg font-bold pt-5 text-center">
-                Subscribe to get our <span className="text-accent-foreground">Newsletter</span> weekly!
+                Subscribe to get our <span className="text-red-600">Newsletter</span> weekly!
               </h2>
               <p className="text-xs text-center pb-5">We don't send any spam mail, your email will be safe with us!</p>
-              <div className="flex flex-col lg:flex-row border rounded-md py-0.5 px-0.5">
+              <div className="flex flex-col lg:flex-row border rounded-sm px-0.5 py-0.5 md:px-0 md:py-0">
                 <Input
                   placeholder="Email"
-                  className="border-none"
+                  className="border-none w-full rounded-l-sm rounded-b-none md:rounded-bl-sm md:rounded-r-none focus:outline-none focus:border-none"
                   value={email}
                   onChange={handleEmailChange}
                 />
                 <Button
-                  className="bg-yellow-600"
+                  className="bg-primary rounded-t-none md:rounded-tr-sm md:rounded-l-none"
                   onClick={handleSubscribe}
                   disabled={!isValidEmail}
                 >

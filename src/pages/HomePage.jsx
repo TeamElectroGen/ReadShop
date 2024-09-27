@@ -24,10 +24,18 @@ const HomePage = () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
   };
+
   useEffect(() => {
     // Fetching books.json from the public folder
     fetchBooks();
   }, []);
+
+  useEffect(() => {
+    if (books.length > 0) {
+      const selectedBooks = books.slice(0, 5);
+      localStorage.setItem("cartBooks", JSON.stringify(selectedBooks));
+    }
+  }, [books]);
 
   useEffect(() => {
     const handleSearch = async () => {
