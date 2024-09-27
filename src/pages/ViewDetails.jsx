@@ -1,5 +1,11 @@
 "use client";
-import { getBookDetails } from "@/services/getBooksData";
+import {
+  getBookDetails,
+  getReadWishStatusUser,
+  patchRWList,
+} from "@/services/getBooksData";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaLongArrowAltRight } from "react-icons/fa";
@@ -8,23 +14,53 @@ import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
 
 const ViewDetails = ({ bookid }) => {
   const [detailsBook, setDetailsBook] = useState({}); // Initialize as an empty object
+  const [update, setUpdate] = useState(false);
+  const [rWStatus, setRWStatus] = useState({});
   const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const { data } = useSession();
 
   const handleAddToCartClick = () => {
     setIsAddedToCart(true);
   };
 
+  const handleRWList = async (param) => {
+    try {
+      const res = await patchRWList(param, bookid, data?.user?.email);
+      setUpdate(!update);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(rWStatus);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { readList, wishList } = await getReadWishStatusUser(
+        bookid,
+        data?.user?.email
+      );
+      setRWStatus({ readList, wishList });
+    };
+    fetch();
+  }, [bookid, data?.user?.email, update]);
+
   useEffect(() => {
     const fetch = async () => {
       const { bookDetails } = await getBookDetails(bookid);
       setDetailsBook(bookDetails);
+      const { readList, wishList } = await getReadWishStatusUser(
+        bookid,
+        data?.user?.email
+      );
+      setRWStatus({ readList, wishList });
     };
     fetch();
-  }, [bookid]);
+  }, [bookid, data?.user?.email]);
 
   return (
-    <div className="mx-auto max-w-5xl rounded-lg bg-gray-100 p-6 shadow-lg">
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+    <div className="mx-auto max-w-5xl rounded-lg p-6 md:my-10 lg:my-20">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {/* Left Side - Book Image */}
         <div className="flex items-center justify-center">
           <Image
@@ -67,7 +103,7 @@ const ViewDetails = ({ bookid }) => {
           {/* Price & Add to Cart Buttons */}
           <div className="mt-6 flex items-center justify-between">
             <span className="text-2xl font-bold text-green-700">
-              ৳{detailsBook.Price}
+              $ {detailsBook.Price}
             </span>
           </div>
 
@@ -91,14 +127,20 @@ const ViewDetails = ({ bookid }) => {
             </button>
 
             {/* Add to Read List Button */}
-            <button className="text-ms flex flex-1 items-center justify-center rounded-lg bg-green-600 px-2 py-2.5 text-center font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300">
+            <button
+              onClick={() => handleRWList("read")}
+              className="text-ms flex flex-1 items-center justify-center rounded-lg bg-green-600 px-2 py-2.5 text-center font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300"
+            >
               <FaBookOpen className="mr-3 size-5" />
               Add to Read List
             </button>
           </div>
           {/* Add to Wish List Button */}
           <div className="mt-4">
-            <button className="flex items-center justify-center rounded-lg bg-gray-600 px-5 py-2.5 text-center text-xl font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300">
+            <button
+              onClick={() => handleRWList("wish")}
+              className="flex items-center justify-center rounded-lg bg-gray-600 px-5 py-2.5 text-center text-xl font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300"
+            >
               <FaRegHeart className="mr-3 size-6" /> Add to Wishlist
             </button>
           </div>
