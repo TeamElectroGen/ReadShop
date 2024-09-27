@@ -21,7 +21,7 @@ const ProfileLayout = ({ children }) => {
         {/* Dashboard container */}
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           {/* navigation */}
-          <aside className="-mr-4 rounded-lg bg-popover py-8 shadow-sm lg:w-1/4">
+          <aside className="-mr-4 px-2 lg:px-4 rounded-lg bg-popover py-8 shadow-sm lg:w-1/4">
             <header className="flex flex-col items-center justify-center gap-2 text-center">
               <Avatar className="size-16">
                 <AvatarImage src="https://github.com/shadcn.pn" />
