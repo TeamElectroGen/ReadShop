@@ -1,11 +1,119 @@
-import React from 'react';
+"use client";
+import { getBookDetails } from "@/services/getBooksData";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { FaBookOpen, FaLongArrowAltRight } from "react-icons/fa";
+import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
+// import { FaShoppingCart } from "react-icons/fa";
 
-const ViewDetails = () => {
-    return (
-        <div>
-            <p className="text-red-700">view details page</p>
+const ViewDetails = ({ bookid }) => {
+  const [detailsBook, setDetailsBook] = useState({}); // Initialize as an empty object
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+
+  const handleAddToCartClick = () => {
+    setIsAddedToCart(true);
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { bookDetails } = await getBookDetails(bookid);
+      setDetailsBook(bookDetails);
+    };
+    fetch();
+  }, [bookid]);
+
+  return (
+    <div className="mx-auto max-w-5xl rounded-lg bg-gray-100 p-6 shadow-lg">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+        {/* Left Side - Book Image */}
+        <div className="flex items-center justify-center">
+          <Image
+            src={detailsBook.CoverImage}
+            alt={detailsBook.BookName}
+            width={300}
+            height={500}
+            className="rounded-lg shadow-md"
+          />
         </div>
-    );
-}
+
+        {/* Right Side - Book Details */}
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          <h1 className="text-2xl font-bold text-gray-800">
+            {detailsBook.BookName}
+          </h1>
+          <p className="mt-2 text-gray-600">by {detailsBook.AuthorName}</p>
+          <div className="mt-4 flex items-center">
+            <span className="rounded bg-yellow-400 px-2.5 py-0.5 text-sm font-semibold">
+              {detailsBook.Rating} Stars
+            </span>
+            <span className="ml-2 font-bold text-gray-500">| 3 Reviews</span>
+          </div>
+
+          {/* Book Description */}
+          <p className="mt-4 text-gray-600">{detailsBook.Description}</p>
+
+          {/* Additional Details */}
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold">Published by:</span>{" "}
+              {detailsBook.PublicationName}
+            </p>
+            <p className="mt-1 text-sm text-gray-500">
+              <span className="font-semibold">Publish Date:</span>{" "}
+              {new Date(detailsBook.PublishDate).toDateString()}
+            </p>
+          </div>
+
+          {/* Price & Add to Cart Buttons */}
+          <div className="mt-6 flex items-center justify-between">
+            <span className="text-2xl font-bold text-green-700">
+              ৳{detailsBook.Price}
+            </span>
+          </div>
+
+          <div className="mt-4 flex space-x-4">
+            {/* Add to Cart Button */}
+
+            <button
+              className={`flex flex-1 items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-xl font-medium text-white duration-300 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
+              onClick={handleAddToCartClick}
+            >
+              {isAddedToCart ? (
+                <>
+                  <FaCartShopping className="mr-3 size-5" /> Go to Cart{" "}
+                  <FaLongArrowAltRight className="ml-3 size-5" />
+                </>
+              ) : (
+                <>
+                  <FaCartShopping className="mr-3 size-5" /> Add to Cart
+                </>
+              )}
+            </button>
+
+            {/* Add to Read List Button */}
+            <button className="text-ms flex flex-1 items-center justify-center rounded-lg bg-green-600 px-2 py-2.5 text-center font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300">
+              <FaBookOpen className="mr-3 size-5" />
+              Add to Read List
+            </button>
+          </div>
+          {/* Add to Wish List Button */}
+          <div className="mt-4">
+            <button className="flex items-center justify-center rounded-lg bg-gray-600 px-5 py-2.5 text-center text-xl font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300">
+              <FaRegHeart className="mr-3 size-6" /> Add to Wishlist
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Additional Section Below (if needed) */}
+      <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
+        <h2 className="text-xl font-semibold text-gray-800">More Details</h2>
+        <p className="mt-2 text-gray-600">
+          Explore more information about the book, author, and publication here.
+        </p>
+      </div>
+    </div>
+  );
+};
 
 export default ViewDetails;

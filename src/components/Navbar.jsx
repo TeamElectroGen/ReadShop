@@ -1,3 +1,4 @@
+"use client";
 "use client"
 
 import Link from "next/link";
@@ -15,10 +16,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
+import { signOut, useSession } from "next-auth/react";
 import ProductCart from "./ProductCart";
 
 const Navbar = () => {
-  const user = true;
+  const { data } = useSession();
   const [isCartOpen, setCartOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
@@ -49,8 +51,8 @@ const Navbar = () => {
             href={"/"}
             className="flex items-center gap-2 font-sans text-2xl font-bold"
           >
-            <FaBookOpenReader className="text-foreground size-7 p-1.5 bg-primary rounded-sm" />
-            <span className="text-xl font-serif font-semibold tracking-wide">
+            <FaBookOpenReader className="size-7 rounded-sm bg-primary p-1.5 text-foreground" />
+            <span className="font-serif text-xl font-semibold tracking-wide">
               Read Shop
             </span>
           </Link>
@@ -67,8 +69,7 @@ const Navbar = () => {
                 </span>
               )}
             </Button>
-
-            {user ? (
+            {data?.user ? (
               <>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -77,7 +78,7 @@ const Navbar = () => {
                       size="icon"
                       className="overflow-hidden rounded-full"
                     >
-                      {user?.photoURL ? (
+                      {data?.user?.photoURL ? (
                         <Image
                           src="/placeholder-user.jpg"
                           width={36}
@@ -96,12 +97,18 @@ const Navbar = () => {
                     <DropdownMenuItem>Settings</DropdownMenuItem>
                     <DropdownMenuItem>Support</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => signOut()}>
+                      Logout
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
             ) : (
-              <Button size="sm" className="font-semibold">Get Started</Button>
+              <Link href={"/login"}>
+                <Button size="sm" className="font-semibold">
+                  Get Started
+                </Button>
+              </Link>
             )}
             <HamburgerMenu navLinks={navLinks} />
           </div>
