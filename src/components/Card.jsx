@@ -1,14 +1,14 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import RatingStar from "./RatingStar";
 
 const Card = ({ book }) => {
   return (
-    <div className="mx-auto h-full flex w-full max-w-[200px] flex-col overflow-hidden shadow-md mb-5 rounded-md">
+    <Link href={`/view-details/${book._id}`} className="border-2 border-white/70 bg-background/50 backdrop-blur-md z-50 hover:shadow-md p-4 space-y-3 h-full flex w-full max-w-[212px] flex-col overflow-hidden mb-4 rounded-xl">
       {/* Book Cover Image */}
-      <div className="h-[229px] bg-[#f3f2f2] relative overflow-hidden">
+      <div className="h-[260px] rounded-md bg-[#f3f2f2] relative overflow-hidden">
         <Image
           src={book.CoverImage}
           alt={book.BookName}
@@ -18,7 +18,7 @@ const Card = ({ book }) => {
         />
       </div>
       {/* Book Info */}
-      <div className="flex flex-1 flex-col justify-between p-4">
+      <div className="flex flex-1 flex-col justify-between">
         {/* Book Name & Author */}
         <div className="flex-grow h-24">
           <p className="text-sm font-bold line-clamp-2">{book.BookName}</p>
@@ -31,15 +31,15 @@ const Card = ({ book }) => {
           </div>
         </div>
         {/* View Details Button */}
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <Link href={`/view-details/${book._id}`}>
             <Button variant="outline" className="w-full">
               View Details
             </Button>
           </Link>
-        </div>
+        </div> */}
       </div>
-    </div>
+    </Link>
   );
 };
 
