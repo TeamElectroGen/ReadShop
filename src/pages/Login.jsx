@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
-import SocialLogin from "./SocialLogin";
+import SocialLogin from "@/components/SocialLogin";
 import { useSearchParams } from "next/navigation";
 
 const Login = () => {
