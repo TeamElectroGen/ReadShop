@@ -6,7 +6,6 @@ export const middleware = async (request) => {
   // TODO: when deploying on Vercel add suffix: __Secure-next-auth.session-token
   const token = cookies(request).get("next-auth.session-token");
   const pathname = request.nextUrl.pathname;
-  console.log("token", token);
 
   // Check if the user is authenticated
   if (!token) {
