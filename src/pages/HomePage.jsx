@@ -78,7 +78,10 @@ const HomePage = () => {
           shop, and enjoy stories that inspire and entertain.
         </p>
         {/* Search and filter */}
-        <div className="relative mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md z-50" ref={dropdownRef}>
+        <div
+          className="relative z-50 mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md"
+          ref={dropdownRef}
+        >
           <div className="relative ml-auto flex-1 md:grow-0">
             <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
             <Input
@@ -96,7 +99,7 @@ const HomePage = () => {
           </Button>
           {/* Show search results dropdown */}
           {showSearchResults && (
-            <div className="absolute left-0 top-[4.2rem] z-50 w-full bg-white rounded-b-sm shadow-lg">
+            <div className="absolute left-0 top-[4.2rem] z-50 w-full rounded-b-sm bg-white shadow-lg">
               {searchItems?.map((item, idx) => (
                 <Link
                   href={`/view-details/${item._id}`}
@@ -124,28 +127,28 @@ const HomePage = () => {
       </section>
 
       {/* Best Sellers Book Slider */}
-      <section className="bg-secondary/50 border-b border-primary mt-10 rounded-sm p-10 z-10">
-        <BookSectionTitle title={'Best Sellers'} />
+      <section className="z-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
+        <BookSectionTitle title={"Best Sellers"} />
         <BookSectionSlider
-          items={books.slice(0, 10)}
+          items={books?.slice(0, 10)}
           renderCard={renderBookCard}
         />
       </section>
 
       {/* New Published Books Slider */}
-      <section className="bg-secondary/50 border-b border-primary mt-10 rounded-sm p-10 z-10">
-        <BookSectionTitle title={'New Published'} />
+      <section className="z-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
+        <BookSectionTitle title={"New Published"} />
         <BookSectionSlider
-          items={books.slice(0, 10)}
+          items={books?.slice(0, 10)}
           renderCard={(book) => <Card book={book} />}
         />
       </section>
 
       {/* Top of the month Books Slider */}
-      <section className="bg-secondary/50 border-b border-primary mt-10 rounded-sm p-10 z-10 mb-10">
-        <BookSectionTitle title={'Top of Month'} />
+      <section className="z-10 mb-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
+        <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
-          items={books.slice(0, 10)} // Show 10 books 
+          items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
       </section>
