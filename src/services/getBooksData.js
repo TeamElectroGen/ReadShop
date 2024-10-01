@@ -79,3 +79,29 @@ export const getSearchBooks = async (q) => {
     return [];
   }
 };
+
+// Fetch wishlist books for user
+export const getWishlistBooks = async (email) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/wish-read/all-wish-user?email=${email}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+// Fetch readList books for user
+export const getReadListBooks = async (email) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/wish-read/all-read-user?email=${email}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
