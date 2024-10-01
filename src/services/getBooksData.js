@@ -79,6 +79,8 @@ export const getSearchBooks = async (q) => {
     return [];
   }
 };
+
+// Fetch wishlist books for user
 export const getWishlistBooks = async (email) => {
   try {
     const res = await axios(
@@ -91,6 +93,7 @@ export const getWishlistBooks = async (email) => {
   }
 };
 
+// Fetch readList books for user
 export const getReadListBooks = async (email) => {
   try {
     const res = await axios(
