@@ -123,7 +123,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Best Sellers Book Slider */}
+      {/* Best Sellers Book Slider  (Albab updated this section) */}
       <section className="bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur rounded-xl border-b-4 border-primary mt-10 p-8 z-10">
         <BookSectionTitle title={'Best Sellers'} />
         <BookSectionSlider
