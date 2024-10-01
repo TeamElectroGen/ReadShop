@@ -2,8 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
-import { getAllBooks } from "@/services/getBooksData";
-import axios from "axios";
+import { getAllBooks, getSearchBooks } from "@/services/getBooksData";
 import Image from "next/image";
 import Link from "next/link";
 import BookSectionSlider from "@/components/BookSectionSlider";
@@ -31,20 +30,14 @@ const HomePage = () => {
 
   useEffect(() => {
     const handleSearch = async () => {
-      if (search.trim() === "") {
-        setSearchItems([]);
-        setShowSearchResults(false);
-        return;
-      }
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${search}`
-        );
-        const { books } = res.data;
-        setSearchItems(books);
-        setShowSearchResults(true);
-      } catch (error) {
-        console.log(error);
+      if (search) {
+        try {
+          const { books } = await getSearchBooks(search);
+          setSearchItems(books);
+          setShowSearchResults(true);
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
     handleSearch();
