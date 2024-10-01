@@ -74,9 +74,9 @@ const WishlistPage = () => {
                     src={book.CoverImage}
                     width="64"
                   />
-                  <div className="space-y-2">
-                    <p>{book.BookName}</p>
-                    <p className="text-gray-500">{book.AuthorName}</p>
+                  <div className="space-y-1">
+                    <p className="text-foreground">{book.BookName}</p>
+                    <p className="text-gray-500 text-xs">{book.AuthorName}</p>
                   </div>
                 </TableCell>
                 <TableCell className="text-red-600 font-semibold">${book.Price}</TableCell>
