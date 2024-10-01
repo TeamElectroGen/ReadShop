@@ -5,17 +5,13 @@ import { useSearchParams } from "next/navigation";
 import React from "react";
 
 const SocialLogin = () => {
-  const searchParams = useSearchParams();
-  const path = searchParams.get("redirect");
-  // const router = useRouter();
+  const path = useSearchParams().get("redirect");
+
   const handleGoogleLogin = () => {
     const res = signIn("google", { redirect: true, callbackUrl: path || "/" });
     console.log(res);
   };
-  // if (session?.status === "authenticated") {
-  //   toast.success("Logged in successfully");
-  //   return router.push("/");
-  // }
+
   return (
     <div className="mt-3 space-y-3">
       <button

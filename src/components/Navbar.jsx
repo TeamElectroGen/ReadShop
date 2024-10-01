@@ -1,5 +1,4 @@
 "use client";
-"use client"
 
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -62,10 +61,15 @@ const Navbar = () => {
             <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative"
+              onClick={() => setCartOpen(true)}
+            >
               <FaCartShopping className="size-7" />
               {cartCount > 0 && (
-                <span className="absolute top-0 right-0 rounded-sm bg-primary text-black text-xs size-4 font-bold">
+                <span className="absolute right-0 top-0 size-4 rounded-sm bg-primary text-xs font-bold text-black">
                   {cartCount}
                 </span>
               )}

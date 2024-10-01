@@ -9,7 +9,6 @@ export async function GET(request) {
   const booksCollection = await db.collection("books");
   try {
     const search = searchParams.get("q");
-    console.log(search);
     let query = {};
     if (search) {
       query = {
