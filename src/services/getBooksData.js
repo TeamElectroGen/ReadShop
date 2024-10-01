@@ -66,3 +66,16 @@ export const getBooksByIds = async (ids) => {
     return [];
   }
 };
+
+// Fetches search results books.
+export const getSearchBooks = async (q) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${q}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
