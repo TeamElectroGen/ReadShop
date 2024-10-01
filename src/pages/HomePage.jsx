@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
+import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
@@ -139,6 +140,11 @@ const HomePage = () => {
           items={books.slice(0, 10)}
           renderCard={(book) => <Card book={book} />}
         />
+      </section>
+
+      {/* Category Grid */}
+      <section>
+        <HomePageCategoryGrid books={books} />
       </section>
 
       {/* Top of the month Books Slider */}

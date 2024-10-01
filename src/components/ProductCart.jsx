@@ -5,76 +5,115 @@ import Image from "next/image";
 import { MdDelete } from "react-icons/md";
 import { Button } from "./ui/button";
 import { FaCircle, FaCircleArrowRight } from "react-icons/fa6";
+import { getBookDetails } from "@/services/getBooksData";
 
 const ProductCart = ({ isOpen, onClose }) => {
-    const [cartItems, setCartItems] = useState([]);
+  const [cartBooks, setCartBooks] = useState([]);
 
-    // Get Cart items from local storage
-    useEffect(() => {
-        const storedCartItems = JSON.parse(localStorage.getItem("cartBooks")) || [];
-        setCartItems(storedCartItems);
-    }, []);
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartBooks")) || [];
+    fetchCartBookDetails(storedCartItems);
+  }, []);
 
-    // Total price
-    const totalPrice = cartItems.reduce((total, book) => total + book.Price, 0);
+  const fetchCartBookDetails = async (storedCartItems) => {
+    try {
+      const bookDetailsPromises = storedCartItems.map(async (item) => {
+        const book = await getBookDetails(item.id); // Use item.id here
+        return { ...book, quantity: item.quantity }; // Include the quantity
+      });
 
-    // Remove item from Local Storage by BookName
-    const removeItem = (bookName) => {
-        const updatedCartItems = cartItems.filter(book => book.BookName !== bookName);
-        setCartItems(updatedCartItems);
-        localStorage.setItem("cartBooks", JSON.stringify(updatedCartItems));
-    };
+      const bookDetails = await Promise.all(bookDetailsPromises);
+      setCartBooks(bookDetails);
+    } catch (error) {
+      console.log("Error fetching book details:", error);
+    }
+  };
 
-    return (
-        <div>
-            <Sheet open={isOpen} onOpenChange={onClose}>
-                <SheetContent className="w-[400px] scroll">
-                    <div className="border-b border-primary">
-                        <h2 className="text-lg font-semibold bg-primary w-fit px-2 rounded-t-sm py-1">Your Cart</h2>
+  const totalPrice = cartBooks.reduce(
+    (total, book) => total + book.Price * book.quantity,
+    0
+  );
+
+  const removeItem = (bookId) => {
+    const updatedCartItems = cartBooks.filter((item) => item.id !== bookId);
+    setCartBooks(updatedCartItems);
+    localStorage.setItem("cartBooks", JSON.stringify(updatedCartItems));
+  };
+
+  return (
+    <div>
+      <Sheet open={isOpen} onOpenChange={onClose}>
+        <SheetContent className="scroll w-[400px]">
+          <div className="border-b border-primary">
+            <h2 className="w-fit rounded-t-sm bg-primary px-2 py-1 text-lg font-semibold">
+              Your Cart
+            </h2>
+          </div>
+          {/* Cart Item */}
+          {cartBooks.length > 0 ? (
+            <ul className="mt-4 flex flex-col gap-2">
+              {cartBooks.map((book) => (
+                <li
+                  key={book.id}
+                  className="flex min-h-20 items-center justify-between gap-5 rounded-sm border-b border-primary bg-primary/10 p-2"
+                >
+                  <div className="flex w-full gap-2">
+                    <div>
+                      <Image
+                        src={book.CoverImage}
+                        alt="Book Cover"
+                        className="min-h-10"
+                        width={40}
+                        height={30}
+                      />
                     </div>
-                    {/* Cart Item */}
-                    {cartItems.length > 0 ? (
-                        <ul className="flex flex-col gap-2 mt-4">
-                            {cartItems.map((book) => (
-                                <li key={book.BookName} className="p-2 border-b border-primary flex justify-between gap-5 min-h-20 items-center bg-primary/10 rounded-sm">
-                                    <div className="flex gap-2 w-full">
-                                        <div>
-                                            <Image src={book.CoverImage} alt="Book Cover" className="min-h-10" width={40} height={30} />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xs font-bold">{book.BookName}</h3>
-                                            <p className="text-[0.5rem]">By: {book.AuthorName}</p>
-                                        </div>
-                                    </div>
-                                    <p className="text-sm">${book.Price.toFixed(2)}</p>
-                                    <button
-                                        onClick={() => removeItem(book.BookName)}
-                                        className="w-fit h-fit p-1 rounded-sm hover:underline"
-                                    >
-                                        <MdDelete />
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="h-40 flex items-center justify-center">Your cart is currently empty.</p>
-                    )}
-                    {/* Total Price */}
-                    {cartItems.length > 0 && (
-                        <div className="mt-4 border-t border-primary flex justify-between bg-primary-foreground/20 px-4 py-2 rounded-sm">
-                            <h3 className="text-lg font-semibold">Total Price:</h3>
-                            <h3 className="pr-6 text-lg font-semibold">${totalPrice.toFixed(2)}</h3>
-                        </div>
-                    )}
-                    {/* Checkout and Details Button */}
-                    <div className="flex justify-between mt-4 gap-4">
-                        <Button className="w-full bg-primary-foreground text-white flex gap-2 hover:bg-primary-foreground/90"><FaCircle />Cart Details</Button>
-                        <Button className="w-full bg-primary flex gap-2">Checkout <FaCircleArrowRight /></Button>
+                    <div>
+                      <h3 className="text-xs font-bold">{book.BookName}</h3>
+                      <p className="text-[0.5rem]">By: {book.AuthorName}</p>
+                      <p className="text-sm">Quantity: {book.quantity}</p>
                     </div>
-                </SheetContent>
-            </Sheet>
-        </div>
-    );
+                  </div>
+                  <p className="text-sm">
+                    ${(book.Price * book.quantity).toFixed(2)}
+                  </p>
+                  <button
+                    onClick={() => removeItem(book.id)} // Pass book.id to removeItem
+                    className="h-fit w-fit rounded-sm p-1 hover:underline"
+                  >
+                    <MdDelete />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="flex h-40 items-center justify-center">
+              Your cart is currently empty.
+            </p>
+          )}
+          {/* Total Price */}
+          {cartBooks.length > 0 && (
+            <div className="mt-4 flex justify-between rounded-sm border-t border-primary bg-primary-foreground/20 px-4 py-2">
+              <h3 className="text-lg font-semibold">Total Price:</h3>
+              <h3 className="pr-6 text-lg font-semibold">
+                ${totalPrice.toFixed(2)}
+              </h3>
+            </div>
+          )}
+          {/* Checkout and Details Button */}
+          <div className="mt-4 flex justify-between gap-4">
+            <Button className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90">
+              <FaCircle />
+              Cart Details
+            </Button>
+            <Button className="flex w-full gap-2 bg-primary">
+              Checkout
+              <FaCircleArrowRight />
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
 };
 
 export default ProductCart;
