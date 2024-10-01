@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -19,23 +20,23 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-export const wishlist = [
-  {
-    image: "photo.jpg",
-    name: "book 1",
-    price: 100,
-    stockStatus: "In Stock",
-  },
-  {
-    image: "photo.jpg",
-    name: "book 2",
-    price: 125,
-    stockStatus: "Stock Out",
-  },
-];
+import { getWishlistBooks } from "@/services/getBooksData";
+import { useSession } from "next-auth/react";
 
 const WishlistPage = () => {
+  const [wishlistBooks, setWishlistBooks] = useState([]);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      const res = await getWishlistBooks(session?.user.email);
+      setWishlistBooks(res.books);
+    };
+    fetchWishlist();
+  }, [session?.user.email]);
+
+  console.log(wishlistBooks);
+
   return (
     <Card>
       <CardHeader>
@@ -60,31 +61,40 @@ const WishlistPage = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
+          {/* Table content */}
           <TableBody>
-            <TableRow>
-              <TableCell className="hidden sm:table-cell">1.</TableCell>
-              <TableCell className="flex items-center gap-2 font-medium">
-                <Image
-                  alt="Product image"
-                  className="aspect-square rounded-md border object-cover"
-                  height="64"
-                  src="/placeholder.svg"
-                  width="64"
-                />
-                <p>The Alchemist</p>
-              </TableCell>
-              <TableCell>$499.99</TableCell>
-              <TableCell>
-                <Badge variant="outline" className="bg-green-50 text-green-600">
-                  In stock
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Button size="icon" variant="outline">
-                  <Trash2 className="size-5 text-destructive" />
-                </Button>
-              </TableCell>
-            </TableRow>
+            {wishlistBooks?.map((book, idx) => (
+              <TableRow key={book._id}>
+                <TableCell className="hidden sm:table-cell">{idx + 1}.</TableCell>
+                <TableCell className="flex items-center gap-2 font-medium">
+                  <Image
+                    alt="Product image"
+                    className="rounded-md border object-cover"
+                    height="64"
+                    src={book.CoverImage}
+                    width="64"
+                  />
+                  <div className="space-y-2">
+                    <p>{book.BookName}</p>
+                    <p className="text-gray-500">{book.AuthorName}</p>
+                  </div>
+                </TableCell>
+                <TableCell className="text-red-600 font-semibold">${book.Price}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 text-green-600"
+                  >
+                    In stock
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Button size="icon" variant="outline">
+                    <Trash2 className="size-5 text-destructive" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>
