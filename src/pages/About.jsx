@@ -16,11 +16,13 @@ const About = () => {
             layout="fill"
             className="rounded-md object-cover"
           />
-          <div className="absolute text-center top-4 z-10">
-            <h1 className="text-3xl font-bold text-white font-display">
+          <div className="relative z-10">
+            <h1 className="font-display text-3xl font-bold text-darkGray-800">
               About Us
             </h1>
-           
+            <p className="py-3 text-center font-mono text-sm font-medium text-mediumGray-500">
+              Home / About us
+            </p>
           </div>
         </header>
 
@@ -661,9 +663,17 @@ const About = () => {
                 </div>
               </div>
             </div>
-            {/* team card */}
-            <div className="h-52 w-40 rounded-t-full border-4 p-2">
-              <div className="relative flex h-3/4 items-center justify-center rounded-full border bg-white">
+          </div>
+        </section>
+
+        {/* team here */}
+        {/* <section className="bg-white py-12">
+          <div className="container mx-auto text-center">
+            <h2 className="mb-8 text-3xl font-bold">
+              Our Professional <span className="text-blue-600">Members</span>
+            </h2>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
+              <div className="transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
                 <Image
                   src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt="Rayna Torff"
@@ -738,7 +748,7 @@ const About = () => {
               </div>
             </div>
           </div>
-        </section> 
+        </section> */}
       </div>
     </section>
   );
