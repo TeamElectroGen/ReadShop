@@ -1,3 +1,4 @@
+"use client";
 import ViewDetails from "@/pages/ViewDetails";
 import React from "react";
 

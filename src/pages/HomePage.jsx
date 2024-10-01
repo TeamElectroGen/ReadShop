@@ -1,42 +1,48 @@
 "use client";
-import Label from "@/components/Label";
-import React, { useEffect, useState } from "react";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { FaTimes } from "react-icons/fa";
-import Card from "@/components/Card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import React, { useEffect, useState, useRef } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import { getAllBooks } from "@/services/getBooksData";
 import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
+import BookSectionSlider from "@/components/BookSectionSlider";
+import Card from "@/components/Card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import BookSectionTitle from "@/components/BookSectionTitle";
+import RatingStar from "@/components/RatingStar";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [searchItems, setSearchItems] = useState([]);
-  // const [currentIndex,setCurrentIndex]= useState(0)
-  const [popularIndex, setPopularIndex] = useState(0);
-  const [allBooksIndex, setAllBooksIndex] = useState(0);
-  const [bestSellersIndex, setBestSellersIndex] = useState(0);
-  const [newPublishedIndex, setNewPublishedIndex] = useState(0);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const dropdownRef = useRef(null); // Reference for dropdown
+
   const fetchBooks = async () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
   };
+
   useEffect(() => {
-    // Fetching books.json from the public folder
     fetchBooks();
   }, []);
 
   useEffect(() => {
     const handleSearch = async () => {
+      if (search.trim() === "") {
+        setSearchItems([]);
+        setShowSearchResults(false);
+        return;
+      }
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${search}`
         );
         const { books } = res.data;
         setSearchItems(books);
+        setShowSearchResults(true);
       } catch (error) {
         console.log(error);
       }
@@ -44,40 +50,25 @@ const HomePage = () => {
     handleSearch();
   }, [search]);
 
-  const handlePrev = (section) => {
-    if (section === "popular") {
-      setPopularIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-    } else if (section === "allBooks") {
-      setAllBooksIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-    } else if (section === "bestSellers") {
-      setBestSellersIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-    } else if (section === "newPublished") {
-      setNewPublishedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-    }
-  };
-  const handleNext = (section, length) => {
-    if (section === "popular") {
-      setPopularIndex((prevIndex) =>
-        prevIndex < length - 6 ? prevIndex + 1 : prevIndex
-      );
-    } else if (section === "allBooks") {
-      setAllBooksIndex((prevIndex) =>
-        prevIndex < length - 7 ? prevIndex + 1 : prevIndex
-      );
-    } else if (section === "bestSellers") {
-      setBestSellersIndex((prevIndex) =>
-        prevIndex < length - 7 ? prevIndex + 1 : prevIndex
-      );
-    } else if (section === "newPublished") {
-      setNewPublishedIndex((prevIndex) =>
-        prevIndex < length - 7 ? prevIndex + 1 : prevIndex
-      );
-    }
-  };
+  // Close dropdown when clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowSearchResults(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  const renderBookCard = (book) => <Card key={book.id} book={book} />;
+
   return (
-    <div className="space-y-5">
-      {/*Search & Filter Banner*/}
-      <section className="container mt-16 flex flex-col items-center justify-center text-center">
+    <div className="md:container">
+      {/* Search & Filter Banner */}
+      <section className="z-50 mt-16 flex flex-col items-center justify-center text-center">
         <h1 className="scroll-m-20 font-sans text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
           Discover & Explore <br />{" "}
           <span className="yellow_gradient">A world of books</span>
@@ -87,7 +78,7 @@ const HomePage = () => {
           shop, and enjoy stories that inspire and entertain.
         </p>
         {/* Search and filter */}
-        <div className="mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md">
+        <div className="relative mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md z-50" ref={dropdownRef}>
           <div className="relative ml-auto flex-1 md:grow-0">
             <IoMdSearch className="absolute left-2.5 top-3.5 size-6 text-muted-foreground" />
             <Input
@@ -103,149 +94,64 @@ const HomePage = () => {
             <IoFilter className="mr-2 size-4" />
             Filter
           </Button>
+          {/* Show search results dropdown */}
+          {showSearchResults && (
+            <div className="absolute left-0 top-[4.2rem] z-50 w-full bg-white rounded-b-sm shadow-lg">
+              {searchItems?.map((item, idx) => (
+                <Link
+                  href={`/view-details/${item._id}`}
+                  key={idx}
+                  className="flex justify-between border-b p-2 hover:bg-gray-100"
+                >
+                  <div className="flex gap-2">
+                    <Image
+                      src={item.CoverImage}
+                      alt={item.BookName}
+                      width={40}
+                      height={50}
+                    />
+                    <div className="flex flex-col items-start">
+                      <p className="font-semibold">{item.BookName}</p>
+                      <p className="text-sm text-gray-500">{item.AuthorName}</p>
+                      <RatingStar rating={`${item.Rating}`} />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/*High to low and Low to high*/}
         {/* Price Sorting */}
 
-      {/* TODO: Show search results with searchItems. condition {searchItems.length > 0} */}
-
-      {/*Popular books cards*/}
-      <section className="container relative mx-auto bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-center">
-          {/* label */}
-          <Label name="Popular Books" />
-          {/* pagination / carousel */}
-
-          <button
-            onClick={() => handlePrev("popular")}
-            disabled={popularIndex === 0}
-            className="absolute left-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {popularIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
-          </button>
-
-          <button
-            onClick={() => handleNext("popular", books.length)}
-            disabled={popularIndex >= books.length - 6}
-            className="absolute right-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {popularIndex >= books.length - 6 ? <FaTimes /> : <FaAngleRight />}
-          </button>
-        </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 items-center justify-center md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {books.slice(popularIndex, popularIndex + 6).map((book, idx) => (
-            <Card key={idx} book={book} />
-          ))}
-        </div>
+      {/* Best Sellers Book Slider */}
+      <section className="bg-secondary/50 border-b border-primary mt-10 rounded-sm p-10 z-10">
+        <BookSectionTitle title={'Best Sellers'} />
+        <BookSectionSlider
+          items={books.slice(0, 10)}
+          renderCard={renderBookCard}
+        />
       </section>
 
-      {/*All books cards*/}
-      <section className="container relative mx-auto bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-center">
-          {/* label */}
-          <Label name="Books" />
-          {/* pagination / carousel */}
-
-          <button
-            onClick={() => handlePrev("allBooks")}
-            disabled={allBooksIndex === 0}
-            className="absolute left-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {allBooksIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
-          </button>
-          <button
-            onClick={() => handleNext("allBooks", books.length)}
-            disabled={allBooksIndex >= books.length - 7}
-            className="absolute right-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
-          >
-            {allBooksIndex >= books.length - 7 ? <FaTimes /> : <FaAngleRight />}
-          </button>
-        </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {books.slice(allBooksIndex, allBooksIndex + 7).map((book, idx) => (
-            <Card key={idx} book={book} />
-          ))}
-        </div>
+      {/* New Published Books Slider */}
+      <section className="bg-secondary/50 border-b border-primary mt-10 rounded-sm p-10 z-10">
+        <BookSectionTitle title={'New Published'} />
+        <BookSectionSlider
+          items={books.slice(0, 10)}
+          renderCard={(book) => <Card book={book} />}
+        />
       </section>
 
-      {/* TODO: a Hero Type Section */}
-      <section></section>
-
-      {/*Best sellers Books Section cards*/}
-      <section className="container relative mx-auto bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-center">
-          {/* label */}
-          <Label name="Best sellers Books" />
-          {/* pagination / carousel */}
-
-          <button
-            onClick={() => handlePrev("bestSellers")}
-            disabled={bestSellersIndex === 0}
-            className="absolute left-0 top-1/2 h-24 bg-white p-2 text-3xl"
-          >
-            {bestSellersIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
-          </button>
-          <button
-            onClick={() => handleNext("bestSellers", books.length)}
-            disabled={bestSellersIndex >= books.length - 7}
-            className="absolute right-0 top-1/2 h-24 bg-white p-2 text-3xl"
-          >
-            {bestSellersIndex >= books.length - 7 ? (
-              <FaTimes />
-            ) : (
-              <FaAngleRight />
-            )}
-          </button>
-        </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {books
-            .slice(bestSellersIndex, bestSellersIndex + 7)
-            .map((book, idx) => (
-              <Card key={idx} book={book} />
-            ))}
-        </div>
+      {/* Top of the month Books Slider */}
+      <section className="bg-secondary/50 border-b border-primary mt-10 rounded-sm p-10 z-10 mb-10">
+        <BookSectionTitle title={'Top of Month'} />
+        <BookSectionSlider
+          items={books.slice(0, 10)} // Show 10 books 
+          renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
+        />
       </section>
-
-      {/*New published books Section*/}
-      <div className="container relative mx-auto bg-[#d9d9d9] p-5">
-        <div className="flex items-center justify-center">
-          {/* label */}
-          <Label name="New published books" />
-          {/* pagination / carousel */}
-
-          <button
-            onClick={() => handlePrev("newPublished")}
-            disabled={newPublishedIndex === 0}
-            className="absolute left-0 top-1/2 h-24 bg-white p-2 text-3xl"
-          >
-            {newPublishedIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
-          </button>
-          <button
-            onClick={() => handleNext("newPublished", books.length)}
-            disabled={newPublishedIndex >= books.length - 7}
-            className="absolute right-0 top-1/2 h-24 bg-white p-2 text-3xl"
-          >
-            {newPublishedIndex >= books.length - 7 ? (
-              <FaTimes />
-            ) : (
-              <FaAngleRight />
-            )}
-          </button>
-        </div>
-        {/* cards */}
-        <div className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-          {books
-            .slice(newPublishedIndex, newPublishedIndex + 7)
-            .map((book, idx) => (
-              <Card key={idx} book={book} />
-            ))}
-        </div>
-      </div>
     </div>
   );
 };

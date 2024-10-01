@@ -5,10 +5,9 @@ import { NextResponse } from "next/server";
 export const GET = async (request) => {
   const db = await connectDB();
   const booksCollection = await db.collection("books");
-  const bookIdParam = request.nextUrl.searchParams;
-  const bookId = bookIdParam.get("bookId");
-  const userParam = request.nextUrl.searchParams;
-  const userEmail = userParam.get("email");
+  const params = request.nextUrl.searchParams;
+  const bookId = params.get("bookId");
+  const userEmail = params.get("email");
 
   try {
     const book = await booksCollection.findOne({ _id: new ObjectId(bookId) });
