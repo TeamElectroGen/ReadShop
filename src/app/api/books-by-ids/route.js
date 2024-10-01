@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/connectDB";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 
-export const GET = async (request) => {
+export const POST = async (request) => {
   const { ids } = await request.json();
 
   const db = await connectDB();
