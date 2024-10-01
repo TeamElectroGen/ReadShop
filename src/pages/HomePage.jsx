@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { FaTimes } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
@@ -24,6 +27,7 @@ const HomePage = () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
   };
+
 
   useEffect(() => {
     fetchBooks();
@@ -123,16 +127,37 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/*High to low and Low to high*/}
-        {/* Price Sorting */}
+      {/* TODO: Show search results with searchItems. condition {searchItems.length > 0} */}
 
-      {/* Best Sellers Book Slider */}
-      <section className="bg-secondary/50 border-b border-primary mt-10 rounded-sm p-10 z-10">
-        <BookSectionTitle title={'Best Sellers'} />
-        <BookSectionSlider
-          items={books.slice(0, 10)}
-          renderCard={renderBookCard}
-        />
+      {/*Popular books cards*/}
+      <section className="container relative mx-auto bg-[#d9d9d9] p-5">
+        <div className="flex items-center justify-center">
+          {/* label */}
+          <Label name="Popular Books" />
+          {/* pagination / carousel */}
+
+          <button
+            onClick={() => handlePrev("popular")}
+            disabled={popularIndex === 0}
+            className="absolute left-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
+          >
+            {popularIndex === 0 ? <FaTimes /> : <FaAngleLeft />}
+          </button>
+
+          <button
+            onClick={() => handleNext("popular", books.length)}
+            disabled={popularIndex >= books.length - 6}
+            className="absolute right-0 top-1/2 z-10 h-24 -translate-y-1/2 bg-white p-2 text-3xl"
+          >
+            {popularIndex >= books.length - 6 ? <FaTimes /> : <FaAngleRight />}
+          </button>
+        </div>
+        {/* cards */}
+        <div className="mt-5 grid grid-cols-2 items-center justify-center md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          {books.slice(popularIndex, popularIndex + 6).map((book, idx) => (
+            <Card key={idx} book={book} />
+          ))}
+        </div>
       </section>
 
       {/* New Published Books Slider */}
