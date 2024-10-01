@@ -89,7 +89,7 @@ const Custom404 = () => {
       <center className="mb-2 mt-2">
         <Link
           href={"/"}
-          className="inline-flex items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-blue-500 to-blue-300 px-7 py-3 text-center text-base font-medium text-white hover:bg-opacity-90"
+          className="inline-flex items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-blue-500 to-blue-400 px-7 py-3 text-center text-base font-medium text-white hover:bg-opacity-90"
         >
           Go Back to Home
         </Link>
