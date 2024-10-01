@@ -49,3 +49,27 @@ export const patchRWList = async (which, bookId, email) => {
     return error;
   }
 };
+
+export const getWishlistBooks = async (email) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/wish-read/all-wish-user?email=${email}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getReadListBooks = async (email) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/wish-read/all-read-user?email=${email}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
