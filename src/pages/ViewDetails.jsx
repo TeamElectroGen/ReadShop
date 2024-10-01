@@ -151,10 +151,10 @@ const ViewDetails = ({ bookid }) => {
             <button
               disabled={!data?.user?.email}
               onClick={() => handleRWList("read")}
-              className={`flex flex-1 items-center justify-center rounded-lg px-1 py-1 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 lg:px-2 lg:py-2.5 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+              className={`flex flex-1 items-center justify-center rounded-lg px-1 py-1 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
             >
-              <FaBookOpen className="lg:mr-1 lg:size-4" />
-              {rWStatus.readList ? "Remove" : "Add"} to Read List
+              <FaBookOpen className="lg:size-4" />
+              {rWStatus.readList ? "Remove from" : "Add to"} Read List
             </button>
           </div>
           {/* Add to Wish List Button */}
@@ -165,7 +165,7 @@ const ViewDetails = ({ bookid }) => {
               className={`flex items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
             >
               <FaRegHeart className="mr-1 size-4" />{" "}
-              {rWStatus.wishList ? "Remove" : "Add"} to Wishlist
+              {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
             </button>
           </div>
         </div>
