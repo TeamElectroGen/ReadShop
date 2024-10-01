@@ -32,6 +32,27 @@ const ViewDetails = ({ bookid }) => {
   };
   console.log(rWStatus);
 
+  // Function to handle storing the book id in local storage
+  const handleLastVisitedBook = (id) => {
+    let recentVisitedBooks =
+      JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
+
+    // Check if the book id is already existing
+    if (recentVisitedBooks.includes(id)) {
+      // Remove the existing book ID from the array
+      recentVisitedBooks = recentVisitedBooks.filter((bookId) => bookId !== id);
+    }
+
+    // Add the book id to the start of the array
+    recentVisitedBooks.unshift(id);
+
+    // Save the updated array to local storage
+    localStorage.setItem(
+      "recentVisitedBooks",
+      JSON.stringify(recentVisitedBooks)
+    );
+  };
+
   useEffect(() => {
     const fetch = async () => {
       const { readList, wishList } = await getReadWishStatusUser(
@@ -54,6 +75,7 @@ const ViewDetails = ({ bookid }) => {
       setRWStatus({ readList, wishList });
     };
     fetch();
+    handleLastVisitedBook(bookid);
   }, [bookid, data?.user?.email]);
 
   return (
