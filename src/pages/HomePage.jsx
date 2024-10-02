@@ -2,8 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
-import { getAllBooks } from "@/services/getBooksData";
-import axios from "axios";
+import { getAllBooks, getSearchBooks } from "@/services/getBooksData";
 import Image from "next/image";
 import Link from "next/link";
 import BookSectionSlider from "@/components/BookSectionSlider";
@@ -28,23 +27,17 @@ const HomePage = () => {
   useEffect(() => {
     fetchBooks();
   }, []);
-
+  
   useEffect(() => {
     const handleSearch = async () => {
-      if (search.trim() === "") {
-        setSearchItems([]);
-        setShowSearchResults(false);
-        return;
-      }
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${search}`
-        );
-        const { books } = res.data;
-        setSearchItems(books);
-        setShowSearchResults(true);
-      } catch (error) {
-        console.log(error);
+      if (search) {
+        try {
+          const { books } = await getSearchBooks(search);
+          setSearchItems(books);
+          setShowSearchResults(true);
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
     handleSearch();
@@ -88,6 +81,7 @@ const HomePage = () => {
               type="search"
               name="search"
               value={search}
+              onFocus={() => setShowSearchResults(true)}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name, author.."
               className="w-full rounded-lg bg-background p-6 pl-9 md:w-[370px] lg:w-[360px]"
@@ -98,8 +92,8 @@ const HomePage = () => {
             Filter
           </Button>
           {/* Show search results dropdown */}
-          {showSearchResults && (
-            <div className="absolute left-0 top-[4.2rem] z-50 w-full rounded-b-sm bg-white shadow-lg">
+          {searchItems && showSearchResults && (
+            <div className="absolute left-0 top-[4.2rem] z-50 mt-5 max-h-96 w-full overflow-scroll rounded-sm bg-white shadow-lg">
               {searchItems?.map((item, idx) => (
                 <Link
                   href={`/view-details/${item._id}`}
@@ -126,9 +120,9 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Best Sellers Book Slider */}
-      <section className="z-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
-        <BookSectionTitle title={"Best Sellers"} />
+      {/* Best Sellers Book Slider  (Albab updated this section) */}
+      <section className="bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur rounded-xl border-b-4 border-primary mt-10 p-8 z-10">
+        <BookSectionTitle title={'Best Sellers'} />
         <BookSectionSlider
           items={books?.slice(0, 10)}
           renderCard={renderBookCard}
@@ -148,7 +142,7 @@ const HomePage = () => {
       <section className="z-10 mb-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
-          items={books?.slice(0, 10)} // Show 10 books
+          items={books?.slice(0, 10)} // Show 10 books 
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
       </section>

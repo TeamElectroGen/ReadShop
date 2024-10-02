@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { Button } from "./ui/button";
 
 const BookSectionSlider = ({ items, renderCard, viewAllLink }) => {
   const swiperRef = useRef(null);
@@ -24,19 +25,13 @@ const BookSectionSlider = ({ items, renderCard, viewAllLink }) => {
   return (
     <div className="slider-container relative">
       {/* Navigation Buttons */}
-      <div className="absolute -right-2 z-10 -mt-14 flex gap-2 p-2 md:-top-2 md:right-0">
-        <button
-          onClick={handlePrev}
-          className="rounded bg-primary px-2 py-1 text-sm font-bold text-black hover:shadow-md md:px-4 md:py-2"
-        >
+      <div className="absolute -right-2 z-10 -mt-14 flex gap-2 md:-top-3 md:right-0">
+        <Button onClick={handlePrev} variant="outline" size="icon" className="hover:bg-primary/60">
           <FaArrowLeft />
-        </button>
-        <button
-          onClick={handleNext}
-          className="bg-pri rounded bg-primary px-2 py-1 text-sm font-bold text-black hover:shadow-md md:px-4 md:py-2"
-        >
+        </Button>
+        <Button onClick={handleNext} variant="outline" size="icon" className="hover:bg-primary/60">
           <FaArrowRight />
-        </button>
+        </Button>
       </div>
 
       {/* Swiper Slider */}
@@ -49,7 +44,7 @@ const BookSectionSlider = ({ items, renderCard, viewAllLink }) => {
         breakpoints={{
           640: { slidesPerView: 2, spaceBetween: 10 },
           768: { slidesPerView: 3, spaceBetween: 20 },
-          1024: { slidesPerView: 5, spaceBetween: 30 },
+          1024: { slidesPerView: 4, spaceBetween: 30 },
           1280: { slidesPerView: 5, spaceBetween: 20 },
         }}
       >
