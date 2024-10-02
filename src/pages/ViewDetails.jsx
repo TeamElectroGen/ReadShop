@@ -18,10 +18,13 @@ const ViewDetails = ({ bookid }) => {
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { data } = useSession() || {};
   const router = useRouter();
+  const [showModalForCart, setShowModalForCart] = useState(false);
+  const [showModalForWishList, setShowModalForWishList] = useState(false);
+  const [showModalForReadList, setShowModalForReadList] = useState(false);
 
   const handleAddToCartClick = () => {
     if (!data?.user?.email) {
-      router.push("/login");
+      setShowModalForCart(true);
       return;
     }
     setIsAddedToCart(true);
@@ -30,7 +33,11 @@ const ViewDetails = ({ bookid }) => {
   const handleRWList = async (param) => {
     try {
       if (!data?.user?.email) {
-        router.push("/login");
+        if (param === "wish") {
+          setShowModalForWishList(true);
+        } else if (param === "read") {
+          setShowModalForReadList(true);
+        }
         return;
       }
       const res = await patchRWList(param, bookid, data?.user?.email);
@@ -41,6 +48,12 @@ const ViewDetails = ({ bookid }) => {
     }
   };
   console.log(rWStatus);
+  const handleRedirectLogin = (modalType) => {
+    if (modalType === "cart") setShowModalForCart(false);
+    if (modalType === "wish") setShowModalForWishList(false);
+    if (modalType === "read") setShowModalForReadList(false);
+    router.push("/login");
+  };
 
   // Function to handle storing the book id in local storage
   const handleLastVisitedBook = (id) => {
@@ -156,17 +169,7 @@ const ViewDetails = ({ bookid }) => {
               )}
             </button>
 
-            {/* Add to Read List Button */}
-            <button
-              onClick={() => handleRWList("read")}
-              className={`flex flex-1 items-center justify-center rounded-lg px-1 py-1 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
-            >
-              <FaBookOpen className="lg:size-4" />
-              {rWStatus.readList ? "Remove from" : "Add to"} Read List
-            </button>
-          </div>
-          {/* Add to Wish List Button */}
-          <div className="mt-4">
+            {/* Add to WishList Button */}
             <button
               onClick={() => handleRWList("wish")}
               className={`flex items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
@@ -174,6 +177,36 @@ const ViewDetails = ({ bookid }) => {
               <FaRegHeart className="mr-1 size-4" />{" "}
               {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
             </button>
+
+            {showModalForCart && (
+              <LoginModal
+                onCancel={() => setShowModalForCart(false)}
+                onLogin={() => handleRedirectLogin("cart")}
+              />
+            )}
+
+            {showModalForWishList && (
+              <LoginModal
+                onCancel={() => setShowModalForWishList(false)}
+                onLogin={() => handleRedirectLogin("wish")}
+              />
+            )}
+          </div>
+          {/* Add to Read List Button */}
+          <div className="mt-4">
+            <button
+              onClick={() => handleRWList("read")}
+              className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+            >
+              <FaBookOpen className="mr-1 lg:size-4" />
+              {rWStatus.readList ? "Remove from" : "Add to"} Read List
+            </button>
+            {showModalForReadList && (
+              <LoginModal
+                onCancel={() => setShowModalForReadList(false)}
+                onLogin={() => handleRedirectLogin("read")}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -184,6 +217,31 @@ const ViewDetails = ({ bookid }) => {
         <p className="mt-2 text-gray-600">
           Explore more information about the book, author, and publication here.
         </p>
+      </div>
+    </div>
+  );
+};
+
+const LoginModal = ({ onCancel, onLogin }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+      <div className="rounded-lg bg-white p-6 shadow-lg">
+        <h2 className="text-xl font-semibold text-gray-800">Login Required</h2>
+        <p className="mt-2 text-gray-600">You need to login to continue.</p>
+        <div className="mt-4 flex justify-end space-x-4">
+          <button
+            className="rounded-lg bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            onClick={onLogin}
+          >
+            Login
+          </button>
+        </div>
       </div>
     </div>
   );
