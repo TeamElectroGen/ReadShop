@@ -5,6 +5,7 @@ import {
 } from "@/services/getBooksData";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaLongArrowAltRight } from "react-icons/fa";
 import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
@@ -16,13 +17,22 @@ const ViewDetails = ({ bookid }) => {
   const [rWStatus, setRWStatus] = useState({});
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { data } = useSession() || {};
+  const router = useRouter();
 
   const handleAddToCartClick = () => {
+    if (!data?.user?.email) {
+      router.push("/login");
+      return;
+    }
     setIsAddedToCart(true);
   };
 
   const handleRWList = async (param) => {
     try {
+      if (!data?.user?.email) {
+        router.push("/login");
+        return;
+      }
       const res = await patchRWList(param, bookid, data?.user?.email);
       setUpdate(!update);
       console.log(res);
@@ -131,7 +141,6 @@ const ViewDetails = ({ bookid }) => {
             {/* Add to Cart Button */}
 
             <button
-              disabled={!data?.user?.email}
               className={`flex flex-1 items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white duration-300 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
               onClick={handleAddToCartClick}
             >
@@ -149,7 +158,6 @@ const ViewDetails = ({ bookid }) => {
 
             {/* Add to Read List Button */}
             <button
-              disabled={!data?.user?.email}
               onClick={() => handleRWList("read")}
               className={`flex flex-1 items-center justify-center rounded-lg px-1 py-1 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
             >
@@ -160,7 +168,6 @@ const ViewDetails = ({ bookid }) => {
           {/* Add to Wish List Button */}
           <div className="mt-4">
             <button
-              disabled={!data?.user?.email}
               onClick={() => handleRWList("wish")}
               className={`flex items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
             >
