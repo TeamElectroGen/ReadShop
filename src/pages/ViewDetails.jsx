@@ -94,8 +94,8 @@ const ViewDetails = ({ bookid }) => {
         {/* Left Side - Book Image */}
         <div className="flex items-center justify-center">
           <Image
-            src={detailsBook.CoverImage}
-            alt={detailsBook.BookName}
+            src={detailsBook?.CoverImage}
+            alt={detailsBook?.BookName}
             width={300}
             height={500}
             className="rounded-lg shadow-md"
@@ -105,35 +105,35 @@ const ViewDetails = ({ bookid }) => {
         {/* Right Side - Book Details */}
         <div className="rounded-lg bg-white p-6 shadow-md">
           <h1 className="text-2xl font-bold text-gray-800">
-            {detailsBook.BookName}
+            {detailsBook?.BookName}
           </h1>
-          <p className="mt-2 text-gray-600">by {detailsBook.AuthorName}</p>
+          <p className="mt-2 text-gray-600">by {detailsBook?.AuthorName}</p>
           <div className="mt-4 flex items-center">
             <span className="rounded bg-yellow-400 px-2.5 py-0.5 text-sm font-semibold">
-              {detailsBook.Rating} Stars
+              {detailsBook?.Rating} Stars
             </span>
             <span className="ml-2 font-bold text-gray-500">| 3 Reviews</span>
           </div>
 
           {/* Book Description */}
-          <p className="mt-4 text-gray-600">{detailsBook.Description}</p>
+          <p className="mt-4 text-gray-600">{detailsBook?.Description}</p>
 
           {/* Additional Details */}
           <div className="mt-4">
             <p className="text-sm text-gray-500">
               <span className="font-semibold">Published by:</span>{" "}
-              {detailsBook.PublicationName}
+              {detailsBook?.PublicationName}
             </p>
             <p className="mt-1 text-sm text-gray-500">
               <span className="font-semibold">Publish Date:</span>{" "}
-              {new Date(detailsBook.PublishDate).toDateString()}
+              {new Date(detailsBook?.PublishDate).toDateString()}
             </p>
           </div>
 
           {/* Price & Add to Cart Buttons */}
           <div className="mt-6 flex items-center justify-between">
             <span className="text-2xl font-bold text-green-700">
-              $ {detailsBook.Price}
+              $ {detailsBook?.Price}
             </span>
           </div>
 
