@@ -18,19 +18,22 @@ const Card = ({ book }) => {
 
   return (
     <Link
-      href={`/view-details/${book._id}`}
-      className="z-50 transition-all ease-in duration-300 mb-4 flex h-full w-full max-w-[212px] flex-col space-y-3 overflow-hidden rounded-xl border-2 border-white/70 bg-background/50 p-4 backdrop-blur-md hover:shadow-md"
+      href={`/view-details/${book?._id}`}
+      className="z-50 mb-4 flex h-full w-full max-w-[212px] flex-col space-y-3 overflow-hidden rounded-xl border-2 border-white/70 bg-background/50 p-4 backdrop-blur-md transition-all duration-300 ease-in hover:shadow-md"
     >
       {/* Book Cover Image */}
       <div className="relative h-[260px] overflow-hidden rounded-md bg-[#f3f2f2] shadow-sm">
         <Image
-          src={book.CoverImage}
-          alt={book.BookName}
+          src={book?.CoverImage}
+          alt={book?.BookName}
           className="h-full w-full object-cover"
           height={228}
           width={168}
         />
-        <WishlistBtn wishListed={wishListed} onWishlistClick={handleWishlistClick}/>
+        <WishlistBtn
+          wishListed={wishListed}
+          onWishlistClick={handleWishlistClick}
+        />
       </div>
       {/* Book Info */}
       <div className="flex flex-1 flex-col justify-between">
@@ -44,7 +47,7 @@ const Card = ({ book }) => {
             <span className="font-medium">$</span> {book.Price}
           </p>
           <div className="mt-2">
-            <RatingStar rating={book.Rating} />
+            <RatingStar rating={book?.Rating} />
           </div>
         </div>
         {/* View Details Button */}
