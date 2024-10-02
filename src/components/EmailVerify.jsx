@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button"
+import Link from "next/link";
 
 const EmailVerify = () => {
   return (
@@ -26,7 +27,7 @@ const EmailVerify = () => {
             it's really you.
           </p>
           
-          <Button className="font-bold">Sure</Button>
+          <Button className="font-bold"><Link href={"/login"}>Sure</Link></Button>
           <p className="mt-4 text-gray-500">
             Didn’t get e-mail?{" "}
             <a href="#" className="text-blue-500 hover:underline">
