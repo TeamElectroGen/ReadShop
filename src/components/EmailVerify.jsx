@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button"
 
 const EmailVerify = () => {
   return (
@@ -24,9 +25,8 @@ const EmailVerify = () => {
             already sent out the verification link. Please check it and confirm
             it's really you.
           </p>
-          <button className="rounded-lg bg-blue-500 px-4 py-2 text-white transition duration-200 hover:bg-blue-400">
-            Sure!
-          </button>
+          
+          <Button className="font-bold">Sure</Button>
           <p className="mt-4 text-gray-500">
             Didn’t get e-mail?{" "}
             <a href="#" className="text-blue-500 hover:underline">
