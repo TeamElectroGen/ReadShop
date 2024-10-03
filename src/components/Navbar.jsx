@@ -18,16 +18,13 @@ import HamburgerMenu from "./HamburgerMenu";
 import { signOut, useSession } from "next-auth/react";
 import ProductCart from "./ProductCart";
 import UserMenu from "./UserMenu";
+import { useCart } from "@/app/context/CartContext";
 
 const Navbar = () => {
   const { data } = useSession();
   const [isCartOpen, setCartOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
 
-  useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cartBooks")) || [];
-    setCartCount(storedCartItems.length);
-  }, []);
+  const { cart } = useCart();
 
   const navLinks = (
     <>
@@ -68,9 +65,9 @@ const Navbar = () => {
               onClick={() => setCartOpen(true)}
             >
               <FaCartShopping className="size-7" />
-              {cartCount > 0 && (
+              {cart.length > 0 && (
                 <span className="absolute right-0 top-0 size-4 rounded-sm bg-primary text-xs font-bold text-black">
-                  {cartCount}
+                  {cart.length}
                 </span>
               )}
             </Button>

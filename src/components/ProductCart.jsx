@@ -1,80 +1,140 @@
-"use client";
-import { useEffect, useState } from "react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import Image from "next/image";
 import { MdDelete } from "react-icons/md";
 import { Button } from "./ui/button";
 import { FaCircle, FaCircleArrowRight } from "react-icons/fa6";
+import { useCart } from "@/app/context/CartContext";
 
 const ProductCart = ({ isOpen, onClose }) => {
-    const [cartItems, setCartItems] = useState([]);
+  const { cart, removeFromCart, updateQuantity } = useCart();
 
-    // Get Cart items from local storage
-    useEffect(() => {
-        const storedCartItems = JSON.parse(localStorage.getItem("cartBooks")) || [];
-        setCartItems(storedCartItems);
-    }, []);
+  const totalPrice = cart.reduce(
+    (total, book) => total + book.price * book.quantity,
+    0
+  );
 
-    // Total price
-    const totalPrice = cartItems.reduce((total, book) => total + book.Price, 0);
+  const handleRemove = (id) => {
+    removeFromCart(id);
+  };
 
-    // Remove item from Local Storage by BookName
-    const removeItem = (bookName) => {
-        const updatedCartItems = cartItems.filter(book => book.BookName !== bookName);
-        setCartItems(updatedCartItems);
-        localStorage.setItem("cartBooks", JSON.stringify(updatedCartItems));
-    };
+  const handleQuantityChange = (id, newQuantity) => {
+    if (newQuantity > 0) {
+      updateQuantity(id, newQuantity);
+    }
+  };
 
-    return (
-        <div>
-            <Sheet open={isOpen} onOpenChange={onClose}>
-                <SheetContent className="w-[400px] scroll">
-                    <div className="border-b border-primary">
-                        <h2 className="text-lg font-semibold bg-primary w-fit px-2 rounded-t-sm py-1">Your Cart</h2>
+  const logCartProductIds = () => {
+    const productIds = cart.map((book) => book.id);
+    console.log("Cart Product IDs:", productIds);
+  };
+
+  return (
+    <div>
+      <Sheet open={isOpen} onOpenChange={onClose}>
+        <SheetContent className="scroll w-[400px]">
+          <div className="border-b border-primary">
+            <h2 className="w-fit rounded-t-sm bg-primary px-2 py-1 text-lg font-semibold">
+              Your Cart
+            </h2>
+          </div>
+
+          {/* Cart Item */}
+          {cart.length > 0 ? (
+            <ul className="mt-4 flex flex-col gap-2">
+              {cart.map((book) => (
+                <li
+                  key={book.id}
+                  className="flex min-h-20 items-center justify-between gap-3 rounded-sm border-b border-primary bg-primary/10 p-2"
+                >
+                  <div className="flex w-full gap-2">
+                    <div className="min-h-14">
+                      <Image
+                        className="max-h-14 min-h-14 min-w-10 max-w-10 bg-primary object-cover"
+                        src={book?.coverImage}
+                        width={50}
+                        height={100}
+                        alt={book.name}
+                      ></Image>
                     </div>
-                    {/* Cart Item */}
-                    {cartItems.length > 0 ? (
-                        <ul className="flex flex-col gap-2 mt-4">
-                            {cartItems.map((book) => (
-                                <li key={book.BookName} className="p-2 border-b border-primary flex justify-between gap-5 min-h-20 items-center bg-primary/10 rounded-sm">
-                                    <div className="flex gap-2 w-full">
-                                        <div>
-                                            <Image src={book.CoverImage} alt="Book Cover" className="min-h-10" width={40} height={30} />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xs font-bold">{book.BookName}</h3>
-                                            <p className="text-[0.5rem]">By: {book.AuthorName}</p>
-                                        </div>
-                                    </div>
-                                    <p className="text-sm">${book.Price.toFixed(2)}</p>
-                                    <button
-                                        onClick={() => removeItem(book.BookName)}
-                                        className="w-fit h-fit p-1 rounded-sm hover:underline"
-                                    >
-                                        <MdDelete />
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="h-40 flex items-center justify-center">Your cart is currently empty.</p>
-                    )}
-                    {/* Total Price */}
-                    {cartItems.length > 0 && (
-                        <div className="mt-4 border-t border-primary flex justify-between bg-primary-foreground/20 px-4 py-2 rounded-sm">
-                            <h3 className="text-lg font-semibold">Total Price:</h3>
-                            <h3 className="pr-6 text-lg font-semibold">${totalPrice.toFixed(2)}</h3>
-                        </div>
-                    )}
-                    {/* Checkout and Details Button */}
-                    <div className="flex justify-between mt-4 gap-4">
-                        <Button className="w-full bg-primary-foreground text-white flex gap-2 hover:bg-primary-foreground/90"><FaCircle />Cart Details</Button>
-                        <Button className="w-full bg-primary flex gap-2">Checkout <FaCircleArrowRight /></Button>
+                    <div>
+                      <h3 className="text-xs font-bold">{book.name}</h3>
+                      <p className="text-[0.5rem]">By: {book.author}</p>
+                      <p className="text-[.5rem] font-semibold text-primary-foreground">
+                        ${book.price}/item
+                      </p>
                     </div>
-                </SheetContent>
-            </Sheet>
-        </div>
-    );
+                  </div>
+                  <div className="flex items-center rounded-sm bg-primary/20 px-1 py-0.5">
+                    <Button
+                      className="h-5 w-5 rounded bg-secondary p-0 text-lg"
+                      onClick={() =>
+                        handleQuantityChange(book.id, book.quantity - 1)
+                      }
+                    >
+                      -
+                    </Button>
+                    <p className="flex h-5 w-5 items-center justify-center rounded p-0 text-lg">
+                      {book.quantity}
+                    </p>
+                    <Button
+                      className="h-5 w-5 rounded bg-secondary p-0 text-lg"
+                      onClick={() =>
+                        handleQuantityChange(book.id, book.quantity + 1)
+                      }
+                    >
+                      +
+                    </Button>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <p className="text-sm font-bold">
+                      ${(book.price * book.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleRemove(book.id)}
+                    className="h-fit w-fit rounded-sm p-1 hover:underline"
+                  >
+                    <MdDelete />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="flex h-40 items-center justify-center">
+              Your cart is currently empty.
+            </p>
+          )}
+
+          {/* Total Price */}
+          {cart.length > 0 && (
+            <div className="mt-4 flex justify-between rounded-sm border-t border-primary bg-primary-foreground/20 px-4 py-2">
+              <h3 className="text-lg font-semibold">Total Price:</h3>
+              <h3 className="pr-6 text-lg font-semibold">
+                ${totalPrice.toFixed(2)}
+              </h3>
+            </div>
+          )}
+          {/* Checkout and Details Button */}
+          <div className="mt-4 flex justify-between gap-4">
+            <Button
+              className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90"
+              onClick={logCartProductIds}
+            >
+              <FaCircle />
+              Cart Details
+            </Button>
+            <Button
+              className="flex w-full gap-2 bg-primary"
+              onClick={logCartProductIds}
+            >
+              Checkout
+              <FaCircleArrowRight />
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
 };
 
 export default ProductCart;

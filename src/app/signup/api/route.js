@@ -14,7 +14,15 @@ export const POST = async (request) => {
     if (exist)
       return NextResponse.json({ message: "User already exists", status: 304 });
     const hashedPassword = bcrypt.hashSync(newUser.password, 14);
-    await userCollection.insertOne({ ...newUser, password: hashedPassword });
+    await userCollection.insertOne({
+      ...newUser,
+      password: hashedPassword,
+      role: "user",
+      isActive: true,
+      createdAt: new Date(),
+      isEmailVerified: false,
+      lastLogin: null,
+    });
     return NextResponse.json({
       message: "user created successfully",
       status: 200,
