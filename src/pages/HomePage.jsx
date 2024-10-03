@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
+import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
@@ -117,6 +118,7 @@ const HomePage = () => {
             <IoFilter className="mr-2 size-4" />
             Filter
           </Button>
+
           {/* Show search results dropdown */}
           {searchItems && showSearchResults && (
             <div className="absolute left-0 top-[4.2rem] z-50 mt-5 max-h-96 w-full overflow-scroll rounded-sm bg-white shadow-lg">
@@ -167,7 +169,7 @@ const HomePage = () => {
       )}
 
       {/* New Published Books Slider */}
-      <section className="z-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Published"} />
         <BookSectionSlider
           items={recentViewedBooks}
@@ -175,8 +177,13 @@ const HomePage = () => {
         />
       </section>
 
+      {/* Category Grid */}
+      <section>
+        <HomePageCategoryGrid books={books} />
+      </section>
+
       {/* Top of the month Books Slider */}
-      <section className="z-10 mb-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
           items={books?.slice(0, 10)} // Show 10 books

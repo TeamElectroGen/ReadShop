@@ -1,3 +1,4 @@
+import { useCart } from "@/app/context/CartContext";
 import {
   getBookDetails,
   getReadWishStatusUser,
@@ -7,19 +8,34 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 import React, { useEffect, useState } from "react";
-import { FaBookOpen, FaLongArrowAltRight } from "react-icons/fa";
-import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
+import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
+import { toast } from "react-hot-toast"; // Import toast
 
 const ViewDetails = ({ bookid }) => {
-  const [detailsBook, setDetailsBook] = useState({}); // Initialize as an empty object
+  const [detailsBook, setDetailsBook] = useState({});
   const [update, setUpdate] = useState(false);
   const [rWStatus, setRWStatus] = useState({});
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { data } = useSession() || {};
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  const { addToCart, cart } = useCart();
+
   const handleAddToCartClick = () => {
     setIsAddedToCart(true);
+    const productToAdd = {
+      id: detailsBook._id,
+      name: detailsBook.BookName,
+      coverImage: detailsBook.CoverImage,
+      author: detailsBook.AuthorName,
+      price: detailsBook.Price,
+      quantity: 1,
+    };
+
+    addToCart(productToAdd);
+
+    // Display success toast
+    toast.success(`${detailsBook.BookName} added to cart!`);
   };
   console.log(rWStatus);
   const handleRWList = async (param) => {
@@ -142,15 +158,15 @@ const ViewDetails = ({ bookid }) => {
 
           <div className="mt-4 flex space-x-4">
             {/* Add to Cart Button */}
-
             <button
-              className={`flex flex-1 items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white duration-300 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
+              className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center text-xl font-medium text-white duration-300 focus:outline-none focus:ring-4 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
               onClick={handleAddToCartClick}
             >
               {isAddedToCart ? (
                 <>
-                  <FaCartShopping className="mr-1 size-4" /> Go to Cart{" "}
-                  <FaLongArrowAltRight className="ml-3 size-5" />
+                  {cart.find((item) => item.id === detailsBook._id)?.quantity ||
+                    1}{" "}
+                  in Cart
                 </>
               ) : (
                 <>
@@ -168,6 +184,7 @@ const ViewDetails = ({ bookid }) => {
               {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
             </button>
           </div>
+
           {/* Add to Read List Button */}
           <div className="mt-4">
             <button
