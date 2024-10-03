@@ -23,6 +23,19 @@ const ViewDetails = ({ bookid }) => {
 
   const handleAddToCartClick = () => {
     setIsAddedToCart(true);
+    const productToAdd = {
+      id: detailsBook._id,
+      name: detailsBook.BookName,
+      coverImage: detailsBook.CoverImage,
+      author: detailsBook.AuthorName,
+      price: detailsBook.Price,
+      quantity: 1,
+    };
+
+    addToCart(productToAdd);
+
+    // Display success toast
+    toast.success(`${detailsBook.BookName} added to cart!`);
   };
   console.log(rWStatus);
   const handleRWList = async (param) => {
