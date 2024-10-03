@@ -2,7 +2,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
-import { getAllBooks, getSearchBooks } from "@/services/getBooksData";
+import {
+  getAllBooks,
+  // getBookDetails,
+  getBooksByIds,
+  getSearchBooks,
+} from "@/services/getBooksData";
 import Image from "next/image";
 import Link from "next/link";
 import BookSectionSlider from "@/components/BookSectionSlider";
@@ -18,16 +23,37 @@ const HomePage = () => {
   const [searchItems, setSearchItems] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const dropdownRef = useRef(null); // Reference for dropdown
+  const [recentViewedBooks, setRecentViewedBooks] = useState([]);
+  // recent viewed books
+  useEffect(() => {
+    const storedBooks =
+      JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
+    console.log("storedBooks", storedBooks);
+    const fetchRecentViewedBooks = async () => {
+      try {
+        const res = await getBooksByIds(storedBooks);
+        setRecentViewedBooks(res.books);
+        console.log("res", res.books);
+        // console.log("Stored Books", recentViewedBooks);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRecentViewedBooks();
+  }, []);
 
+  // all books
   const fetchBooks = async () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
+    console.log("books", books);
   };
 
   useEffect(() => {
     fetchBooks();
   }, []);
-  
+
+  // search books
   useEffect(() => {
     const handleSearch = async () => {
       if (search) {
@@ -121,19 +147,30 @@ const HomePage = () => {
       </section>
 
       {/* Best Sellers Book Slider  (Albab updated this section) */}
-      <section className="bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur rounded-xl border-b-4 border-primary mt-10 p-8 z-10">
-        <BookSectionTitle title={'Best Sellers'} />
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+        <BookSectionTitle title={"Best Sellers"} />
         <BookSectionSlider
           items={books?.slice(0, 10)}
           renderCard={renderBookCard}
         />
       </section>
 
+      {/* Recently Viewed Section */}
+      {recentViewedBooks?.length > 0 && (
+        <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
+          <BookSectionTitle title={"Recently Viewed"} />
+          <BookSectionSlider
+            items={recentViewedBooks} // Pass the recently viewed books
+            renderCard={renderBookCard} // Use the Card component to render books
+          />
+        </section>
+      )}
+
       {/* New Published Books Slider */}
       <section className="z-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
         <BookSectionTitle title={"New Published"} />
         <BookSectionSlider
-          items={books?.slice(0, 10)}
+          items={recentViewedBooks}
           renderCard={(book) => <Card book={book} />}
         />
       </section>
@@ -142,7 +179,7 @@ const HomePage = () => {
       <section className="z-10 mb-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
-          items={books?.slice(0, 10)} // Show 10 books 
+          items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
       </section>
