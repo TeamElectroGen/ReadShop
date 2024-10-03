@@ -1,43 +1,31 @@
-"use client";
-import { useEffect, useState } from "react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import Image from "next/image";
 import { MdDelete } from "react-icons/md";
 import { Button } from "./ui/button";
 import { FaCircle, FaCircleArrowRight } from "react-icons/fa6";
-import { getBookDetails } from "@/services/getBooksData";
+import { useCart } from "@/app/context/CartContext";
 
 const ProductCart = ({ isOpen, onClose }) => {
-  const [cartBooks, setCartBooks] = useState([]);
+  const { cart, removeFromCart, updateQuantity } = useCart();
 
-  useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cartBooks")) || [];
-    fetchCartBookDetails(storedCartItems);
-  }, []);
-
-  const fetchCartBookDetails = async (storedCartItems) => {
-    try {
-      const bookDetailsPromises = storedCartItems.map(async (item) => {
-        const book = await getBookDetails(item.id); // Use item.id here
-        return { ...book, quantity: item.quantity }; // Include the quantity
-      });
-
-      const bookDetails = await Promise.all(bookDetailsPromises);
-      setCartBooks(bookDetails);
-    } catch (error) {
-      console.log("Error fetching book details:", error);
-    }
-  };
-
-  const totalPrice = cartBooks.reduce(
-    (total, book) => total + book.Price * book.quantity,
+  const totalPrice = cart.reduce(
+    (total, book) => total + book.price * book.quantity,
     0
   );
 
-  const removeItem = (bookId) => {
-    const updatedCartItems = cartBooks.filter((item) => item.id !== bookId);
-    setCartBooks(updatedCartItems);
-    localStorage.setItem("cartBooks", JSON.stringify(updatedCartItems));
+  const handleRemove = (id) => {
+    removeFromCart(id);
+  };
+
+  const handleQuantityChange = (id, newQuantity) => {
+    if (newQuantity > 0) {
+      updateQuantity(id, newQuantity);
+    }
+  };
+
+  const logCartProductIds = () => {
+    const productIds = cart.map((book) => book.id);
+    console.log("Cart Product IDs:", productIds);
   };
 
   return (
@@ -49,35 +37,61 @@ const ProductCart = ({ isOpen, onClose }) => {
               Your Cart
             </h2>
           </div>
+
           {/* Cart Item */}
-          {cartBooks.length > 0 ? (
+          {cart.length > 0 ? (
             <ul className="mt-4 flex flex-col gap-2">
-              {cartBooks.map((book) => (
+              {cart.map((book) => (
                 <li
                   key={book.id}
-                  className="flex min-h-20 items-center justify-between gap-5 rounded-sm border-b border-primary bg-primary/10 p-2"
+                  className="flex min-h-20 items-center justify-between gap-3 rounded-sm border-b border-primary bg-primary/10 p-2"
                 >
                   <div className="flex w-full gap-2">
-                    <div>
+                    <div className="min-h-14">
                       <Image
-                        src={book.CoverImage}
-                        alt="Book Cover"
-                        className="min-h-10"
-                        width={40}
-                        height={30}
-                      />
+                        className="max-h-14 min-h-14 min-w-10 max-w-10 bg-primary object-cover"
+                        src={book?.coverImage}
+                        width={50}
+                        height={100}
+                        alt={book.name}
+                      ></Image>
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold">{book.BookName}</h3>
-                      <p className="text-[0.5rem]">By: {book.AuthorName}</p>
-                      <p className="text-sm">Quantity: {book.quantity}</p>
+                      <h3 className="text-xs font-bold">{book.name}</h3>
+                      <p className="text-[0.5rem]">By: {book.author}</p>
+                      <p className="text-[.5rem] font-semibold text-primary-foreground">
+                        ${book.price}/item
+                      </p>
                     </div>
                   </div>
-                  <p className="text-sm">
-                    ${(book.Price * book.quantity).toFixed(2)}
-                  </p>
+                  <div className="flex items-center rounded-sm bg-primary/20 px-1 py-0.5">
+                    <Button
+                      className="h-5 w-5 rounded bg-secondary p-0 text-lg"
+                      onClick={() =>
+                        handleQuantityChange(book.id, book.quantity - 1)
+                      }
+                    >
+                      -
+                    </Button>
+                    <p className="flex h-5 w-5 items-center justify-center rounded p-0 text-lg">
+                      {book.quantity}
+                    </p>
+                    <Button
+                      className="h-5 w-5 rounded bg-secondary p-0 text-lg"
+                      onClick={() =>
+                        handleQuantityChange(book.id, book.quantity + 1)
+                      }
+                    >
+                      +
+                    </Button>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <p className="text-sm font-bold">
+                      ${(book.price * book.quantity).toFixed(2)}
+                    </p>
+                  </div>
                   <button
-                    onClick={() => removeItem(book.id)} // Pass book.id to removeItem
+                    onClick={() => handleRemove(book.id)}
                     className="h-fit w-fit rounded-sm p-1 hover:underline"
                   >
                     <MdDelete />
@@ -90,8 +104,9 @@ const ProductCart = ({ isOpen, onClose }) => {
               Your cart is currently empty.
             </p>
           )}
+
           {/* Total Price */}
-          {cartBooks.length > 0 && (
+          {cart.length > 0 && (
             <div className="mt-4 flex justify-between rounded-sm border-t border-primary bg-primary-foreground/20 px-4 py-2">
               <h3 className="text-lg font-semibold">Total Price:</h3>
               <h3 className="pr-6 text-lg font-semibold">
@@ -101,11 +116,17 @@ const ProductCart = ({ isOpen, onClose }) => {
           )}
           {/* Checkout and Details Button */}
           <div className="mt-4 flex justify-between gap-4">
-            <Button className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90">
+            <Button
+              className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90"
+              onClick={logCartProductIds}
+            >
               <FaCircle />
               Cart Details
             </Button>
-            <Button className="flex w-full gap-2 bg-primary">
+            <Button
+              className="flex w-full gap-2 bg-primary"
+              onClick={logCartProductIds}
+            >
               Checkout
               <FaCircleArrowRight />
             </Button>
