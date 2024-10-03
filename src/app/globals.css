@@ -155,3 +155,9 @@
 .main_content {
   @apply flex-1;
 }
+:root {
+  --first-color: #ff005a;
+  --second-color: #8400ff;
+  --third-color: #000;
+  --body-font: "Montserrat", sans-serif;
+}

@@ -6,6 +6,7 @@ import {
 } from "@/services/getBooksData";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+
 import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import { toast } from "react-hot-toast"; // Import toast
@@ -16,35 +17,56 @@ const ViewDetails = ({ bookid }) => {
   const [rWStatus, setRWStatus] = useState({});
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { data } = useSession() || {};
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const { addToCart, cart } = useCart();
 
   const handleAddToCartClick = () => {
     setIsAddedToCart(true);
-
-    const productToAdd = {
-      id: detailsBook._id,
-      name: detailsBook.BookName,
-      coverImage: detailsBook.CoverImage,
-      author: detailsBook.AuthorName,
-      price: detailsBook.Price,
-      quantity: 1,
-    };
-
-    addToCart(productToAdd);
-
-    // Display success toast
-    toast.success(`${detailsBook.BookName} added to cart!`);
   };
-
+  console.log(rWStatus);
   const handleRWList = async (param) => {
-    try {
-      const res = await patchRWList(param, bookid, data?.user?.email);
-      setUpdate(!update);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
+    if (data?.user?.email) {
+      try {
+        const res = await patchRWList(param, bookid, data?.user?.email);
+        setUpdate(!update);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setShowLoginModal(true);
     }
+  };
+  // console.log(rWStatus);
+
+  // Function to handle storing the book id in local storage
+  const handleLastVisitedBook = (id) => {
+    let recentVisitedBooks;
+    try {
+      recentVisitedBooks =
+        JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
+      if (!Array.isArray(recentVisitedBooks)) {
+        recentVisitedBooks = [];
+      }
+    } catch (error) {
+      recentVisitedBooks = [];
+    }
+
+    // Remove the book ID if it already exists
+    recentVisitedBooks = recentVisitedBooks.filter((bookId) => bookId !== id);
+
+    // Add the book ID to the beginning of the array
+    recentVisitedBooks.unshift(id);
+
+    // Limit the array to a maximum of 10 items
+    recentVisitedBooks = recentVisitedBooks.slice(0, 10);
+
+    // Save the updated array to local storage
+    localStorage.setItem(
+      "recentVisitedBooks",
+      JSON.stringify(recentVisitedBooks)
+    );
   };
 
   useEffect(() => {
@@ -69,6 +91,7 @@ const ViewDetails = ({ bookid }) => {
       setRWStatus({ readList, wishList });
     };
     fetch();
+    handleLastVisitedBook(bookid);
   }, [bookid, data?.user?.email]);
 
   return (
@@ -77,8 +100,8 @@ const ViewDetails = ({ bookid }) => {
         {/* Left Side - Book Image */}
         <div className="flex items-center justify-center">
           <Image
-            src={detailsBook.CoverImage}
-            alt={detailsBook.BookName}
+            src={detailsBook?.CoverImage}
+            alt={detailsBook?.BookName}
             width={300}
             height={500}
             className="rounded-lg shadow-md"
@@ -88,35 +111,35 @@ const ViewDetails = ({ bookid }) => {
         {/* Right Side - Book Details */}
         <div className="rounded-lg bg-white p-6 shadow-md">
           <h1 className="text-2xl font-bold text-gray-800">
-            {detailsBook.BookName}
+            {detailsBook?.BookName}
           </h1>
-          <p className="mt-2 text-gray-600">by {detailsBook.AuthorName}</p>
+          <p className="mt-2 text-gray-600">by {detailsBook?.AuthorName}</p>
           <div className="mt-4 flex items-center">
             <span className="rounded bg-yellow-400 px-2.5 py-0.5 text-sm font-semibold">
-              {detailsBook.Rating} Stars
+              {detailsBook?.Rating} Stars
             </span>
             <span className="ml-2 font-bold text-gray-500">| 3 Reviews</span>
           </div>
 
           {/* Book Description */}
-          <p className="mt-4 text-gray-600">{detailsBook.Description}</p>
+          <p className="mt-4 text-gray-600">{detailsBook?.Description}</p>
 
           {/* Additional Details */}
           <div className="mt-4">
             <p className="text-sm text-gray-500">
               <span className="font-semibold">Published by:</span>{" "}
-              {detailsBook.PublicationName}
+              {detailsBook?.PublicationName}
             </p>
             <p className="mt-1 text-sm text-gray-500">
               <span className="font-semibold">Publish Date:</span>{" "}
-              {new Date(detailsBook.PublishDate).toDateString()}
+              {new Date(detailsBook?.PublishDate).toDateString()}
             </p>
           </div>
 
           {/* Price & Add to Cart Buttons */}
           <div className="mt-6 flex items-center justify-between">
             <span className="text-2xl font-bold text-green-700">
-              $ {detailsBook.Price}
+              $ {detailsBook?.Price}
             </span>
           </div>
 
@@ -134,35 +157,44 @@ const ViewDetails = ({ bookid }) => {
                 </>
               ) : (
                 <>
-                  <FaCartShopping className="mr-3 size-5" /> Add to Cart
+                  <FaCartShopping className="mr-1 size-4" /> Add to Cart
                 </>
               )}
             </button>
 
-            {/* Add to Read List Button */}
+            {/* Add to WishList Button */}
             <button
-              disabled={!data?.user?.email}
-              onClick={() => handleRWList("read")}
-              className="text-ms flex flex-1 items-center justify-center rounded-lg bg-green-600 px-2 py-2.5 text-center font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300"
+              onClick={() => handleRWList("wish")}
+              className={`flex items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
             >
-              <FaBookOpen className="mr-3 size-5" />
-              {rWStatus.readList ? "Remove" : "Add"} to Read List
+              <FaRegHeart className="mr-1 size-4" />{" "}
+              {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
             </button>
           </div>
 
-          {/* Add to Wish List Button */}
+          {/* Add to Read List Button */}
           <div className="mt-4">
             <button
-              disabled={!data?.user?.email}
-              onClick={() => handleRWList("wish")}
-              className="flex items-center justify-center rounded-lg bg-gray-600 px-5 py-2.5 text-center text-xl font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300"
+              onClick={() => handleRWList("read")}
+              className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
             >
-              <FaRegHeart className="mr-3 size-6" />{" "}
-              {rWStatus.wishList ? "Remove" : "Add"} to Wishlist
+              <FaBookOpen className="mr-1 lg:size-4" />
+              {rWStatus.readList ? "Remove from" : "Add to"} Read List
             </button>
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <LoginModal
+          onCancel={() => setShowLoginModal(false)}
+          onLogin={() => {
+            // Redirect to login page or trigger login process
+            setShowLoginModal(false);
+          }}
+        />
+      )}
 
       {/* Additional Section Below (if needed) */}
       <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
@@ -170,6 +202,31 @@ const ViewDetails = ({ bookid }) => {
         <p className="mt-2 text-gray-600">
           Explore more information about the book, author, and publication here.
         </p>
+      </div>
+    </div>
+  );
+};
+
+const LoginModal = ({ onCancel, onLogin }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+      <div className="rounded-lg bg-white p-6 shadow-lg">
+        <h2 className="text-xl font-semibold text-gray-800">Please Login</h2>
+        <p className="mt-2 text-gray-600">You need to login to continue.</p>
+        <div className="mt-4 flex justify-end space-x-4">
+          <button
+            className="rounded-lg bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            onClick={onLogin}
+          >
+            Login
+          </button>
+        </div>
       </div>
     </div>
   );
