@@ -28,22 +28,25 @@ const HomePage = () => {
   useEffect(() => {
     const storedBooks =
       JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-    console.log(storedBooks);
-    const f = async () => {
+    console.log("storedBooks", storedBooks);
+    const fetchRecentViewedBooks = async () => {
       try {
         const res = await getBooksByIds(storedBooks);
-        setRecentViewedBooks(res.data);
+        setRecentViewedBooks(res.books);
+        console.log("res", res.books);
+        // console.log("Stored Books", recentViewedBooks);
       } catch (error) {
         console.log(error);
       }
     };
-    f();
+    fetchRecentViewedBooks();
   }, []);
 
   // all books
   const fetchBooks = async () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
+    console.log("books", books);
   };
 
   useEffect(() => {
@@ -157,8 +160,8 @@ const HomePage = () => {
         <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
           <BookSectionTitle title={"Recently Viewed"} />
           <BookSectionSlider
-            items={books?.slice(0, 10)} // Pass the fetched recently viewed books
-            renderCard={renderBookCard} // Use your Card component
+            items={recentViewedBooks} // Pass the recently viewed books
+            renderCard={renderBookCard} // Use the Card component to render books
           />
         </section>
       )}
@@ -167,7 +170,7 @@ const HomePage = () => {
       <section className="z-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
         <BookSectionTitle title={"New Published"} />
         <BookSectionSlider
-          items={books?.slice(0, 10)}
+          items={recentViewedBooks}
           renderCard={(book) => <Card book={book} />}
         />
       </section>
