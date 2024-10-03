@@ -6,27 +6,33 @@ const About = () => {
   return (
     <section>
       <div className="container mx-auto px-4 2xl:px-36">
-        <header
-          style={{ borderRadius: "32px" }}
-          className="relative mt-12 flex h-72 w-full items-center justify-center bg-lightGray-200"
-        >
-          <Image
-            src="https://images.pexels.com/photos/2177482/pexels-photo-2177482.jpeg?auto=compress&cs=tinysrgb&w=600"
-            alt="Custom banner"
-            layout="fill"
-            className="rounded-md object-cover"
-          />
-          <div className="relative z-10">
-            <h1 className="font-display text-3xl font-bold text-darkGray-800">
-              About Us
-            </h1>
-            <p className="py-3 text-center font-mono text-sm font-medium text-mediumGray-500">
-              Home / About us
-            </p>
+        <header className="relative mt-12 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-green-500">
+          <div className="container px-4 py-16 sm:px-6 lg:px-8">
+            <div className="relative z-10 text-center">
+              <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-white lg:text-5xl">
+                About
+              </h1>
+
+              <p className="mt-4 text-xl leading-7 text-white/90">
+                Discover Our Story and Mission
+              </p>
+              <div className="mt-6 flex justify-center space-x-4">
+                <Link
+                  href="/"
+                  className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                >
+                  Home
+                </Link>
+                <span className="inline-flex items-center text-sm text-white/70">
+                  / About
+                </span>
+              </div>
+            </div>
           </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         </header>
 
-        <section className="dark:bg-dark overflow-hidden bg-white pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]">
+        <section className="dark:bg-dark overflow-hidden pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]">
           <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full px-4 lg:w-6/12">
