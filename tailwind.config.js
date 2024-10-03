@@ -12,10 +12,12 @@ module.exports = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -82,8 +84,8 @@ module.exports = {
     container: {
       center: true,
       padding: {
-        DEFAULT: '1rem',
-        '2xl': '10rem',
+        DEFAULT: "1rem",
+        "2xl": "10rem",
       },
     },
   },
