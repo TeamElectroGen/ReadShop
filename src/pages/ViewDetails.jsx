@@ -5,11 +5,10 @@ import {
 } from "@/services/getBooksData";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+
 import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaLongArrowAltRight } from "react-icons/fa";
 import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
-// import { FaShoppingCart } from "react-icons/fa";
 
 const ViewDetails = ({ bookid }) => {
   const [detailsBook, setDetailsBook] = useState({}); // Initialize as an empty object
@@ -17,57 +16,48 @@ const ViewDetails = ({ bookid }) => {
   const [rWStatus, setRWStatus] = useState({});
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { data } = useSession() || {};
-  const router = useRouter();
-  const [showModalForCart, setShowModalForCart] = useState(false);
-  const [showModalForWishList, setShowModalForWishList] = useState(false);
-  const [showModalForReadList, setShowModalForReadList] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleAddToCartClick = () => {
-    if (!data?.user?.email) {
-      setShowModalForCart(true);
-      return;
-    }
     setIsAddedToCart(true);
   };
-
+  console.log(rWStatus);
   const handleRWList = async (param) => {
-    try {
-      if (!data?.user?.email) {
-        if (param === "wish") {
-          setShowModalForWishList(true);
-        } else if (param === "read") {
-          setShowModalForReadList(true);
-        }
-        return;
+    if (data?.user?.email) {
+      try {
+        const res = await patchRWList(param, bookid, data?.user?.email);
+        setUpdate(!update);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
       }
-      const res = await patchRWList(param, bookid, data?.user?.email);
-      setUpdate(!update);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
+    } else {
+      setShowLoginModal(true);
     }
   };
-  console.log(rWStatus);
-  const handleRedirectLogin = (modalType) => {
-    if (modalType === "cart") setShowModalForCart(false);
-    if (modalType === "wish") setShowModalForWishList(false);
-    if (modalType === "read") setShowModalForReadList(false);
-    router.push("/login");
-  };
+  // console.log(rWStatus);
 
   // Function to handle storing the book id in local storage
   const handleLastVisitedBook = (id) => {
-    let recentVisitedBooks =
-      JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-
-    // Check if the book id is already existing
-    if (recentVisitedBooks.includes(id)) {
-      // Remove the existing book ID from the array
-      recentVisitedBooks = recentVisitedBooks.filter((bookId) => bookId !== id);
+    let recentVisitedBooks;
+    try {
+      recentVisitedBooks =
+        JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
+      if (!Array.isArray(recentVisitedBooks)) {
+        recentVisitedBooks = [];
+      }
+    } catch (error) {
+      recentVisitedBooks = [];
     }
 
-    // Add the book id to the start of the array
+    // Remove the book ID if it already exists
+    recentVisitedBooks = recentVisitedBooks.filter((bookId) => bookId !== id);
+
+    // Add the book ID to the beginning of the array
     recentVisitedBooks.unshift(id);
+
+    // Limit the array to a maximum of 10 items
+    recentVisitedBooks = recentVisitedBooks.slice(0, 10);
 
     // Save the updated array to local storage
     localStorage.setItem(
@@ -177,20 +167,6 @@ const ViewDetails = ({ bookid }) => {
               <FaRegHeart className="mr-1 size-4" />{" "}
               {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
             </button>
-
-            {showModalForCart && (
-              <LoginModal
-                onCancel={() => setShowModalForCart(false)}
-                onLogin={() => handleRedirectLogin("cart")}
-              />
-            )}
-
-            {showModalForWishList && (
-              <LoginModal
-                onCancel={() => setShowModalForWishList(false)}
-                onLogin={() => handleRedirectLogin("wish")}
-              />
-            )}
           </div>
           {/* Add to Read List Button */}
           <div className="mt-4">
@@ -201,15 +177,20 @@ const ViewDetails = ({ bookid }) => {
               <FaBookOpen className="mr-1 lg:size-4" />
               {rWStatus.readList ? "Remove from" : "Add to"} Read List
             </button>
-            {showModalForReadList && (
-              <LoginModal
-                onCancel={() => setShowModalForReadList(false)}
-                onLogin={() => handleRedirectLogin("read")}
-              />
-            )}
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <LoginModal
+          onCancel={() => setShowLoginModal(false)}
+          onLogin={() => {
+            // Redirect to login page or trigger login process
+            setShowLoginModal(false);
+          }}
+        />
+      )}
 
       {/* Additional Section Below (if needed) */}
       <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
@@ -226,7 +207,7 @@ const LoginModal = ({ onCancel, onLogin }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
       <div className="rounded-lg bg-white p-6 shadow-lg">
-        <h2 className="text-xl font-semibold text-gray-800">Login Required</h2>
+        <h2 className="text-xl font-semibold text-gray-800">Please Login</h2>
         <p className="mt-2 text-gray-600">You need to login to continue.</p>
         <div className="mt-4 flex justify-end space-x-4">
           <button
