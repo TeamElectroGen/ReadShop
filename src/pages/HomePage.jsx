@@ -28,7 +28,7 @@ const HomePage = () => {
   useEffect(() => {
     fetchBooks();
   }, []);
-  
+
   useEffect(() => {
     const handleSearch = async () => {
       if (search) {
@@ -92,6 +92,7 @@ const HomePage = () => {
             <IoFilter className="mr-2 size-4" />
             Filter
           </Button>
+
           {/* Show search results dropdown */}
           {searchItems && showSearchResults && (
             <div className="absolute left-0 top-[4.2rem] z-50 mt-5 max-h-96 w-full overflow-scroll rounded-sm bg-white shadow-lg">
@@ -122,8 +123,8 @@ const HomePage = () => {
       </section>
 
       {/* Best Sellers Book Slider  (Albab updated this section) */}
-      <section className="bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur rounded-xl border-b-4 border-primary mt-10 p-8 z-10">
-        <BookSectionTitle title={'Best Sellers'} />
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+        <BookSectionTitle title={"Best Sellers"} />
         <BookSectionSlider
           items={books?.slice(0, 10)}
           renderCard={renderBookCard}
@@ -131,7 +132,7 @@ const HomePage = () => {
       </section>
 
       {/* New Published Books Slider */}
-      <section className="z-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Published"} />
         <BookSectionSlider
           items={books?.slice(0, 10)}
@@ -145,10 +146,10 @@ const HomePage = () => {
       </section>
 
       {/* Top of the month Books Slider */}
-      <section className="z-10 mb-10 mt-10 rounded-sm border-b border-primary bg-secondary/50 p-10">
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
-          items={books?.slice(0, 10)} // Show 10 books 
+          items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
       </section>
