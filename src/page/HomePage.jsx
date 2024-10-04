@@ -93,7 +93,7 @@ const HomePage = () => {
           Discover & Explore <br />{" "}
           <span className="yellow_gradient">A world of books</span>
         </h1>
-        <p className="text-md mt-5 max-w-2xl text-muted-foreground sm:text-xl">
+        <p className="text-md mt-5 px-4 max-w-2xl text-muted-foreground sm:text-xl">
           Discover a diverse collection of books to suit every reader. Explore,
           shop, and enjoy stories that inspire and entertain.
         </p>
