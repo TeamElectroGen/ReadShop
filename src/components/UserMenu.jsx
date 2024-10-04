@@ -30,11 +30,6 @@ const userMenuItems = [
     href: "/profile/orders",
     icon: ShoppingCart,
   },
-  {
-    title: "Logout",
-    href: "/profile/logout",
-    icon: LogOut,
-  },
 ];
 
 const UserMenu = ({ className }) => {
@@ -46,7 +41,7 @@ const UserMenu = ({ className }) => {
       )}
     >
       {userMenuItems.map((item) => (
-        <MenuItem key={item.title} item={item} />
+        <MenuItem key={item.title} href={item.href} title={item.title} icon={item.icon} />
       ))}
     </nav>
   );
