@@ -1,6 +1,8 @@
 import { connectDB } from "@/lib/connectDB";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export const GET = async () => {
   const db = await connectDB();
   const booksCollection = await db.collection("books");
