@@ -18,7 +18,7 @@ const MenuItem = ({ item }) => {
         "flex items-center gap-3 rounded-lg px-3 py-2 transition-all"
       )}
     >
-      {item.icon && <item.icon className="h-4 w-4" />}
+      {item.icon && <item.icon className="size-4" />}
       {item.title}
     </Link>
   );
