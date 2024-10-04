@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
-import { FaCartShopping, FaCircleUser } from "react-icons/fa6";
+import React, { useEffect, useState } from "react";
+import { FaCircleUser } from "react-icons/fa6";
 import { FaBookOpenReader } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import {
@@ -18,13 +18,20 @@ import HamburgerMenu from "./HamburgerMenu";
 import { signOut, useSession } from "next-auth/react";
 import ProductCart from "./ProductCart";
 import UserMenu from "./UserMenu";
-import { useCart } from "@/app/context/CartContext";
+// import { useCart } from "@/app/context/CartContext";
+import dynamic from "next/dynamic";
+
+const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
 const Navbar = () => {
   const { data } = useSession();
   const [isCartOpen, setCartOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  const { cart } = useCart();
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  // const { cart } = useCart();
 
   const navLinks = (
     <>
@@ -58,19 +65,9 @@ const Navbar = () => {
             <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
           </div>
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              onClick={() => setCartOpen(true)}
-            >
-              <FaCartShopping className="size-7" />
-              {cart.length > 0 && (
-                <span className="absolute right-0 top-0 size-4 rounded-sm bg-primary text-xs font-bold text-black">
-                  {cart.length}
-                </span>
-              )}
-            </Button>
+            {isClient && (
+              <DynamicCartButton onClick={() => setCartOpen(true)} />
+            )}
             {data?.user ? (
               <>
                 <DropdownMenu>
