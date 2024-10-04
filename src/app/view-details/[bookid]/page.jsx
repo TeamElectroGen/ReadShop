@@ -1,5 +1,5 @@
 "use client";
-import ViewDetails from "@/pages/ViewDetails";
+import ViewDetails from "@/page/ViewDetails";
 import React from "react";
 
 const Page = ({ params }) => {

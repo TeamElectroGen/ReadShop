@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const EmailVerify = () => {
@@ -21,13 +21,14 @@ const EmailVerify = () => {
             Check your inbox, please!
           </h2>
           <p className="mb-4 text-gray-600">
-            
-            Hey Nazrul, to start using this, we need to verify your email. We’ve
-            already sent out the verification link. Please check it and confirm
-            it's really you.
+            Hey Nazrul, to start using this, we need to verify your email.
+            We&lsquo;ve already sent out the verification link. Please check it
+            and confirm it&apos;s really you.
           </p>
-          
-          <Button className="font-bold"><Link href={"/login"}>Sure</Link></Button>
+
+          <Button className="font-bold">
+            <Link href={"/login"}>Sure</Link>
+          </Button>
           <p className="mt-4 text-gray-500">
             Didn’t get e-mail?{" "}
             <a href="#" className="text-blue-500 hover:underline">

@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import RatingStar from "./RatingStar";
-import { FaRegHeart } from "react-icons/fa6";
-import { FaHeart } from "react-icons/fa6";
 import WishlistBtn from "./WishlistBtn";
 
 const Card = ({ book }) => {
