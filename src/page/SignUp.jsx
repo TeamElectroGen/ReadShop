@@ -3,9 +3,9 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import axios from "axios";
-import SocialLogin from "./SocialLogin";
+import SocialLogin from "@/components/SocialLogin";
 
-const Signup = () => {
+const SignUp = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <SignupContent />
@@ -156,4 +156,4 @@ const SignupContent = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
-import SocialLogin from "./SocialLogin";
+import SocialLogin from "@/components/SocialLogin";
 import { useSearchParams } from "next/navigation";
 
 const Login = () => {
@@ -15,8 +15,7 @@ const Login = () => {
 };
 
 const LoginContent = () => {
-  const searchParams = useSearchParams();
-  const path = searchParams.get("redirect");
+  const path = useSearchParams().get("redirect");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,10 +26,14 @@ const LoginContent = () => {
       const res = await signIn("credentials", {
         emailOrPhone,
         password,
-        redirect: true,
-        callbackUrl: path || "/",
+        redirect: false,
       });
-      console.log(res);
+      if (res?.error) {
+        console.log(res.error);
+        toast.error("Invalid credentials");
+      } else {
+        window.location.href = path || "/";
+      }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong!");

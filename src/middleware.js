@@ -4,9 +4,8 @@ import { NextResponse } from "next/server";
 // Middleware function to handle authentication
 export const middleware = async (request) => {
   // TODO: when deploying on Vercel add suffix: __Secure-next-auth.session-token
-  const token = cookies(request).get("__Secure-next-auth.session-token");
+  const token = cookies(request).get("next-auth.session-token");
   const pathname = request.nextUrl.pathname;
-  console.log("token", token);
 
   // Check if the user is authenticated
   if (!token) {
@@ -22,5 +21,5 @@ export const middleware = async (request) => {
 
 // Configuration for the middleware
 export const config = {
-  matcher: ["/api/private/:path*"],
+  matcher: ["/api/private/:path*", "/profile/:path*"],
 };
