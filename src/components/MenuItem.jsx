@@ -4,22 +4,23 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-const MenuItem = ({ item }) => {
+const MenuItem = ({ href, title, icon: Icon, handleClick }) => {
   const pathname = usePathname();
 
   return (
     <Link
-      key={item.href}
-      href={item.href}
+      key={href}
+      href={href}
+      onClick={handleClick}
       className={cn(
-        pathname === item.href
+        pathname === href
           ? "bg-muted text-foreground hover:text-foreground"
           : "text-muted-foreground hover:text-foreground",
         "flex items-center gap-3 rounded-lg px-3 py-2 transition-all"
       )}
     >
-      {item.icon && <item.icon className="h-4 w-4" />}
-      {item.title}
+      {Icon && <Icon className="h-4 w-4" />}
+      {title}
     </Link>
   );
 };
