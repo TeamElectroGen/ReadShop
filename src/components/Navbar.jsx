@@ -8,19 +8,17 @@ import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import ProductCart from "./ProductCart";
 import UserMenu from "./UserMenu";
 // import { useCart } from "@/app/context/CartContext";
 import dynamic from "next/dynamic";
-import { LogOut } from "lucide-react";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -95,12 +93,6 @@ const Navbar = () => {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <UserMenu />
-                    <DropdownMenuItem
-                      onClick={() => signOut()}
-                      className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-foreground"
-                    >
-                      <LogOut className="size-4"/> Logout
-                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
