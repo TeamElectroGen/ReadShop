@@ -18,8 +18,27 @@ const ViewDetails = ({ bookid }) => {
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { data } = useSession() || {};
   const [showLoginModal, setShowLoginModal] = useState(false);
-
   const { addToCart, cart } = useCart();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { bookDetails } = await getBookDetails(bookid);
+      setDetailsBook(bookDetails);
+    };
+    fetch();
+    handleLastVisitedBook(bookid);
+  }, [bookid, data?.user?.email]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { readList, wishList } = await getReadWishStatusUser(
+        bookid,
+        data?.user?.email
+      );
+      setRWStatus({ readList, wishList });
+    };
+    fetch();
+  }, [bookid, data?.user?.email, update]);
 
   const handleAddToCartClick = () => {
     setIsAddedToCart(true);
@@ -31,13 +50,11 @@ const ViewDetails = ({ bookid }) => {
       price: detailsBook.Price,
       quantity: 1,
     };
-
     addToCart(productToAdd);
-
     // Display success toast
     toast.success(`${detailsBook.BookName} added to cart!`);
   };
-  console.log(rWStatus);
+
   const handleRWList = async (param) => {
     if (data?.user?.email) {
       try {
@@ -51,7 +68,6 @@ const ViewDetails = ({ bookid }) => {
       setShowLoginModal(true);
     }
   };
-  // console.log(rWStatus);
 
   // Function to handle storing the book id in local storage
   const handleLastVisitedBook = (id) => {
@@ -81,31 +97,6 @@ const ViewDetails = ({ bookid }) => {
       JSON.stringify(recentVisitedBooks)
     );
   };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const { readList, wishList } = await getReadWishStatusUser(
-        bookid,
-        data?.user?.email
-      );
-      setRWStatus({ readList, wishList });
-    };
-    fetch();
-  }, [bookid, data?.user?.email, update]);
-
-  useEffect(() => {
-    const fetch = async () => {
-      const { bookDetails } = await getBookDetails(bookid);
-      setDetailsBook(bookDetails);
-      const { readList, wishList } = await getReadWishStatusUser(
-        bookid,
-        data?.user?.email
-      );
-      setRWStatus({ readList, wishList });
-    };
-    fetch();
-    handleLastVisitedBook(bookid);
-  }, [bookid, data?.user?.email]);
 
   return (
     <div className="mx-auto max-w-5xl rounded-lg p-6 md:my-10 lg:my-20">

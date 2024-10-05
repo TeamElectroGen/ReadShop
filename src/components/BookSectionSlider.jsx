@@ -6,8 +6,9 @@ import "swiper/css/navigation";
 import Link from "next/link";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { Button } from "./ui/button";
+import Card from "./Card";
 
-const BookSectionSlider = ({ items, renderCard, viewAllLink }) => {
+const BookSectionSlider = ({ items, viewAllLink }) => {
   const swiperRef = useRef(null);
 
   const handlePrev = () => {
@@ -26,10 +27,20 @@ const BookSectionSlider = ({ items, renderCard, viewAllLink }) => {
     <div className="slider-container relative">
       {/* Navigation Buttons */}
       <div className="absolute -right-2 z-10 -mt-14 flex gap-2 md:-top-3 md:right-0">
-        <Button onClick={handlePrev} variant="outline" size="icon" className="hover:bg-primary/60">
+        <Button
+          onClick={handlePrev}
+          variant="outline"
+          size="icon"
+          className="hover:bg-primary/60"
+        >
           <FaArrowLeft />
         </Button>
-        <Button onClick={handleNext} variant="outline" size="icon" className="hover:bg-primary/60">
+        <Button
+          onClick={handleNext}
+          variant="outline"
+          size="icon"
+          className="hover:bg-primary/60"
+        >
           <FaArrowRight />
         </Button>
       </div>
@@ -49,8 +60,10 @@ const BookSectionSlider = ({ items, renderCard, viewAllLink }) => {
         }}
       >
         {/* Render all the book items */}
-        {items?.map((item, idx) => (
-          <SwiperSlide key={idx}>{renderCard(item)}</SwiperSlide>
+        {items?.map((item) => (
+          <SwiperSlide key={item._id}>
+            <Card key={item._id} book={item} />
+          </SwiperSlide>
         ))}
         {/* Add a "View All" button as the last card */}
         <SwiperSlide className="rounded-md bg-secondary">

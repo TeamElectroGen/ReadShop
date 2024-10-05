@@ -40,7 +40,7 @@ const About = () => {
                   <div className="w-full px-3 sm:px-4 xl:w-1/2">
                     <div className="py-3 sm:py-4">
                       <Image
-                        src="	https://images.pexels.com/photos/4440123/pexels-photo-4440123.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        src="https://images.pexels.com/photos/4440123/pexels-photo-4440123.jpeg?auto=compress&cs=tinysrgb&w=600"
                         alt=""
                         className="w-full rounded-2xl"
                         width={100}
@@ -49,7 +49,7 @@ const About = () => {
                     </div>
                     <div className="py-3 sm:py-4">
                       <Image
-                        src="	https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        src="https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=600"
                         alt=""
                         className="w-full rounded-2xl"
                         width={100}
@@ -60,7 +60,7 @@ const About = () => {
                   <div className="w-full px-3 sm:px-4 xl:w-1/2">
                     <div className="relative z-10 my-4">
                       <Image
-                        src="	https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        src="https://images.pexels.com/photos/1926988/pexels-photo-1926988.jpeg?auto=compress&cs=tinysrgb&w=600"
                         alt=""
                         className="w-full rounded-2xl"
                         width={100}
