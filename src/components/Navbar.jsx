@@ -14,14 +14,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import ProductCart from "./ProductCart";
 import UserMenu from "./UserMenu";
 // import { useCart } from "@/app/context/CartContext";
 import dynamic from "next/dynamic";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
-import { LogOutIcon } from "lucide-react";
 
 const Navbar = () => {
   const { data } = useSession();
@@ -94,9 +93,6 @@ const Navbar = () => {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <UserMenu />
-                    <DropdownMenuItem onClick={() => signOut()} className="pl-3.5 cursor-pointer flex gap-2.5 text-red-600">
-                      <LogOutIcon className="size-4" /> Logout
-                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
