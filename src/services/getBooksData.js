@@ -105,3 +105,16 @@ export const getReadListBooks = async (email) => {
     return {};
   }
 };
+
+// Fetch all unique categories
+export const getCategories = async () => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-categories`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
