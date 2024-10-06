@@ -50,13 +50,22 @@ const handler = NextAuth({
   callbacks: {
     async signIn({ user, account }) {
       if (account.provider === "google") {
-        const { email } = user;
+        const { name, email, image } = user;
         try {
           const db = await connectDB();
           const userCollection = db.collection("users");
           const exist = await userCollection.findOne({ email });
           if (!exist) {
-            await userCollection.insertOne({ email });
+            await userCollection.insertOne({
+              name,
+              email,
+              image,
+              role: "user",
+              isActive: true,
+              createdAt: new Date(),
+              isEmailVerified: true,
+              lastLogin: new Date(),
+            });
             return user;
           } else {
             return user;
