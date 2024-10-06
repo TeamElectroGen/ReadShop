@@ -118,3 +118,16 @@ export const getCategories = async () => {
     return [];
   }
 };
+
+// Fetch books by a specific category
+export const getBooksByCategory = async (category) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-books-by-category?category=${category}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
