@@ -20,6 +20,7 @@ import UserMenu from "./UserMenu";
 // import { useCart } from "@/app/context/CartContext";
 import dynamic from "next/dynamic";
 import useScrollPosition from "@/hooks/useScrollPosition";
+import { usePathname } from "next/navigation";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -28,6 +29,7 @@ const Navbar = () => {
   const [isCartOpen, setCartOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
+  const pathName = usePathname();
 
   useEffect(() => {
     setIsClient(true);
@@ -47,6 +49,10 @@ const Navbar = () => {
       </li>
     </>
   );
+
+  if(pathName.includes('dashboard')) {
+    return;
+  }
 
   return (
     <>
