@@ -4,8 +4,8 @@ import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import {
   getAllBooks,
-  // getBookDetails,
   getBooksByIds,
+  getCategories,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
@@ -25,6 +25,8 @@ const HomePage = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const dropdownRef = useRef(null); // Reference for dropdown
   const [recentViewedBooks, setRecentViewedBooks] = useState([]);
+  const [categoriesName, setCategoriesName] = useState([]);
+
   // recent viewed books
   useEffect(() => {
     const storedBooks =
@@ -83,6 +85,17 @@ const HomePage = () => {
     };
   }, [dropdownRef]);
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const { categories } = await getCategories();
+      setCategoriesName(categories);
+    };
+
+    fetchCategory();
+  }, []);
+
+  console.log("categoriesName", categoriesName);
+
   return (
     <div className="md:container">
       {/* Search & Filter Banner */}
@@ -91,7 +104,7 @@ const HomePage = () => {
           Discover & Explore <br />{" "}
           <span className="yellow_gradient">A world of books</span>
         </h1>
-        <p className="text-md mt-5 px-4 max-w-2xl text-muted-foreground sm:text-xl">
+        <p className="text-md mt-5 max-w-2xl px-4 text-muted-foreground sm:text-xl">
           Discover a diverse collection of books to suit every reader. Explore,
           shop, and enjoy stories that inspire and entertain.
         </p>
@@ -146,10 +159,15 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Best Sellers Book Slider  (Albab updated this section) */}
+      {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-        <BookSectionTitle title={"Best Sellers"} />
+        <BookSectionTitle title={"New Arrival"} />
         <BookSectionSlider items={books?.slice(0, 10)} />
+      </section>
+
+      {/* Category Grid */}
+      <section>
+        <HomePageCategoryGrid books={books} />
       </section>
 
       {/* Recently Viewed Section */}
@@ -162,21 +180,34 @@ const HomePage = () => {
         </section>
       )}
 
-      {/* New Published Books Slider */}
+      <section className="mt-10 flex flex-col items-center text-center">
+        <h2 className="mb-10 mt-5 w-fit rounded-sm bg-primary px-5 py-2 text-center text-2xl font-bold text-primary-foreground">
+          All Category
+        </h2>
+        <div className="flex flex-wrap justify-center gap-3 text-center">
+          {categoriesName.map((categories, idx) => (
+            <Link
+              href={`/category/${categories.Genre}`}
+              className="rounded-sm border border-primary bg-secondary px-10 py-4"
+              key={idx}
+            >
+              {categories.Genre}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* New Best Sellers Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-        <BookSectionTitle title={"New Published"} />
+        <BookSectionTitle title={"Best Sellers"} />
         <BookSectionSlider items={books?.slice(0, 10)} />
       </section>
 
-      {/* Category Grid */}
-      <section>
-        <HomePageCategoryGrid books={books} />
-      </section>
-
       {/* Top of the month Books Slider */}
-      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+      <section className="z-10 mb-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
+          viewAllLink={"/category/Fiction"}
           items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
