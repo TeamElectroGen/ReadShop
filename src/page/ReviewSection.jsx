@@ -7,7 +7,7 @@ const ReviewSection = () => {
   const [totalRating, setTotalRating] = useState(4.5); // Example average rating
   const [totalReviews, setTotalReviews] = useState(120); // Example total reviews
   const [totalRatingCount, setTotalRatingCount] = useState(200); // Example total rating count
-  // const [selectedRating, setSelectedRating] = useState(0);
+  const [selectedRating, setSelectedRating] = useState(0);
   const [reviews, setReviews] = useState([
     // Example reviews data
     {
@@ -117,9 +117,9 @@ const ReviewSection = () => {
     setShowReviewForm(false);
   };
 
-  // const handleStarClick = (rating) => {
-  //   setSelectedRating(rating);
-  // };
+  const handleStarClick = (rating) => {
+    setSelectedRating(rating);
+  };
 
   return (
     <div className="reviews-container mx-auto mt-8 max-w-5xl rounded-lg p-6 shadow-md">
@@ -189,7 +189,7 @@ const ReviewSection = () => {
               ></textarea>
             </div>
             {/* rating selection */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="rating"
                 className="block font-medium text-gray-700"
@@ -209,9 +209,9 @@ const ReviewSection = () => {
                 <option value="2">2 Stars</option>
                 <option value="1">1 Star</option>
               </select>
-            </div>
+            </div> */}
             {/* rating stars */}
-            {/* <div className="mb-4">
+            <div className="mb-4">
               <label className="block font-medium text-gray-700">Rating</label>
               <div className="mt-1 flex space-x-1">
                 {[1, 2, 3, 4, 5].map((rating) => (
@@ -226,7 +226,7 @@ const ReviewSection = () => {
                   />
                 ))}
               </div>
-            </div> */}
+            </div>
             <div className="mb-4">
               <label
                 htmlFor="reviewPhoto"
