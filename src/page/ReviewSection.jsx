@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa"; // Using react-icons for star symbol
-// import ReactPaginate from "react-paginate";
+import ReactPaginate from "react-paginate";
 import Image from "next/image";
 
 const ReviewSection = () => {
@@ -72,8 +72,8 @@ const ReviewSection = () => {
     },
     // Add more static reviews here...
   ]);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const reviewsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
   const [showReviewForm, setShowReviewForm] = useState(false);
 
   useEffect(() => {
@@ -96,9 +96,9 @@ const ReviewSection = () => {
     return data;
   };
 
-  // const handlePageChange = ({ selected }) => {
-  //   setCurrentPage(selected + 1);
-  // };
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected + 1);
+  };
 
   const handleShowReviewForm = () => {
     setShowReviewForm(!showReviewForm);
@@ -268,10 +268,10 @@ const ReviewSection = () => {
         {/* Review List */}
         <div className="space-y-6">
           {reviews
-            // .slice(
-            //   (currentPage - 1) * reviewsPerPage,
-            //   currentPage * reviewsPerPage
-            // )
+            .slice(
+              (currentPage - 1) * reviewsPerPage,
+              currentPage * reviewsPerPage
+            )
             .map((review) => (
               <div
                 key={review.id}
@@ -312,7 +312,7 @@ const ReviewSection = () => {
         </div>
 
         {/* Pagination */}
-        {/* <div className="mt-6">
+        <div className="mt-6">
           <ReactPaginate
             pageCount={Math.ceil(reviews.length / reviewsPerPage)}
             onPageChange={handlePageChange}
@@ -328,7 +328,7 @@ const ReviewSection = () => {
             nextClassName="px-4 py-2 border rounded-lg text-gray-700 hover:bg-blue-100"
             disabledClassName="opacity-50"
           />
-        </div> */}
+        </div>
       </div>
     </div>
   );
