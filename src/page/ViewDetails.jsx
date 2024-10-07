@@ -10,8 +10,10 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import { toast } from "react-hot-toast"; // Import toast
+import ReviewsAndRatings from "./ReviewsAndRatings";
 
-const ViewDetails = ({ bookid }) => {
+
+const ViewDetails = ({ bookid}) => {
   const [detailsBook, setDetailsBook] = useState({});
   const [update, setUpdate] = useState(false);
   const [rWStatus, setRWStatus] = useState({});
@@ -121,6 +123,7 @@ const ViewDetails = ({ bookid }) => {
           <div className="mt-4 flex items-center">
             <span className="rounded bg-yellow-400 px-2.5 py-0.5 text-sm font-semibold">
               {detailsBook?.Rating} Stars
+              
             </span>
             <span className="ml-2 font-bold text-gray-500">| 3 Reviews</span>
           </div>
@@ -206,6 +209,9 @@ const ViewDetails = ({ bookid }) => {
         <p className="mt-2 text-gray-600">
           Explore more information about the book, author, and publication here.
         </p>
+      </div>
+      <div>
+        <ReviewsAndRatings></ReviewsAndRatings>
       </div>
     </div>
   );
