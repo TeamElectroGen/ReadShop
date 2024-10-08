@@ -134,6 +134,19 @@ export const getBooksByCategory = async (category) => {
   }
 };
 
+// get  count of books by category
+export const getCategoryCount = async (category) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-specific-category-count/${category}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
 // ============================= Author ================================
 
 // Fetch All Authors
