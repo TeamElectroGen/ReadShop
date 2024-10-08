@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// ================================ Books ================================
+
 // Fetches all books from the API
 export const getAllBooks = async () => {
   try {
@@ -129,5 +131,31 @@ export const getBooksByCategory = async (category) => {
   } catch (error) {
     console.log(error);
     return [];
+  }
+};
+
+// ============================= Author ================================
+
+// Fetch All Authors
+export const getAuthors = async () => {
+  try {
+    const res = await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/api/authors`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+// Fetch Author by username
+export const getAuthorByUsername = async (username) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/authors/${username}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
   }
 };
