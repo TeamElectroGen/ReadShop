@@ -24,18 +24,18 @@ const AuthorDetails = () => {
         <div className="h-80 w-full rounded-md lg:flex lg:gap-6">
           <div>
             <Image
-              className="mt-20 h-32 w-32 rounded-full border-8 border-gray-200 bg-red-300 shadow-2xl shadow-blue-400"
+              className="mt-20 h-32 w-32 rounded-full border-8 border-gray-200 bg-red-300 shadow-xl shadow-blue-200"
               src="/assets/cover.jpg"
               alt="Author Photo"
               width={150}
               height={150}
             />
-            <button
+            <Button
               onClick={toggleFollow}
               className="border-[1px] border-black px-4 mt-6 ml-4"
             >
               {following ? "Unfollow" : "+ Follow"}
-            </button>
+            </Button>
           </div>
           <div className="mr-4 lg:mt-24 lg:w-4/5">
             <h1 className="text-xl font-bold">Eran Ben-Joseph</h1>
@@ -82,14 +82,6 @@ const AuthorDetails = () => {
 
       {/*Author*/}
       <div className="container mx-auto">
-        <hr className="my-4 border-gray-300" />
-        <select name="" id="" className="p-2">
-          <option value="#">Sort by: Popularity</option>
-          <option value="#">Price: Low to High</option>
-          <option value="#">Price: High to Low</option>
-          <option value="#">Avg: Customer Review</option>
-          <option value="#">Sort by: Best Sellers</option>
-        </select>
         <hr className="my-4 border-gray-300" />
         <div className="flex justify-center">
           <Image
