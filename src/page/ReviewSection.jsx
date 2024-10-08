@@ -135,12 +135,12 @@ const ReviewSection = () => {
   };
 
   return (
-    <div className="reviews-container container mx-auto mt-8 rounded-lg p-6 shadow-md">
+    <div className="reviews-container container mx-auto mt-8 rounded-lg p-6 ">
       {/* Reviews and Ratings Section */}
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>
-      <div className="mb-6 flex items-center justify-around rounded-lg bg-white p-4 shadow-lg">
+      <div className="mb-6 flex items-center justify-around rounded-lg bg-white p-4">
         <div className="text-center">
           {/* Average Rating with Large Stars */}
           <div className="mb-2 flex justify-center">
@@ -205,28 +205,6 @@ const ReviewSection = () => {
                 required
               ></textarea>
             </div>
-            {/* rating selection */}
-            {/* <div className="mb-4">
-              <label
-                htmlFor="rating"
-                className="block font-medium text-gray-700"
-              >
-                Rating
-              </label>
-              <select
-                id="rating"
-                name="rating"
-                className="mt-1 w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Select Rating</option>
-                <option value="5">5 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="2">2 Stars</option>
-                <option value="1">1 Star</option>
-              </select>
-            </div> */}
             {/* rating stars */}
             <div className="mb-4">
               <label className="block font-medium text-gray-700">Rating</label>
