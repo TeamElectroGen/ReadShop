@@ -131,3 +131,16 @@ export const getBooksByCategory = async (category) => {
     return [];
   }
 };
+
+// Fetch All Authors
+export const getAuthors = async () => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/authors`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
