@@ -180,15 +180,13 @@ const HomePage = () => {
         </section>
       )}
 
-      <section className="mt-10 flex flex-col items-center text-center">
-        <h2 className="mb-10 mt-5 w-fit rounded-sm bg-primary px-5 py-2 text-center text-2xl font-bold text-primary-foreground">
-          All Category
-        </h2>
+      <section className="mt-10 flex flex-col p-8 text-center">
+        <BookSectionTitle title={"All Category"} />
         <div className="flex flex-wrap justify-center gap-3 text-center">
           {categoriesName.map((categories, idx) => (
             <Link
               href={`/category/${categories.Genre}`}
-              className="rounded-sm border border-primary bg-secondary px-10 py-4"
+              className="rounded-sm border border-primary bg-secondary px-10 py-4 hover:bg-primary hover:duration-300 hover:ease-linear"
               key={idx}
             >
               {categories.Genre}

@@ -66,8 +66,8 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
           </SwiperSlide>
         ))}
         {/* Add a "View All" button as the last card */}
-        <SwiperSlide className="rounded-md bg-secondary">
-          <div className="flex h-96 items-center justify-center">
+        <SwiperSlide className="rounded-md border bg-secondary">
+          <div className="flex h-[25rem] items-center justify-center lg:h-[25.1rem]">
             <Link
               href={`${viewAllLink}`}
               className="rounded-md bg-primary-foreground/80 px-5 py-2 text-white hover:bg-primary-foreground"
