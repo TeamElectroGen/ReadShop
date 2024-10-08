@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
 import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
+import AuthorSectionSlide from "@/components/AuthorSectionSlide";
+import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
@@ -25,6 +27,8 @@ const HomePage = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const dropdownRef = useRef(null); // Reference for dropdown
   const [recentViewedBooks, setRecentViewedBooks] = useState([]);
+  const [authors, setAuthors] = useState([]);
+
   // recent viewed books
   useEffect(() => {
     const storedBooks =
@@ -53,7 +57,6 @@ const HomePage = () => {
   useEffect(() => {
     fetchBooks();
   }, []);
-
   // search books
   useEffect(() => {
     const handleSearch = async () => {
@@ -91,7 +94,7 @@ const HomePage = () => {
           Discover & Explore <br />{" "}
           <span className="yellow_gradient">A world of books</span>
         </h1>
-        <p className="text-md mt-5 px-4 max-w-2xl text-muted-foreground sm:text-xl">
+        <p className="text-md mt-5 max-w-2xl px-4 text-muted-foreground sm:text-xl">
           Discover a diverse collection of books to suit every reader. Explore,
           shop, and enjoy stories that inspire and entertain.
         </p>
@@ -180,6 +183,10 @@ const HomePage = () => {
           items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
+      </section>
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+        <AuthorSectionTitle title={"Author"} />
+        <AuthorSectionSlide items={authors?.slice(0, 10)} />
       </section>
     </div>
   );
