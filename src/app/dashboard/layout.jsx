@@ -41,9 +41,9 @@ const DashboardLayout = ({ children }) => {
     <div className="grid min-h-screen w-full border-t bg-background md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       {/* Sidebar */}
       <DashboardSidebar />
-      <div className="flex flex-col bg-primary/5 sm:gap-4 sm:py-4 md:pl-6">
+      <div className="flex flex-col bg-primary/5 sm:gap-4 sm:py-4 md:pl-5">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-14 border items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto py-3 sm:border-0 sm:bg-transparent sm:px-6">
+        <header className="sticky top-0 z-30 flex h-14 border items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto py-3 sm:border-0 sm:bg-transparent lg:px-12">
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="md:hidden">
@@ -147,7 +147,7 @@ const DashboardLayout = ({ children }) => {
         </header>
 
         {/* Dynamic pages */}
-        <main className="h-full">{children}</main>
+        <main className="h-full p-4 lg:px-12 lg:py-6">{children}</main>
       </div>
     </div>
   );
