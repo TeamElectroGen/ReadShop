@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import HamburgerMenu from "./HamburgerMenu";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import ProductCart from "./ProductCart";
 import UserMenu from "./UserMenu";
 // import { useCart } from "@/app/context/CartContext";

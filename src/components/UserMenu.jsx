@@ -37,7 +37,7 @@ const UserMenu = ({ className }) => {
   return (
     <nav className={cn("grid items-start text-sm font-medium", className)}>
       {userMenuItems.map((item) => (
-        <MenuItem key={item.title} item={item} />
+        <MenuItem key={item.title} href={item.href} title={item.title} icon={item.icon} />
       ))}
       <button
         onClick={() => signOut()}
