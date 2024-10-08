@@ -4,6 +4,7 @@ import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import {
   getAllBooks,
+  getAuthors,
   // getBookDetails,
   getBooksByIds,
   getSearchBooks,
@@ -54,8 +55,15 @@ const HomePage = () => {
     console.log("books", books);
   };
 
+  //fetch  all authors
+  const fetchAllAuthors = async () => {
+    const { authors } = await getAuthors();
+    setAuthors(authors);
+  };
+
   useEffect(() => {
     fetchBooks();
+    fetchAllAuthors();
   }, []);
   // search books
   useEffect(() => {
