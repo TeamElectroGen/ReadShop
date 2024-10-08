@@ -1,7 +1,11 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa"; // Using react-icons for star symbol
 import ReactPaginate from "react-paginate";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const ReviewSection = () => {
   const [totalRating, setTotalRating] = useState(4.5); // Example average rating
@@ -76,6 +80,8 @@ const ReviewSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const {data}=useSession()
+  console.log('Data',data)
 
   useEffect(() => {
     // Fetch total rating, reviews, and rating count from data source
@@ -166,12 +172,16 @@ const ReviewSection = () => {
 
       {/* Button to write a review */}
       <div className="flex justify-center">
-        <button
+       
+       {data?.user?.email? <button
           onClick={handleShowReviewForm}
           className="rounded-full bg-blue-600 px-6 py-2 text-white shadow-lg hover:bg-blue-500 focus:outline-none"
         >
           Write a Review
         </button>
+        :<div className='font-semibold text-xl'>Please login to write review
+        <Link href='/login'><Button className="ml-10 p-5 ghost hover:bg-blue-600 hover:text-white">Login</Button></Link> 
+        </div> }
       </div>
 
       {/* Review Form */}
