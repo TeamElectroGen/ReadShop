@@ -12,6 +12,8 @@ import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import { toast } from "react-hot-toast"; // Import toast
 
 import ReviewSection from "./ReviewSection";
+import { useRouter } from "next/navigation";
+
 
 
 const ViewDetails = ({ bookid }) => {
@@ -22,6 +24,7 @@ const ViewDetails = ({ bookid }) => {
   const { data } = useSession() || {};
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { addToCart, cart } = useCart();
+  const router= useRouter();
 
   useEffect(() => {
     const fetch = async () => {
@@ -198,7 +201,7 @@ const ViewDetails = ({ bookid }) => {
         <LoginModal
           onCancel={() => setShowLoginModal(false)}
           onLogin={() => {
-            // Redirect to login page or trigger login process
+            router.push("/login");
             setShowLoginModal(false);
           }}
         />
