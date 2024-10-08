@@ -1,17 +1,11 @@
 import Link from "next/link";
 import {
-  Bell,
-  CircleUser,
   Home,
   LineChart,
-  Menu,
   MenuIcon,
   Package,
-  Package2,
-  PanelLeft,
   Search,
   ShoppingCart,
-  Users,
   Users2,
 } from "lucide-react";
 import {
@@ -49,7 +43,7 @@ const DashboardLayout = ({ children }) => {
       <DashboardSidebar />
       <div className="flex flex-col bg-primary/5 sm:gap-4 sm:py-4 md:pl-6">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        <header className="sticky top-0 z-30 flex h-14 border items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto py-3 sm:border-0 sm:bg-transparent sm:px-6">
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="md:hidden">
