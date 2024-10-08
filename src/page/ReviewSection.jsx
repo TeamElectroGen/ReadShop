@@ -122,7 +122,7 @@ const ReviewSection = () => {
   };
 
   return (
-    <div className="reviews-container mx-auto mt-8 max-w-5xl rounded-lg p-6 shadow-md">
+    <div className="reviews-container container mx-auto mt-8 rounded-lg p-6 shadow-md">
       {/* Reviews and Ratings Section */}
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
