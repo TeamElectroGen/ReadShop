@@ -8,6 +8,7 @@ const ReviewSection = () => {
   const [totalReviews, setTotalReviews] = useState(120); // Example total reviews
   const [totalRatingCount, setTotalRatingCount] = useState(200); // Example total rating count
   const [selectedRating, setSelectedRating] = useState(0);
+  const [ratingError, setRatingError] = useState("");
   const [reviews, setReviews] = useState([
     // Example reviews data
     {
@@ -106,6 +107,11 @@ const ReviewSection = () => {
 
   const handleSubmitReview = (event) => {
     event.preventDefault();
+     // Check if rating is selected
+     if (selectedRating === 0) {
+      setRatingError("Please select a rating."); // Show error if no rating
+      return; // Prevent form submission if no rating is selected
+    }
     const newReview = {
       id: reviews.length + 1,
       user: { name: "New User", avatar: "https://example.com/avatar-new.jpg" },
@@ -119,6 +125,7 @@ const ReviewSection = () => {
 
   const handleStarClick = (rating) => {
     setSelectedRating(rating);
+    setRatingError("");
   };
 
   return (
@@ -226,6 +233,7 @@ const ReviewSection = () => {
                   />
                 ))}
               </div>
+              {ratingError && <p className="text-red-500">{ratingError}</p>}
             </div>
             <div className="mb-4">
               <label
