@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa"; // Using react-icons for star symbol
-import ReactPaginate from "react-paginate";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ReactLoading from "react-loading";
 
 const ReviewSection = () => {
   const [totalRating, setTotalRating] = useState(4.5); // Example average rating
@@ -77,11 +78,20 @@ const ReviewSection = () => {
     },
     // Add more static reviews here...
   ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const {data}=useSession()
-  console.log('Data',data)
+  const { data } = useSession();
+  const [reviewText, setReviewText] = useState(5);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadReviews = () => {
+    if (reviews.length <= reviewText) {
+      setHasMore(false);
+      return;
+    }
+    setTimeout(() => {
+      setReviewText((prevVisible) => prevVisible + 5);
+    }, 1000);
+  };
 
   useEffect(() => {
     // Fetch total rating, reviews, and rating count from data source
@@ -103,26 +113,22 @@ const ReviewSection = () => {
     return data;
   };
 
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected + 1);
-  };
-
   const handleShowReviewForm = () => {
     setShowReviewForm(!showReviewForm);
   };
 
   const handleSubmitReview = (event) => {
     event.preventDefault();
-     // Check if rating is selected
-     if (selectedRating === 0) {
+    // Check if rating is selected
+    if (selectedRating === 0) {
       setRatingError("Please select a rating."); // Show error if no rating
       return; // Prevent form submission if no rating is selected
     }
     const newReview = {
       id: reviews.length + 1,
       user: { name: "New User", avatar: "https://example.com/avatar-new.jpg" },
-      rating: event.target.elements.rating.value,
-      text: event.target.elements.reviewText.value,
+      rating: event.target.elements?.rating?.value,
+      text: event.target.elements?.reviewText?.value,
       createdAt: new Date().toLocaleDateString(),
     };
     setReviews([...reviews, newReview]);
@@ -135,7 +141,7 @@ const ReviewSection = () => {
   };
 
   return (
-    <div className="reviews-container container mx-auto mt-8 rounded-lg p-6 ">
+    <div className="reviews-container container mx-auto mt-8 rounded-lg p-6">
       {/* Reviews and Ratings Section */}
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
@@ -172,16 +178,23 @@ const ReviewSection = () => {
 
       {/* Button to write a review */}
       <div className="flex justify-center">
-       
-       {data?.user?.email? <button
-          onClick={handleShowReviewForm}
-          className="rounded-full bg-blue-600 px-6 py-2 text-white shadow-lg hover:bg-blue-500 focus:outline-none"
-        >
-          Write a Review
-        </button>
-        :<div className='font-semibold text-xl'>Please login to write review
-        <Link href='/login'><Button className="ml-10 p-5 ghost hover:bg-blue-600 hover:text-white">Login</Button></Link> 
-        </div> }
+        {data?.user?.email ? (
+          <button
+            onClick={handleShowReviewForm}
+            className="rounded-full bg-blue-600 px-6 py-2 text-white shadow-lg hover:bg-blue-500 focus:outline-none"
+          >
+            Write a Review
+          </button>
+        ) : (
+          <div className="text-xl font-semibold">
+            Please login to write review
+            <Link href="/login">
+              <Button className="ghost ml-10 p-5 hover:bg-blue-600 hover:text-white">
+                Login
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Review Form */}
@@ -262,68 +275,59 @@ const ReviewSection = () => {
         <h2 className="mb-4 text-2xl font-bold">Customer Reviews</h2>
 
         {/* Review List */}
-        <div className="space-y-6">
-          {reviews
-            .slice(
-              (currentPage - 1) * reviewsPerPage,
-              currentPage * reviewsPerPage
-            )
-            .map((review) => (
-              <div
-                key={review.id}
-                className="rounded-lg bg-white p-6 shadow-lg"
-              >
-                <div className="mb-4 flex items-center">
-                  <Image
-                    width={50}
-                    height={50}
-                    src={review.user.avatar}
-                    alt={review.user.name}
-                    className="mr-4 h-12 w-12 rounded-full"
-                  />
-                  <div>
-                    <h3 className="text-lg font-semibold">
-                      {review.user.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">{review.createdAt}</p>
-                  </div>
-                </div>
-                <div className="mb-4 flex items-center">
-                  <div className="flex space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <span
-                        key={i}
-                        className={`text-xl text-yellow-500 ${
-                          i < review.rating ? "filled" : "text-gray-300"
-                        }`}
-                      >
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <p className="text-gray-700">{review.text}</p>
-              </div>
-            ))}
-        </div>
+        <div >
+          <InfiniteScroll
+            dataLength={reviewText}
+            next={loadReviews}
+            hasMore={hasMore}
+            className="space-y-6"
+            loader={
+              <ReactLoading type="spin" color="#3498db" className="mx-auto" />
+            }
+          >
+            {reviews
+              .slice(0, reviewText)
 
-        {/* Pagination */}
-        <div className="mt-6">
-          <ReactPaginate
-            pageCount={Math.ceil(reviews.length / reviewsPerPage)}
-            onPageChange={handlePageChange}
-            previousLabel="&laquo;"
-            nextLabel="&raquo;"
-            breakLabel="..."
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            containerClassName="flex justify-center space-x-2"
-            pageClassName="px-4 py-2 border rounded-lg text-gray-700 hover:bg-blue-100"
-            activeClassName="bg-blue-500 text-white"
-            previousClassName="px-4 py-2 border rounded-lg text-gray-700 hover:bg-blue-100"
-            nextClassName="px-4 py-2 border rounded-lg text-gray-700 hover:bg-blue-100"
-            disabledClassName="opacity-50"
-          />
+              .map((review) => (
+                <div
+                  key={review.id}
+                  className="rounded-lg bg-white p-6 shadow-lg"
+                >
+                  <div className="mb-4 flex items-center">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={review.user.avatar}
+                      alt={review.user.name}
+                      className="mr-4 h-12 w-12 rounded-full"
+                    />
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        {review.user.name}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {review.createdAt}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mb-4 flex items-center">
+                    <div className="flex space-x-1">
+                      {[...Array(5)].map((_, i) => (
+                        <span
+                          key={i}
+                          className={`text-xl text-yellow-500 ${
+                            i < review.rating ? "filled" : "text-gray-300"
+                          }`}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-gray-700">{review.text}</p>
+                </div>
+              ))}
+          </InfiniteScroll>
         </div>
       </div>
     </div>
