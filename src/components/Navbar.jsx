@@ -33,8 +33,7 @@ const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
   const pathName = usePathname();
-  const role = "admin";
-  console.log(data);
+  const role = "user";
 
   useEffect(() => {
     setIsClient(true);
