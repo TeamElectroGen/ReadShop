@@ -22,6 +22,8 @@ import dynamic from "next/dynamic";
 import useScrollPosition from "@/hooks/useScrollPosition";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import AdminMenu from "./AdminMenu";
+import PublisherMenu from "./PublisherMenu";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -31,6 +33,8 @@ const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
   const pathName = usePathname();
+  const role = "admin";
+  console.log(data);
 
   useEffect(() => {
     setIsClient(true);
@@ -44,7 +48,9 @@ const Navbar = () => {
           href={"/"}
           className={cn(
             "transition-all hover:text-primary/80",
-            pathName === "/" ? "text-primary font-bold border-b-2 border-yellow-300 pb-2" : "text-foreground/60"
+            pathName === "/"
+              ? "border-b-2 border-yellow-300 pb-2 font-bold text-primary"
+              : "text-foreground/60"
           )}
         >
           Home
@@ -55,17 +61,26 @@ const Navbar = () => {
           href={"/about"}
           className={cn(
             "transition-all hover:text-primary/80",
-            pathName === "/about" ? "text-primary font-bold border-b-2 border-yellow-300 pb-1" : "text-foreground/60"
+            pathName === "/about"
+              ? "border-b-2 border-yellow-300 pb-1 font-bold text-primary"
+              : "text-foreground/60"
           )}
         >
           About
         </Link>
       </li>
       <li>
-        <Link href={"/contact-us"} className={cn(
+        <Link
+          href={"/contact-us"}
+          className={cn(
             "transition-all hover:text-primary/80",
-            pathName === "/contact-us" ? "text-primary font-bold border-b-2 border-yellow-300 pb-1" : "text-foreground/60"
-          )}>Contact Us</Link>
+            pathName === "/contact-us"
+              ? "border-b-2 border-yellow-300 pb-1 font-bold text-primary"
+              : "text-foreground/60"
+          )}
+        >
+          Contact Us
+        </Link>
       </li>
     </>
   );
@@ -91,7 +106,7 @@ const Navbar = () => {
           </Link>
 
           <nav>
-            <ul className="hidden gap-4 text-md md:flex md:justify-center md:items-center lg:gap-6">
+            <ul className="text-md hidden gap-4 md:flex md:items-center md:justify-center lg:gap-6">
               {navLinks}
             </ul>
           </nav>
@@ -108,9 +123,9 @@ const Navbar = () => {
                       size="icon"
                       className="overflow-hidden rounded-full"
                     >
-                      {data?.user?.photoURL ? (
+                      {data?.user?.image ? (
                         <Image
-                          src="/placeholder-user.jpg"
+                          src={data.user.image}
                           width={36}
                           height={36}
                           alt="Avatar"
@@ -121,10 +136,14 @@ const Navbar = () => {
                       )}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuContent align="end" className="w-52">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <UserMenu />
+                    <nav className="grid items-start text-sm font-medium">
+                      {role === "user" && <UserMenu />}
+                      {role === "admin" && <AdminMenu />}
+                      {role === "publisher" && <PublisherMenu />}
+                    </nav>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
