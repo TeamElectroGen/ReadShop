@@ -29,13 +29,12 @@ const HomePage = () => {
   useEffect(() => {
     const storedBooks =
       JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-    console.log("storedBooks", storedBooks);
+    // console.log("storedBooks", storedBooks);
     const fetchRecentViewedBooks = async () => {
       try {
         const res = await getBooksByIds(storedBooks);
         setRecentViewedBooks(res.books);
-        console.log("res", res.books);
-        // console.log("Stored Books", recentViewedBooks);
+        // console.log("res", res.books);
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +46,7 @@ const HomePage = () => {
   const fetchBooks = async () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
-    console.log("books", books);
+    // console.log("books", books);
   };
 
   useEffect(() => {
@@ -65,6 +64,9 @@ const HomePage = () => {
         } catch (error) {
           console.log(error);
         }
+      } else {
+        setSearchItems([]);
+        setShowSearchResults(false);
       }
     };
     handleSearch();
@@ -91,7 +93,7 @@ const HomePage = () => {
           Discover & Explore <br />{" "}
           <span className="yellow_gradient">A world of books</span>
         </h1>
-        <p className="text-md mt-5 px-4 max-w-2xl text-muted-foreground sm:text-xl">
+        <p className="text-md mt-5 max-w-2xl px-4 text-muted-foreground sm:text-xl">
           Discover a diverse collection of books to suit every reader. Explore,
           shop, and enjoy stories that inspire and entertain.
         </p>
