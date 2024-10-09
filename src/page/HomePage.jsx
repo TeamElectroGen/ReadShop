@@ -31,13 +31,12 @@ const HomePage = () => {
   useEffect(() => {
     const storedBooks =
       JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-    console.log("storedBooks", storedBooks);
+    // console.log("storedBooks", storedBooks);
     const fetchRecentViewedBooks = async () => {
       try {
         const res = await getBooksByIds(storedBooks);
         setRecentViewedBooks(res.books);
-        console.log("res", res.books);
-        // console.log("Stored Books", recentViewedBooks);
+        // console.log("res", res.books);
       } catch (error) {
         console.log(error);
       }
@@ -49,7 +48,7 @@ const HomePage = () => {
   const fetchBooks = async () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
-    console.log("books", books);
+    // console.log("books", books);
   };
 
   useEffect(() => {

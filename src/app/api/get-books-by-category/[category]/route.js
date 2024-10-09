@@ -3,15 +3,18 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export const GET = async (request) => {
+export const GET = async (request, { params }) => {
   const db = await connectDB();
   const booksCollection = await db.collection("books");
-  const params = request.nextUrl.searchParams;
-  const category = params.get("category");
+  const size = parseInt(request.nextUrl.searchParams.get("size"));
+  const page = parseInt(request.nextUrl.searchParams.get("page"));
+  const category = params.category;
 
   try {
     const books = await booksCollection
       .find({ Genre: { $regex: category, $options: "i" } })
+      .limit(size)
+      .skip(size * page)
       .toArray();
 
     return NextResponse.json({ books });
