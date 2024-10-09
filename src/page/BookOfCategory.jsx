@@ -1,30 +1,68 @@
 "use client";
-import BookSectionTitle from "@/components/BookSectionTitle";
 import Card from "@/components/Card";
 import PagesHeader from "@/components/PagesHeader";
-import { getBooksByCategory } from "@/services/getBooksData";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { getBooksByCategory, getCategoryCount } from "@/services/getBooksData";
 import React, { useEffect, useState } from "react";
 
 const BookOfCategory = ({ genre }) => {
-  console.log(genre.genre);
-  const category = genre.genre;
-  const decodeText = decodeURIComponent(category);
+  const categoryName = genre.genre;
+  const decodeText = decodeURIComponent(categoryName);
   const [booksByCategory, setBooksByCategory] = useState([]);
 
-  useEffect(() => {
-    if (genre.genre) {
-      const fetchBooksByCategory = async () => {
-        try {
-          const { books } = await getBooksByCategory(genre.genre);
-          setBooksByCategory(books);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchBooksByCategory();
+  const [totalBooks, setTotalBooks] = useState(0);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5);
+
+  const [loading, setLoading] = useState(true);
+
+  const fetchCategoryCount = async (categoryName) => {
+    try {
+      const { count } = await getCategoryCount(categoryName);
+      setTotalBooks(count);
+    } catch (error) {
+      console.log(error);
     }
-  }, [genre]);
-  console.log("booksByCategory", booksByCategory);
+  };
+
+  const fetchBooksByCategory = async (category, size, page) => {
+    try {
+      const { books } = await getBooksByCategory(category, size, page);
+      setBooksByCategory(books || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (categoryName) {
+      fetchCategoryCount(categoryName);
+      fetchBooksByCategory(categoryName, size, page);
+      setLoading(false);
+    }
+  }, [categoryName, size, page]);
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  const handleSizeChange = (event) => {
+    setSize(Number(event.target.value));
+    setPage(1);
+  };
+
+  const totalPages = Math.ceil(totalBooks / size);
+
+  if (loading) {
+    return <div className="my-10 h-20 w-full animate-ping">Loading...</div>;
+  }
 
   return (
     <section className="container">
@@ -34,11 +72,70 @@ const BookOfCategory = ({ genre }) => {
         path={`Category`}
         path2={`${decodeText}`}
       />
-      <div className="mb-10 mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-        {booksByCategory.map((book) => (
-          <Card key={book._id} book={book} />
-        ))}
+
+      <div className="mt-10 flex items-center justify-end">
+        <label htmlFor="pageSize" className="mr-2">
+          Items per page:
+        </label>
+        <select
+          id="pageSize"
+          value={size}
+          onChange={handleSizeChange}
+          className="rounded border border-gray-300 px-2 py-1"
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+        </select>
       </div>
+
+      <div className="flex items-center justify-center">
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          {booksByCategory.length > 0 ? (
+            booksByCategory.map((book) => <Card key={book._id} book={book} />)
+          ) : (
+            <p>No books available for this category.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 0 && (
+        <Pagination
+          total={totalPages}
+          current={page}
+          onChange={handlePageChange}
+          className="mb-20 mt-8"
+        >
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={"hover:cursor-pointer"}
+                onClick={() => handlePageChange(page > 1 ? page - 1 : 1)}
+              />
+            </PaginationItem>
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  onClick={() => handlePageChange(index + 1)}
+                  isActive={page === index + 1}
+                  className={"hover:cursor-pointer"}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                className={"hover:cursor-pointer"}
+                onClick={() =>
+                  handlePageChange(page < totalPages ? page + 1 : totalPages)
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </section>
   );
 };
