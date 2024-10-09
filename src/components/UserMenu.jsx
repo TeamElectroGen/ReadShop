@@ -28,11 +28,16 @@ const userMenuItems = [
   },
 ];
 
-const UserMenu = ({ className }) => {
+const UserMenu = () => {
   return (
-    <nav className={cn("grid items-start text-sm font-medium", className)}>
+    <>
       {userMenuItems.map((item) => (
-        <MenuItem key={item.title} href={item.href} title={item.title} icon={item.icon} />
+        <MenuItem
+          key={item.title}
+          href={item.href}
+          title={item.title}
+          icon={item.icon}
+        />
       ))}
       <button
         onClick={() => signOut()}
@@ -40,7 +45,7 @@ const UserMenu = ({ className }) => {
       >
         <LogOut className="size-4" /> Logout
       </button>
-    </nav>
+    </>
   );
 };
 
