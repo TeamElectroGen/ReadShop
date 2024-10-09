@@ -7,11 +7,6 @@ import { signOut } from "next-auth/react";
 
 const userMenuItems = [
   {
-    title: "Dashboard",
-    href: "/profile",
-    icon: Home,
-  },
-  {
     title: "My Profile",
     href: "/profile/my-profile",
     icon: User,
