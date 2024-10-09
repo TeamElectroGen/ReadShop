@@ -33,13 +33,15 @@ const Card = ({ book }) => {
         />
       </div>
       {/* Book Info */}
-      <div className="flex flex-1 flex-col justify-between">
+      <div className="flex flex-1 flex-col">
         {/* Book Name & Author */}
-        <div className="h-24 flex-grow">
+        <div className="h-16 flex-grow">
           <p className="line-clamp-2 text-sm font-bold">{book.BookName}</p>
-          <p className="line-clamp-1 text-sm text-muted-foreground">
+          <p className="line-clamp-1 text-xs text-muted-foreground">
             {book.AuthorName}
           </p>
+        </div>
+        <div>
           <p className="text-sm">
             <span className="font-medium">$</span> {book.Price}
           </p>
@@ -47,10 +49,6 @@ const Card = ({ book }) => {
             <RatingStar rating={book?.Rating} />
           </div>
         </div>
-        {/* View Details Button */}
-        {/* <Button variant="outline" className="mt-4 w-full hidden group-hover:block transition-all ease-linear duration-500">
-          Add to cart
-        </Button> */}
       </div>
     </Link>
   );

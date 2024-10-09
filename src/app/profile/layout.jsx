@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UserMenu from "@/components/UserMenu";
+import UserInfoCard from "@/components/UserInfoCard";
 
 export const metadata = {
   title: "Profile | User name here..",
@@ -8,6 +9,7 @@ export const metadata = {
 };
 
 const ProfileLayout = ({ children }) => {
+  
   return (
     <>
       <div className="container my-12 space-y-6">
@@ -21,19 +23,10 @@ const ProfileLayout = ({ children }) => {
         {/* Dashboard container */}
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           {/* navigation */}
-          <aside className="-mr-4 px-2 lg:px-4 rounded-lg bg-popover py-8 shadow-sm lg:w-1/4">
+          <aside className="-mr-4 px-2 lg:px-4 self-start rounded-lg py-8 lg:w-1/4 glassmorphism">
             <header className="flex flex-col items-center justify-center gap-2 text-center">
-              <Avatar className="size-16">
-                <AvatarImage src="https://github.com/shadcn.pn" />
-                <AvatarFallback>A</AvatarFallback>
-              </Avatar>
-              <h1 className="text-primary text-xl font-bold">
-                Albab ibn Makbul
-              </h1>
-              <div className="text-sm space-y-1 font-medium text-muted-foreground">
-                <p>albabmakbul@gmail.com</p>
-                <p>+8801612103500</p>
-              </div>
+              {/* user infos */}
+              <UserInfoCard />
             </header>
             <Separator className="my-4" />
             <UserMenu />

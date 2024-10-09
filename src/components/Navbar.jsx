@@ -21,6 +21,9 @@ import UserMenu from "./UserMenu";
 import dynamic from "next/dynamic";
 import useScrollPosition from "@/hooks/useScrollPosition";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import AdminMenu from "./AdminMenu";
+import PublisherMenu from "./PublisherMenu";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -30,6 +33,7 @@ const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
   const pathName = usePathname();
+  const role = "user";
 
   useEffect(() => {
     setIsClient(true);
@@ -39,24 +43,56 @@ const Navbar = () => {
   const navLinks = (
     <>
       <li>
-        <Link href={"/"}>Home</Link>
+        <Link
+          href={"/"}
+          className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/"
+              ? "border-b-2 border-yellow-300 pb-2 font-bold text-primary"
+              : "text-foreground/60"
+          )}
+        >
+          Home
+        </Link>
       </li>
       <li>
-        <Link href={"/about"}>About</Link>
+        <Link
+          href={"/about"}
+          className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/about"
+              ? "border-b-2 border-yellow-300 pb-1 font-bold text-primary"
+              : "text-foreground/60"
+          )}
+        >
+          About
+        </Link>
       </li>
       <li>
-        <Link href={"/contact-us"}>Contact Us</Link>
+        <Link
+          href={"/contact-us"}
+          className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/contact-us"
+              ? "border-b-2 border-yellow-300 pb-1 font-bold text-primary"
+              : "text-foreground/60"
+          )}
+        >
+          Contact Us
+        </Link>
       </li>
     </>
   );
 
-  if(pathName.includes('dashboard')) {
+  if (pathName.includes("dashboard")) {
     return;
   }
 
   return (
     <>
-      <header className={`h-16 w-full sticky top-0 z-50 border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}>
+      <header
+        className={`sticky top-0 z-50 h-16 w-full border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}
+      >
         <div className="container flex h-full items-center justify-between">
           <Link
             href={"/"}
@@ -69,7 +105,9 @@ const Navbar = () => {
           </Link>
 
           <nav>
-            <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
+            <ul className="text-md hidden gap-4 md:flex md:items-center md:justify-center lg:gap-6">
+              {navLinks}
+            </ul>
           </nav>
           <div className="flex items-center gap-3">
             {isClient && (
@@ -84,9 +122,9 @@ const Navbar = () => {
                       size="icon"
                       className="overflow-hidden rounded-full"
                     >
-                      {data?.user?.photoURL ? (
+                      {data?.user?.image ? (
                         <Image
-                          src="/placeholder-user.jpg"
+                          src={data.user.image}
                           width={36}
                           height={36}
                           alt="Avatar"
@@ -97,10 +135,14 @@ const Navbar = () => {
                       )}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" className="w-52">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <UserMenu />
+                    <nav className="grid items-start text-sm font-medium">
+                      {role === "user" && <UserMenu />}
+                      {role === "admin" && <AdminMenu />}
+                      {role === "publisher" && <PublisherMenu />}
+                    </nav>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
