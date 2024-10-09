@@ -21,6 +21,7 @@ import UserMenu from "./UserMenu";
 import dynamic from "next/dynamic";
 import useScrollPosition from "@/hooks/useScrollPosition";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -39,24 +40,45 @@ const Navbar = () => {
   const navLinks = (
     <>
       <li>
-        <Link href={"/"}>Home</Link>
+        <Link
+          href={"/"}
+          className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/" ? "text-primary font-bold border-b-2 border-yellow-300 pb-2" : "text-foreground/60"
+          )}
+        >
+          Home
+        </Link>
       </li>
       <li>
-        <Link href={"/about"}>About</Link>
+        <Link
+          href={"/about"}
+          className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/about" ? "text-primary font-bold border-b-2 border-yellow-300 pb-1" : "text-foreground/60"
+          )}
+        >
+          About
+        </Link>
       </li>
       <li>
-        <Link href={"/contact-us"}>Contact Us</Link>
+        <Link href={"/contact-us"} className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/contact-us" ? "text-primary font-bold border-b-2 border-yellow-300 pb-1" : "text-foreground/60"
+          )}>Contact Us</Link>
       </li>
     </>
   );
 
-  if(pathName.includes('dashboard')) {
+  if (pathName.includes("dashboard")) {
     return;
   }
 
   return (
     <>
-      <header className={`h-16 w-full sticky top-0 z-50 border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}>
+      <header
+        className={`sticky top-0 z-50 h-16 w-full border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}
+      >
         <div className="container flex h-full items-center justify-between">
           <Link
             href={"/"}
@@ -69,7 +91,9 @@ const Navbar = () => {
           </Link>
 
           <nav>
-            <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
+            <ul className="hidden gap-4 text-md md:flex md:justify-center md:items-center lg:gap-6">
+              {navLinks}
+            </ul>
           </nav>
           <div className="flex items-center gap-3">
             {isClient && (
