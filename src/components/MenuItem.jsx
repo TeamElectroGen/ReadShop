@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-const MenuItem = ({ href, title, icon: Icon, handleClick }) => {
+const MenuItem = ({ href="", title="", icon: Icon, handleClick }) => {
   const pathname = usePathname();
 
   return (

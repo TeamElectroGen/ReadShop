@@ -29,13 +29,12 @@ const HomePage = () => {
   useEffect(() => {
     const storedBooks =
       JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-    console.log("storedBooks", storedBooks);
+    // console.log("storedBooks", storedBooks);
     const fetchRecentViewedBooks = async () => {
       try {
         const res = await getBooksByIds(storedBooks);
         setRecentViewedBooks(res.books);
-        console.log("res", res.books);
-        // console.log("Stored Books", recentViewedBooks);
+        // console.log("res", res.books);
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +46,7 @@ const HomePage = () => {
   const fetchBooks = async () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
-    console.log("books", books);
+    // console.log("books", books);
   };
 
   useEffect(() => {
@@ -100,7 +99,7 @@ const HomePage = () => {
         </p>
         {/* Search and filter */}
         <div
-          className="relative z-50 mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md"
+          className="relative z-40 mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md"
           ref={dropdownRef}
         >
           <div className="relative ml-auto flex-1 md:grow-0">

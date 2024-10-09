@@ -13,10 +13,12 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import toast, { Toaster } from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
+  const pathName = usePathname();
 
   // Function to validate the email format
   const validateEmail = (email) => {
@@ -39,6 +41,10 @@ const Footer = () => {
       setEmail("");
     }
   };
+
+  if(pathName.includes('dashboard')) {
+    return;
+  }
 
   return (
     <footer className="-mt-2 w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
