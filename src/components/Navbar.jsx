@@ -19,6 +19,8 @@ import ProductCart from "./ProductCart";
 import UserMenu from "./UserMenu";
 // import { useCart } from "@/app/context/CartContext";
 import dynamic from "next/dynamic";
+import useScrollPosition from "@/hooks/useScrollPosition";
+import { usePathname } from "next/navigation";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -26,6 +28,8 @@ const Navbar = () => {
   const { data } = useSession();
   const [isCartOpen, setCartOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const scrollPosition = useScrollPosition();
+  const pathName = usePathname();
 
   useEffect(() => {
     setIsClient(true);
@@ -46,9 +50,13 @@ const Navbar = () => {
     </>
   );
 
+  if(pathName.includes('dashboard')) {
+    return;
+  }
+
   return (
     <>
-      <nav className="h-16 w-full">
+      <header className={`h-16 w-full sticky top-0 z-50 border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}>
         <div className="container flex h-full items-center justify-between">
           <Link
             href={"/"}
@@ -60,9 +68,9 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <div>
+          <nav>
             <ul className="hidden gap-5 text-foreground md:flex">{navLinks}</ul>
-          </div>
+          </nav>
           <div className="flex items-center gap-3">
             {isClient && (
               <DynamicCartButton onClick={() => setCartOpen(true)} />
@@ -106,7 +114,7 @@ const Navbar = () => {
             <HamburgerMenu navLinks={navLinks} />
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Cart Drawer */}
       <ProductCart isOpen={isCartOpen} onClose={() => setCartOpen(false)} />

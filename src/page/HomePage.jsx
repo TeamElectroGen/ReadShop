@@ -99,7 +99,7 @@ const HomePage = () => {
         </p>
         {/* Search and filter */}
         <div
-          className="relative z-50 mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md"
+          className="relative z-40 mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md"
           ref={dropdownRef}
         >
           <div className="relative ml-auto flex-1 md:grow-0">
