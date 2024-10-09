@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// ================================ Books ================================
+
 // Fetches all books from the API
 export const getAllBooks = async () => {
   try {
@@ -119,15 +121,54 @@ export const getCategories = async () => {
   }
 };
 
-// Fetch books by a specific category
-export const getBooksByCategory = async (category) => {
+// Fetch books by a specific category with pagination
+export const getBooksByCategory = async (category, size, page) => {
   try {
     const res = await axios(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-books-by-category?category=${category}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-books-by-category/${category}?size=${size}&page=${page}`
     );
     return res.data;
   } catch (error) {
     console.log(error);
     return [];
+  }
+};
+
+// get  count of books by category
+export const getCategoryCount = async (category) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-specific-category-count/${category}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+// ============================= Author ================================
+
+// Fetch All Authors
+export const getAuthors = async () => {
+  try {
+    const res = await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/api/authors`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+// Fetch Author by username
+export const getAuthorByUsername = async (username) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/authors/${username}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
   }
 };
