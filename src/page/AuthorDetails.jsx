@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 
-const AuthorDetails = () => {
+const AuthorDetails = ({ authorId }) => {
   const [following, setFollowing] = useState(false);
   const [showFullText, setShowFullText] = useState(false);
 
@@ -30,13 +30,13 @@ const AuthorDetails = () => {
               width={150}
               height={150}
             />
-           
+
             <Button
               onClick={toggleFollow}
               className={`ml-4 mt-6 border-[1px] px-4 ${
                 following
-                  ? "border-red-500 bg-red-500 text-white" 
-                  : "border-blue-500 bg-blue-500 text-white" 
+                  ? "border-red-500 bg-red-500 text-white"
+                  : "border-blue-500 bg-blue-500 text-white"
               }`}
             >
               {following ? "Unfollow" : "+ Follow"}

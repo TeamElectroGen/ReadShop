@@ -4,7 +4,7 @@ import Link from "next/link";
 const AuthorCard = ({ authors }) => {
   return (
     <Link
-      href={`/view-details/${authors?._id}`}
+      href={`/author/${authors?._id}`}
       className="flex flex-col items-center"
     >
       {/* author Cover Image */}
