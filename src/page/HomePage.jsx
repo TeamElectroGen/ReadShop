@@ -4,6 +4,7 @@ import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import {
   getAllBooks,
+  getAuthors,
   // getBookDetails,
   getBooksByIds,
   getSearchBooks,
@@ -17,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
 import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
+import AuthorSectionSlide from "@/components/AuthorSectionSlide";
+import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
@@ -25,6 +28,8 @@ const HomePage = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const dropdownRef = useRef(null); // Reference for dropdown
   const [recentViewedBooks, setRecentViewedBooks] = useState([]);
+  const [authors, setAuthors] = useState([]);
+
   // recent viewed books
   useEffect(() => {
     const storedBooks =
@@ -49,10 +54,16 @@ const HomePage = () => {
     // console.log("books", books);
   };
 
+  //fetch  all authors
+  const fetchAllAuthors = async () => {
+    const { authors } = await getAuthors();
+    setAuthors(authors);
+  };
+
   useEffect(() => {
     fetchBooks();
+    fetchAllAuthors();
   }, []);
-
   // search books
   useEffect(() => {
     const handleSearch = async () => {
@@ -182,6 +193,10 @@ const HomePage = () => {
           items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
+      </section>
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+        <AuthorSectionTitle title={"Author"} />
+        <AuthorSectionSlide items={authors?.slice(0, 10)} />
       </section>
     </div>
   );
