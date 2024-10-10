@@ -1,5 +1,5 @@
 "use client";
-import defaultImage from "../../public/assets/user-1.png";
+import defaultImage from "../../public/assets/profile.png";
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
@@ -33,12 +33,12 @@ const ReviewSection = ({ bookId }) => {
       const { reviewAndRatingData } = await getBookReviewAndRating(bookId);
       console.log(reviewAndRatingData);
       setReviews(reviewAndRatingData);
-      setTotalRating(reviewAndRatingData.length);
-      setTotalReviews(reviewAndRatingData.length);
+      setTotalRating(reviewAndRatingData?.length);
+      setTotalReviews(reviewAndRatingData?.length);
       // setTotalRatingCount(reviewAndRatingData.length);
       setTotalRatingCount(
         reviewAndRatingData.reduce((acc, review) => acc + review.rating, 0)
-       );
+      );
       // if (data) {
       //   setReviews(data.reviews || []);
       //   setTotalRating(data.totalRating || 0);
@@ -138,7 +138,7 @@ const ReviewSection = ({ bookId }) => {
             ))}
           </div>
           <p className="text-2xl font-semibold text-gray-800">
-            {totalRating.toFixed(1)} / 5
+            {totalRating?.toFixed(1) || 0} / 5
           </p>
           <p className="text-sm text-gray-500">
             Based on {totalRatingCount} total ratings
@@ -229,7 +229,9 @@ const ReviewSection = ({ bookId }) => {
         </div>
       )}
       {reviews?.length === 0 ? (
-        <p>No reviews yet. Be the first to leave a review!</p>
+        <p className="text-center mt-6">
+          No reviews yet. Be the first to leave a review!
+        </p>
       ) : (
         <div className="mt-10">
           <h2 className="mb-4 text-2xl font-bold">Customer Reviews</h2>
