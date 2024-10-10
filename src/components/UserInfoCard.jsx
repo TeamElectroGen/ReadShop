@@ -13,7 +13,7 @@ const UserInfoCard = () => {
         <AvatarImage src={session?.user?.image} />
         <AvatarFallback>{session?.user?.name.slice(0, 2)}</AvatarFallback>
       </Avatar>
-      <h1 className="text-xl font-bold text-primary">Albab ibn Makbul</h1>
+      <h1 className="text-xl font-bold text-primary">{session?.user?.name}</h1>
       <div className="-mt-1 space-y-1 text-xs font-medium text-muted-foreground">
         <p>{session?.user?.email}</p>
         <p>{session?.user?.phone}</p>
