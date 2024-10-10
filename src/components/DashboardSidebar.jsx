@@ -11,6 +11,17 @@ import PublisherMenu from "./PublisherMenu";
 
 const DashboardSidebar = () => {
   const role = "publisher";
+  // const {data: session} = useSession()
+  // const [role, setRole] = useState("");
+  
+  // useEffect(() => {
+  //   const getRole = async() => {
+  //     const {role} = await getUserRole(session?.user?.email);
+  //     console.log(role);
+  //     setRole(role);
+  //   }
+  //   getRole();
+  // }, [session?.user?.email]);
   
   return (
     <aside className="hidden shadow-lg bg-background md:block sticky top-0 bottom-0 left-0 z-50">
