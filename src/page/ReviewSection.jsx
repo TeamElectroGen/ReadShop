@@ -123,7 +123,7 @@ const ReviewSection = ({ bookId }) => {
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>
-      <div className="mb-6 flex items-center justify-around rounded-lg bg-white p-4">
+      <div className="mb-6 flex flex-wrap items-center justify-around gap-5 rounded-lg bg-white p-4 md:gap-0">
         <div className="text-center">
           <div className="mb-2 flex justify-center">
             {[...Array(5)].map((_, i) => (
@@ -229,7 +229,7 @@ const ReviewSection = ({ bookId }) => {
         </div>
       )}
       {reviews?.length === 0 ? (
-        <p className="text-center mt-6">
+        <p className="mt-6 text-center">
           No reviews yet. Be the first to leave a review!
         </p>
       ) : (
