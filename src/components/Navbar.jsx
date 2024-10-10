@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import AdminMenu from "./AdminMenu";
 import PublisherMenu from "./PublisherMenu";
 import { getUserRole } from "@/services/getUserData";
+import LogoutButton from "./LogoutButton";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -152,6 +153,7 @@ const Navbar = () => {
                       {role === "user" && <UserMenu />}
                       {role === "admin" && <AdminMenu />}
                       {role === "publisher" && <PublisherMenu />}
+                      <LogoutButton />
                     </nav>
                   </DropdownMenuContent>
                 </DropdownMenu>
