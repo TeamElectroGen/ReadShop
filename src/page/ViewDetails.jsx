@@ -218,7 +218,7 @@ const ViewDetails = ({ bookid }) => {
       </div> */}
       <div>
         
-        <ReviewSection ></ReviewSection>
+        <ReviewSection bookId={bookid}></ReviewSection>
        
         
       </div>
