@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import AuthorCard from "./AuthorCard";
 
 const AuthorSectionSlide = ({ items, viewAllLink }) => {
-  console.log(items);
+  // console.log(items);
   const swiperRef = useRef(null);
 
   const handlePrev = () => {
