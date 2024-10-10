@@ -24,6 +24,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import AdminMenu from "./AdminMenu";
 import PublisherMenu from "./PublisherMenu";
+import LogoutButton from "./LogoutButton";
+import { getUserRole } from "@/services/getUserData";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -33,11 +35,18 @@ const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
   const pathName = usePathname();
-  const role = "user";
+  const [role, setRole] = useState("");
+  // const role = "publisher";
 
   useEffect(() => {
+    const getRole = async() => {
+      const {role} = await getUserRole(data?.user?.email);
+      console.log(role);
+      setRole(role);
+    }
+    getRole();
     setIsClient(true);
-  }, []);
+  }, [data?.user?.email]);
   // const { cart } = useCart();
 
   const navLinks = (
@@ -142,6 +151,7 @@ const Navbar = () => {
                       {role === "user" && <UserMenu />}
                       {role === "admin" && <AdminMenu />}
                       {role === "publisher" && <PublisherMenu />}
+                      <LogoutButton />
                     </nav>
                   </DropdownMenuContent>
                 </DropdownMenu>
