@@ -16,6 +16,7 @@ export const GET = async () => {
             CoverImage: book.CoverImage,
             Description: book.Description,
             PublicationName: book.PublicationName,
+            PublicationId: book.PublicationId,
             PublishDate: book.PublishDate,
             Price: book.Price,
             Rating: book.Rating,
