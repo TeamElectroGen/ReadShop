@@ -28,11 +28,13 @@ const WishlistPage = () => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    const fetchWishlist = async () => {
-      const res = await getWishlistBooks(session?.user.email);
-      setWishlistBooks(res.books);
-    };
-    fetchWishlist();
+    if (session?.user.email) {
+      const fetchWishlist = async () => {
+        const res = await getWishlistBooks(session?.user.email);
+        setWishlistBooks(res.books);
+      };
+      fetchWishlist();
+    }
   }, [session?.user.email]);
 
   console.log(wishlistBooks);
@@ -65,7 +67,9 @@ const WishlistPage = () => {
           <TableBody>
             {wishlistBooks?.map((book, idx) => (
               <TableRow key={book._id}>
-                <TableCell className="hidden sm:table-cell">{idx + 1}.</TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  {idx + 1}.
+                </TableCell>
                 <TableCell className="flex items-center gap-2 font-medium">
                   <Image
                     alt="Product image"
@@ -76,10 +80,12 @@ const WishlistPage = () => {
                   />
                   <div className="space-y-1">
                     <p className="text-foreground">{book.BookName}</p>
-                    <p className="text-gray-500 text-xs">{book.AuthorName}</p>
+                    <p className="text-xs text-gray-500">{book.AuthorName}</p>
                   </div>
                 </TableCell>
-                <TableCell className="text-red-600 font-semibold">${book.Price}</TableCell>
+                <TableCell className="font-semibold text-red-600">
+                  ${book.Price}
+                </TableCell>
                 <TableCell>
                   <Badge
                     variant="outline"
