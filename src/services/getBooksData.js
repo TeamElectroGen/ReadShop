@@ -173,11 +173,11 @@ export const getAuthors = async () => {
   }
 };
 
-// Fetch Author by username
-export const getAuthorByUsername = async (username) => {
+// Fetch Author by id
+export const getAuthorById = async (id) => {
   try {
     const res = await axios(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/authors/${username}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/authors/${id}`
     );
     return res.data;
   } catch (error) {

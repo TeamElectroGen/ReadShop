@@ -23,7 +23,7 @@ const ProfileLayout = ({ children }) => {
         {/* Dashboard container */}
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           {/* navigation */}
-          <aside className="-mr-4 px-2 lg:px-4 self-start rounded-lg py-8 lg:w-1/4 glassmorphism">
+          <aside className="-mr-4 px-2 lg:px-4 lg:self-start rounded-lg py-8 lg:w-1/4 glassmorphism">
             <header className="flex flex-col items-center justify-center gap-2 text-center">
               {/* user infos */}
               <UserInfoCard />

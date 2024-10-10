@@ -1,5 +1,5 @@
 "use client";
-import defaultImage from "../../public/assets/user-1.png";
+import defaultImage from "../../public/assets/profile.png";
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
@@ -23,7 +23,7 @@ const ReviewSection = ({ bookId }) => {
   const [ratingError, setRatingError] = useState("");
   const [reviews, setReviews] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const { data: session } = useSession(); // session to check if user is logged in
+  const { data: session } = useSession() || {}; // session to check if user is logged in
   const [reviewText, setReviewText] = useState(5);
   const [hasMore, setHasMore] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
@@ -33,12 +33,12 @@ const ReviewSection = ({ bookId }) => {
       const { reviewAndRatingData } = await getBookReviewAndRating(bookId);
       console.log(reviewAndRatingData);
       setReviews(reviewAndRatingData);
-      setTotalRating(reviewAndRatingData.length);
-      setTotalReviews(reviewAndRatingData.length);
+      setTotalRating(reviewAndRatingData?.length);
+      setTotalReviews(reviewAndRatingData?.length);
       // setTotalRatingCount(reviewAndRatingData.length);
       setTotalRatingCount(
         reviewAndRatingData.reduce((acc, review) => acc + review.rating, 0)
-       );
+      );
       // if (data) {
       //   setReviews(data.reviews || []);
       //   setTotalRating(data.totalRating || 0);
@@ -123,7 +123,7 @@ const ReviewSection = ({ bookId }) => {
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>
-      <div className="mb-6 flex items-center justify-around rounded-lg bg-white p-4">
+      <div className="mb-6 flex flex-wrap items-center justify-around gap-5 rounded-lg bg-white p-4 md:gap-0">
         <div className="text-center">
           <div className="mb-2 flex justify-center">
             {[...Array(5)].map((_, i) => (
@@ -138,7 +138,7 @@ const ReviewSection = ({ bookId }) => {
             ))}
           </div>
           <p className="text-2xl font-semibold text-gray-800">
-            {totalRating.toFixed(1)} / 5
+            {totalRating?.toFixed(1) || 0} / 5
           </p>
           <p className="text-sm text-gray-500">
             Based on {totalRatingCount} total ratings
@@ -229,7 +229,9 @@ const ReviewSection = ({ bookId }) => {
         </div>
       )}
       {reviews?.length === 0 ? (
-        <p>No reviews yet. Be the first to leave a review!</p>
+        <p className="mt-6 text-center">
+          No reviews yet. Be the first to leave a review!
+        </p>
       ) : (
         <div className="mt-10">
           <h2 className="mb-4 text-2xl font-bold">Customer Reviews</h2>
