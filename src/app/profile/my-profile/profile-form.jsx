@@ -53,10 +53,9 @@ const profileFormSchema = z.object({
   dob: z.date(),
 });
 
-
 const ProfileForm = () => {
-  const {data: session} = useSession();
-  
+  const { data: session } = useSession() || {};
+
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     mode: "onChange",
@@ -77,7 +76,11 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" defaultValue={session?.user?.name}  {...field} />
+                <Input
+                  placeholder="Your name"
+                  defaultValue={session?.user?.name}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,7 +94,11 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="name@gmail.com" defaultValue={session?.user?.email} {...field} />
+                <Input
+                  placeholder="name@gmail.com"
+                  defaultValue={session?.user?.email}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Give your verified email addresses{" "}

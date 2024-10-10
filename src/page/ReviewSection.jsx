@@ -23,7 +23,7 @@ const ReviewSection = ({ bookId }) => {
   const [ratingError, setRatingError] = useState("");
   const [reviews, setReviews] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const { data: session } = useSession(); // session to check if user is logged in
+  const { data: session } = useSession() || {}; // session to check if user is logged in
   const [reviewText, setReviewText] = useState(5);
   const [hasMore, setHasMore] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");

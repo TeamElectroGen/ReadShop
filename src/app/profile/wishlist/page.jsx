@@ -25,7 +25,7 @@ import { useSession } from "next-auth/react";
 
 const WishlistPage = () => {
   const [wishlistBooks, setWishlistBooks] = useState([]);
-  const { data: session } = useSession();
+  const { data: session } = useSession() || {};
 
   useEffect(() => {
     if (session?.user.email) {

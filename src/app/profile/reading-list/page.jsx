@@ -25,7 +25,7 @@ import { getReadListBooks } from "@/services/getBooksData";
 
 const ReadingList = () => {
   const [readListBooks, setReadListBooks] = useState([]);
-  const { data: session } = useSession();
+  const { data: session } = useSession() || {};
 
   useEffect(() => {
     if (session?.user.email) {

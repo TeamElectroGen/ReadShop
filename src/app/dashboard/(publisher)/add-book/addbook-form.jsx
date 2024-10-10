@@ -39,7 +39,7 @@ const addBookFormSchema = z.object({
 // This can come from your database or API.
 
 const AddBookForm = () => {
-  const { data: session } = useSession();
+  const { data: session } = useSession() || {};
   const defaultValues = {
     PublicationName: session?.user?.name,
     PublicationEmail: session?.user?.email,

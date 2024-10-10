@@ -29,7 +29,7 @@ import { getUserRole } from "@/services/getUserData";
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
 const Navbar = () => {
-  const { data } = useSession();
+  const { data } = useSession() || {};
   const [isCartOpen, setCartOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
