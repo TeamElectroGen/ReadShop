@@ -24,7 +24,6 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import AdminMenu from "./AdminMenu";
 import PublisherMenu from "./PublisherMenu";
-import LogoutButton from "./LogoutButton";
 import { getUserRole } from "@/services/getUserData";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
@@ -39,12 +38,14 @@ const Navbar = () => {
   // const role = "publisher";
 
   useEffect(() => {
-    const getRole = async() => {
-      const {role} = await getUserRole(data?.user?.email);
-      console.log(role);
-      setRole(role);
+    if (data?.user?.email) {
+      const getRole = async () => {
+        const { role } = await getUserRole(data?.user?.email);
+        console.log(role);
+        setRole(role);
+      };
+      getRole();
     }
-    getRole();
     setIsClient(true);
   }, [data?.user?.email]);
   // const { cart } = useCart();
@@ -102,7 +103,7 @@ const Navbar = () => {
       <header
         className={`sticky top-0 z-50 h-16 w-full border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}
       >
-        <div className="container flex h-full items-center justify-between z-50">
+        <div className="container z-50 flex h-full items-center justify-between">
           <Link
             href={"/"}
             className="flex items-center gap-2 font-sans text-2xl font-bold"
@@ -151,7 +152,6 @@ const Navbar = () => {
                       {role === "user" && <UserMenu />}
                       {role === "admin" && <AdminMenu />}
                       {role === "publisher" && <PublisherMenu />}
-                      <LogoutButton />
                     </nav>
                   </DropdownMenuContent>
                 </DropdownMenu>
