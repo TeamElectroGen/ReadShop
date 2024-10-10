@@ -93,7 +93,7 @@ const Navbar = () => {
       <header
         className={`sticky top-0 z-50 h-16 w-full border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}
       >
-        <div className="container flex h-full items-center justify-between">
+        <div className="container flex h-full items-center justify-between z-50">
           <Link
             href={"/"}
             className="flex items-center gap-2 font-sans text-2xl font-bold"
