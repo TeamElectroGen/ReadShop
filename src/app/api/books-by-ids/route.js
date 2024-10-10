@@ -14,7 +14,7 @@ export const POST = async (request) => {
     const books = await booksCollection
       .find({ _id: { $in: ids.map((id) => new ObjectId(id)) } })
       .toArray();
-    console.log(books);
+    // console.log(books);
     return NextResponse.json({ books });
   } catch (error) {
     console.log(error);
