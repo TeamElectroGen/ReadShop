@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const UserInfoCard = () => {
   const { data: session } = useSession();
-  console.log(session);
 
   return (
     <>
