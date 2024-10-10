@@ -31,7 +31,7 @@ export const getUserReviewAndRating = async (email, bookId) => {
 export const getBookReviewAndRating = async (bookId) => {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/get-all-rr-of-book/${bookId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-all-rr-of-book/${bookId}`
     );
     return res.data;
   } catch (error) {
