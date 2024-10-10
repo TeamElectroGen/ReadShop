@@ -7,7 +7,7 @@ const About = () => {
     <section>
       <div className="container mx-auto px-4 2xl:px-36">
         <header className="relative mt-12 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-green-500">
-          <div className="container px-4 py-16 sm:px-6 lg:px-8">
+          <div className="container px-4 py-8 sm:px-6 lg:px-8">
             <div className="relative z-10 text-center">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-white lg:text-5xl">
                 About

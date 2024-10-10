@@ -4,8 +4,10 @@ import { IoMdSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import {
   getAllBooks,
+  getAuthors,
   // getBookDetails,
   getBooksByIds,
+  getCategories,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
@@ -17,6 +19,8 @@ import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
 import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
+import AuthorSectionSlide from "@/components/AuthorSectionSlide";
+import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);
@@ -25,17 +29,20 @@ const HomePage = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const dropdownRef = useRef(null); // Reference for dropdown
   const [recentViewedBooks, setRecentViewedBooks] = useState([]);
+  const [authors, setAuthors] = useState([]);
+
+  const [categoriesName, setCategoriesName] = useState([]);
+
   // recent viewed books
   useEffect(() => {
     const storedBooks =
       JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-    console.log("storedBooks", storedBooks);
+    // console.log("storedBooks", storedBooks);
     const fetchRecentViewedBooks = async () => {
       try {
         const res = await getBooksByIds(storedBooks);
         setRecentViewedBooks(res.books);
-        console.log("res", res.books);
-        // console.log("Stored Books", recentViewedBooks);
+        // console.log("res", res.books);
       } catch (error) {
         console.log(error);
       }
@@ -47,13 +54,19 @@ const HomePage = () => {
   const fetchBooks = async () => {
     const { books } = await getAllBooks(); // public/books.json path
     setBooks(books);
-    console.log("books", books);
+    // console.log("books", books);
+  };
+
+  //fetch  all authors
+  const fetchAllAuthors = async () => {
+    const { authors } = await getAuthors();
+    setAuthors(authors);
   };
 
   useEffect(() => {
     fetchBooks();
+    fetchAllAuthors();
   }, []);
-
   // search books
   useEffect(() => {
     const handleSearch = async () => {
@@ -86,8 +99,19 @@ const HomePage = () => {
     };
   }, [dropdownRef]);
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const { categories } = await getCategories();
+      setCategoriesName(categories);
+    };
+
+    fetchCategory();
+  }, []);
+
+  // console.log("categoriesName", categoriesName);
+
   return (
-    <div className="md:container">
+    <div className="md:container my-6">
       {/* Search & Filter Banner */}
       <section className="z-50 mt-16 flex flex-col items-center justify-center text-center">
         <h1 className="scroll-m-20 font-sans text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
@@ -100,7 +124,7 @@ const HomePage = () => {
         </p>
         {/* Search and filter */}
         <div
-          className="relative z-50 mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md"
+          className="relative z-40 mt-8 flex w-full max-w-lg items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-background/50 px-5 py-4 backdrop-blur-md"
           ref={dropdownRef}
         >
           <div className="relative ml-auto flex-1 md:grow-0">
@@ -149,10 +173,15 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Best Sellers Book Slider  (Albab updated this section) */}
+      {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-        <BookSectionTitle title={"Best Sellers"} />
+        <BookSectionTitle title={"New Arrival"} />
         <BookSectionSlider items={books?.slice(0, 10)} />
+      </section>
+
+      {/* Category Grid */}
+      <section>
+        <HomePageCategoryGrid books={books} />
       </section>
 
       {/* Recently Viewed Section */}
@@ -165,24 +194,39 @@ const HomePage = () => {
         </section>
       )}
 
-      {/* New Published Books Slider */}
+      <section className="mt-10 flex flex-col p-8 text-center">
+        <BookSectionTitle title={"All Category"} />
+        <div className="flex flex-wrap justify-center gap-3 text-center">
+          {categoriesName.map((categories, idx) => (
+            <Link
+              href={`/category/${categories.Genre}`}
+              className="rounded-sm border border-primary bg-secondary px-10 py-4 hover:bg-primary hover:duration-300 hover:ease-linear"
+              key={idx}
+            >
+              {categories.Genre}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* New Best Sellers Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-        <BookSectionTitle title={"New Published"} />
+        <BookSectionTitle title={"Best Sellers"} />
         <BookSectionSlider items={books?.slice(0, 10)} />
       </section>
 
-      {/* Category Grid */}
-      <section>
-        <HomePageCategoryGrid books={books} />
-      </section>
-
       {/* Top of the month Books Slider */}
-      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+      <section className="z-10 mb-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
+          viewAllLink={"/category/Fiction"}
           items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
+      </section>
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+        <AuthorSectionTitle title={"Author"} />
+        <AuthorSectionSlide items={authors?.slice(0, 10)} />
       </section>
     </div>
   );
