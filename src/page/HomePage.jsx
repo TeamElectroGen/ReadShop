@@ -108,7 +108,7 @@ const HomePage = () => {
     fetchCategory();
   }, []);
 
-  console.log("categoriesName", categoriesName);
+  // console.log("categoriesName", categoriesName);
 
   return (
     <div className="md:container">
