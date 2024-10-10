@@ -7,7 +7,7 @@ export const GET = async (request, { params }) => {
   const db = await connectDB();
   const booksCollection = await db.collection("books");
   const size = parseInt(request.nextUrl.searchParams.get("size"));
-  const page = parseInt(request.nextUrl.searchParams.get("page"));
+  const page = parseInt(request.nextUrl.searchParams.get("page") - 1);
   const category = params.category;
 
   try {

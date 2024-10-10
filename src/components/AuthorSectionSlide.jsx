@@ -6,9 +6,11 @@ import "swiper/css/navigation";
 import Link from "next/link";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { Button } from "./ui/button";
-import Card from "./Card";
 
-const BookSectionSlider = ({ items, viewAllLink }) => {
+import AuthorCard from "./AuthorCard";
+
+const AuthorSectionSlide = ({ items, viewAllLink }) => {
+  console.log(items);
   const swiperRef = useRef(null);
 
   const handlePrev = () => {
@@ -60,14 +62,14 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
         }}
       >
         {/* Render all the book items */}
-        {items?.map((item) => (
-          <SwiperSlide key={item._id}>
-            <Card key={item._id} book={item} />
+        {items?.map((author) => (
+          <SwiperSlide key={author._id}>
+            <AuthorCard key={author._id} authors={author} />
           </SwiperSlide>
         ))}
         {/* Add a "View All" button as the last card */}
-        <SwiperSlide className="rounded-md border bg-secondary">
-          <div className="flex h-[25rem] items-center justify-center lg:h-[25.1rem]">
+        <SwiperSlide className="rounded-md bg-secondary">
+          <div className="flex h-96 items-center justify-center">
             <Link
               href={`${viewAllLink}`}
               className="rounded-md bg-primary-foreground/80 px-5 py-2 text-white hover:bg-primary-foreground"
@@ -81,4 +83,4 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
   );
 };
 
-export default BookSectionSlider;
+export default AuthorSectionSlide;
