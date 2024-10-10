@@ -1,3 +1,4 @@
+"use client";
 import { useCart } from "@/app/context/CartContext";
 import {
   getBookDetails,
@@ -11,6 +12,11 @@ import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import { toast } from "react-hot-toast"; // Import toast
 
+import ReviewSection from "./ReviewSection";
+import { useRouter } from "next/navigation";
+
+
+
 const ViewDetails = ({ bookid }) => {
   const [detailsBook, setDetailsBook] = useState({});
   const [update, setUpdate] = useState(false);
@@ -19,6 +25,8 @@ const ViewDetails = ({ bookid }) => {
   const { data } = useSession() || {};
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { addToCart, cart } = useCart();
+  const router= useRouter();
+  
 
   useEffect(() => {
     const fetch = async () => {
@@ -97,16 +105,17 @@ const ViewDetails = ({ bookid }) => {
       JSON.stringify(recentVisitedBooks)
     );
   };
+  
 
   return (
-    <div className="mx-auto max-w-5xl rounded-lg p-6 md:my-10 lg:my-20">
+    <div className="mx-auto rounded-lg p-6 md:my-10 lg:my-20 container">
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {/* Left Side - Book Image */}
-        <div className="flex items-center justify-center">
+        <div className="flex items-center">
           <Image
             src={detailsBook?.CoverImage}
             alt={detailsBook?.BookName}
-            width={300}
+            width={500}
             height={500}
             className="rounded-lg shadow-md"
           />
@@ -169,7 +178,7 @@ const ViewDetails = ({ bookid }) => {
             {/* Add to WishList Button */}
             <button
               onClick={() => handleRWList("wish")}
-              className={`flex items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
+              className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
             >
               <FaRegHeart className="mr-1 size-4" />{" "}
               {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
@@ -180,7 +189,7 @@ const ViewDetails = ({ bookid }) => {
           <div className="mt-4">
             <button
               onClick={() => handleRWList("read")}
-              className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+              className={`flex w-1/2 flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
             >
               <FaBookOpen className="mr-1 lg:size-4" />
               {rWStatus.readList ? "Remove from" : "Add to"} Read List
@@ -194,18 +203,24 @@ const ViewDetails = ({ bookid }) => {
         <LoginModal
           onCancel={() => setShowLoginModal(false)}
           onLogin={() => {
-            // Redirect to login page or trigger login process
+            router.push("/login");
             setShowLoginModal(false);
           }}
         />
       )}
 
       {/* Additional Section Below (if needed) */}
-      <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
+      {/* <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
         <h2 className="text-xl font-semibold text-gray-800">More Details</h2>
         <p className="mt-2 text-gray-600">
           Explore more information about the book, author, and publication here.
         </p>
+      </div> */}
+      <div>
+        
+        <ReviewSection bookId={bookid}></ReviewSection>
+       
+        
       </div>
     </div>
   );
