@@ -111,7 +111,7 @@ const HomePage = () => {
   // console.log("categoriesName", categoriesName);
 
   return (
-    <div className="md:container">
+    <div className="md:container my-6">
       {/* Search & Filter Banner */}
       <section className="z-50 mt-16 flex flex-col items-center justify-center text-center">
         <h1 className="scroll-m-20 font-sans text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
