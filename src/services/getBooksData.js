@@ -15,6 +15,19 @@ export const getAllBooks = async () => {
   }
 };
 
+//fetches newly added books from the API
+export const getNewlyAddedBooks = async () => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/newly-added-books`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 // Retrieves details of a specific book by its ID
 export const getBookDetails = async (id) => {
   try {
