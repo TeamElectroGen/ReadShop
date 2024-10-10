@@ -2,11 +2,26 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+
 
 const AuthorDetails = () => {
   const [following, setFollowing] = useState(false);
   const [showFullText, setShowFullText] = useState(false);
+
+
+  const [authorData, setAuthorData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setAuthorData(data);
+      });
+  }, []);
+
+  console.log(authorData);
 
   // Toggle follow/unfollow:
   const toggleFollow = () => {
@@ -20,23 +35,24 @@ const AuthorDetails = () => {
 
   return (
     <div>
+     
       <div className="container mx-auto">
         <div className="h-80 w-full rounded-md lg:flex lg:gap-6">
           <div>
             <Image
-              className="mt-20 h-32 w-32 rounded-full border-8 border-gray-200 bg-red-300 shadow-xl shadow-blue-200"
+              className="mt-20 h-32 w-32 rounded-full border-8 border-gray-200 bg-red-300 object-cover shadow-xl shadow-blue-200"
               src="/assets/cover.jpg"
               alt="Author Photo"
-              width={150}
-              height={150}
+              width={600}
+              height={600}
             />
-           
+
             <Button
               onClick={toggleFollow}
               className={`ml-4 mt-6 border-[1px] px-4 ${
                 following
-                  ? "border-red-500 bg-red-500 text-white" 
-                  : "border-blue-500 bg-blue-500 text-white" 
+                  ? "border-red-500 bg-red-500 text-white"
+                  : "border-blue-500 bg-blue-500 text-white"
               }`}
             >
               {following ? "Unfollow" : "+ Follow"}
@@ -90,11 +106,11 @@ const AuthorDetails = () => {
         <hr className="my-4 border-gray-300" />
         <div className="flex justify-center">
           <Image
-            className="h-20 w-20 rounded-full bg-red-300 shadow-2xl shadow-blue-400"
+            className="h-20 w-20 rounded-full bg-red-300 object-cover shadow-2xl shadow-blue-400"
             src="/assets/cover.jpg"
             alt="Author Photo"
-            width={150}
-            height={150}
+            width={600}
+            height={600}
           />
         </div>
         <h1 className="mt-4 text-center text-xl font-bold">Eran Ben-Joseph</h1>
