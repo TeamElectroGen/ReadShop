@@ -10,7 +10,7 @@ import AdminMenu from "./AdminMenu";
 import PublisherMenu from "./PublisherMenu";
 
 const DashboardSidebar = () => {
-  const role = "admin";
+  const role = "publisher";
   
   return (
     <aside className="hidden shadow-lg bg-background md:block sticky top-0 bottom-0 left-0 z-50">
