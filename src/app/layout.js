@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/services/AuthProvider";
 import { CartProvider } from "./context/CartContext";
+import Providers from "@/services/Providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,22 +29,24 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <AuthProvider>
-        <CartProvider>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            <div className="main">
-              <div className="gradient" />
-            </div>
+        <Providers>
+          <CartProvider>
+            <body
+              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+              <div className="main">
+                <div className="gradient" />
+              </div>
 
-            <main className="app">
-              <Navbar />
-              <div className="main_content">{children}</div>
-              <Toaster position="top-center" reverseOrder={true} />
-              <Footer />
-            </main>
-          </body>
-        </CartProvider>
+              <main className="app">
+                <Navbar />
+                <div className="main_content">{children}</div>
+                <Toaster position="top-center" reverseOrder={true} />
+                <Footer />
+              </main>
+            </body>
+          </CartProvider>
+        </Providers>
       </AuthProvider>
     </html>
   );
