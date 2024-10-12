@@ -7,7 +7,7 @@ export const GET = async (request, { params }) => {
   const bookId = request.nextUrl.searchParams.get("bookId");
   const reviewAndRatingCollection = db.collection("reviewAndRating");
   const user = await db.collection("users").findOne({ email });
-  console.log(user._id, bookId);
+  // console.log(user._id, bookId);
   if (!email) {
     return NextResponse.json({ message: "forbidden access!" });
   }
