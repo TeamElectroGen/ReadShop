@@ -28,24 +28,20 @@ const HomePage = () => {
   const [search, setSearch] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
   const dropdownRef = useRef(null); // Reference for dropdown
-  const [recentViewedBooks, setRecentViewedBooks] = useState([]);
 
   // recent viewed books
-  useEffect(() => {
-    const storedBooks =
-      JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-    // console.log("storedBooks", storedBooks);
-    const fetchRecentViewedBooks = async () => {
-      try {
-        const res = await getBooksByIds(storedBooks);
-        setRecentViewedBooks(res.books);
-        // console.log("res", res.books);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchRecentViewedBooks();
-  }, []);
+  const { data: recentViewedBooks } = useQuery({
+    queryKey: ["recentViewedBooks"],
+    queryFn: async () => {
+      const storedBooks =
+        JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
+      const res = await getBooksByIds(storedBooks);
+      return res.books;
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   // all books
   const { data: books } = useQuery({
