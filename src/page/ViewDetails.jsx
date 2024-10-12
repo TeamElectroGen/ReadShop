@@ -13,9 +13,10 @@ import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import { toast } from "react-hot-toast"; // Import toast
 
 import ReviewSection from "./ReviewSection";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const ViewDetails = ({ bookid }) => {
+  const pathname = usePathname();
   const [detailsBook, setDetailsBook] = useState({});
   const [update, setUpdate] = useState(false);
   const [rWStatus, setRWStatus] = useState({});
@@ -185,7 +186,7 @@ const ViewDetails = ({ bookid }) => {
           <div className="mt-4">
             <button
               onClick={() => handleRWList("read")}
-              className={`flex md:w-1/2 flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+              className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:w-1/2 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
             >
               <FaBookOpen className="mr-2 lg:size-4" />
               {rWStatus.readList ? "Remove from" : "Add to"} Read List
@@ -199,7 +200,7 @@ const ViewDetails = ({ bookid }) => {
         <LoginModal
           onCancel={() => setShowLoginModal(false)}
           onLogin={() => {
-            router.push("/login");
+            router.push(`/login?redirect=${pathname}`);
             setShowLoginModal(false);
           }}
         />
