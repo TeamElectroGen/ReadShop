@@ -10,6 +10,7 @@ export const GET = async (request, { params }) => {
   if (!bookId) {
     return NextResponse.json({ message: "forbidden access!" });
   }
+    // TODO: get single user data and insert it in the reviewAndRatingData for dynamic user info.
   try {
     const reviewAndRatingData = await reviewAndRatingCollection
       .find({ bookId })

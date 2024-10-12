@@ -11,7 +11,7 @@ export const GET = async (request, { params }) => {
     const bookDetails = await booksCollection.findOne({
       _id: new ObjectId(id),
     });
-    console.log(bookDetails);
+    // console.log(bookDetails);
     return NextResponse.json({ bookDetails });
   } catch (error) {
     console.log(error);
