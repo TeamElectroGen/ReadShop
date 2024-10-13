@@ -21,5 +21,5 @@ export const middleware = async (request) => {
 
 // Configuration for the middleware
 export const config = {
-  matcher: ["/api/private/:path*", "/profile/:path*"],
+  matcher: ["/api/private/:path*", "/profile/:path*", "/checkout/:path*"],
 };
