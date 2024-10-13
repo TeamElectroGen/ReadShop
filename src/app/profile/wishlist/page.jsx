@@ -30,12 +30,12 @@ const WishlistPage = () => {
   useEffect(() => {
     if (session?.user.email) {
       const fetchWishlist = async () => {
-        const res = await getWishlistBooks(session?.user.email);
+        const res = await getWishlistBooks(session?.user?.email);
         setWishlistBooks(res.books);
       };
       fetchWishlist();
     }
-  }, [session?.user.email]);
+  }, [session?.user?.email]);
 
   console.log(wishlistBooks);
 
