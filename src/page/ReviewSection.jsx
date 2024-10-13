@@ -141,7 +141,7 @@ const ReviewSection = ({ bookId }) => {
             {totalRating?.toFixed(1) || 0} / 5
           </p>
           <p className="text-sm text-gray-500">
-            Based on {totalRatingCount} total ratings
+            Based on {totalRatingCount} Total Ratings
           </p>
         </div>
         <div className="text-center">

@@ -35,7 +35,7 @@ const AuthorDetails = () => {
 
   return (
     <div>
-     
+     <h1>Data: {authorData.length}</h1>
       <div className="container mx-auto">
         <div className="h-80 w-full rounded-md lg:flex lg:gap-6">
           <div>
