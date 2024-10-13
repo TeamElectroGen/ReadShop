@@ -22,7 +22,7 @@ const userMenuItems = [
   },
   {
     title: "Orders History",
-    href: "/profile/orders",
+    href: "/profile/orders-history",
     icon: ShoppingCart,
   },
 ];
