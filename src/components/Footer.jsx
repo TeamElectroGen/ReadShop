@@ -42,9 +42,46 @@ const Footer = () => {
     }
   };
 
-  if(pathName.includes('dashboard')) {
+  if (pathName.includes("dashboard")) {
     return;
   }
+
+  const footerPagesMenu = (
+    <>
+      <Link href={"/"} className="w-fit">
+        Home
+      </Link>
+      <Link href={"/about"} className="w-fit">
+        About
+      </Link>
+      <Link href={"/contact-us"} className="w-fit">
+        Contact us
+      </Link>
+      <Link href={"/all-books"} className="w-fit">
+        All Books
+      </Link>
+    </>
+  );
+
+  const footerCategoryMenu = (
+    <>
+      <Link href={"/category/Fiction"} className="w-fit">
+        Fiction
+      </Link>
+      <Link href={"/category/Short Stories"} className="w-fit">
+        Short Stories
+      </Link>
+      <Link href={"/category/Children's"} className="w-fit">
+        Children&apos;s
+      </Link>
+      <Link href={"/category/Fantasy"} className="w-fit">
+        Fantasy
+      </Link>
+      <Link href={"/category/Drama"} className="w-fit">
+        Drama
+      </Link>
+    </>
+  );
 
   return (
     <footer className="-mt-2 w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
@@ -73,47 +110,12 @@ const Footer = () => {
             <div className="grid grid-cols-2 text-sm">
               <div className="flex flex-col">
                 <p className="pb-3 text-lg font-bold">Pages:</p>
-                <span></span>
-                <Link href={"/"} className="w-fit">
-                  Home
-                </Link>
-                <Link href={"/about"} className="w-fit">
-                  About
-                </Link>
-                <Link href={"/contact-us"} className="w-fit">
-                  Contact us
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 4
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 5
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 6
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 7
-                </Link>
-                <span></span>
+
+                {footerPagesMenu}
               </div>
               <div className="flex flex-col">
                 <p className="pb-3 text-lg font-bold">Category:</p>
-                <Link href={""} className="w-fit">
-                  Page 1
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 2
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 3
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 4
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 5
-                </Link>
+                {footerCategoryMenu}
               </div>
             </div>
           </div>

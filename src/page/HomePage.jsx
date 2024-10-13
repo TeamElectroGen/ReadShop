@@ -171,7 +171,10 @@ const HomePage = () => {
       {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
-        <BookSectionSlider items={books?.slice(0, 10)} />
+        <BookSectionSlider
+          items={books?.slice(0, 10)}
+          viewAllLink={"/all-books"}
+        />
       </section>
 
       {/* Category Grid */}
@@ -184,6 +187,7 @@ const HomePage = () => {
         <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
           <BookSectionTitle title={"Recently Viewed"} />
           <BookSectionSlider
+            viewAllLink={"/all-books"}
             items={recentViewedBooks} // Pass the recently viewed books
           />
         </section>
@@ -207,14 +211,17 @@ const HomePage = () => {
       {/* New Best Sellers Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Best Sellers"} />
-        <BookSectionSlider items={books?.slice(0, 10)} />
+        <BookSectionSlider
+          items={books?.slice(0, 10)}
+          viewAllLink={"/all-books"}
+        />
       </section>
 
       {/* Top of the month Books Slider */}
       <section className="z-10 mb-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
-          viewAllLink={"/category/Fiction"}
+          viewAllLink={"/all-books"}
           items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
