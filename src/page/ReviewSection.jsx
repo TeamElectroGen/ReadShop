@@ -253,7 +253,7 @@ const ReviewSection = ({ bookId }) => {
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center">
                   <Image
-                    src={review.user.avatar || defaultImage}
+                    src={review?.user?.avatar|| review.user.image || defaultImage}
                     alt="Profile Avatar"
                     className="rounded-full"
                     width={50}
