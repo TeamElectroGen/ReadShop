@@ -14,6 +14,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getCategories } from "@/services/getBooksData";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -41,6 +43,14 @@ const Footer = () => {
       setEmail("");
     }
   };
+
+  const { data: categoriesName } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { categories } = await getCategories();
+      return categories;
+    },
+  });
 
   if (pathName.includes("dashboard")) {
     return;
@@ -83,37 +93,23 @@ const Footer = () => {
                 <Link href={"/contact-us"} className="w-fit">
                   Contact us
                 </Link>
-                <Link href={""} className="w-fit">
-                  Page 4
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 5
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 6
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 7
-                </Link>
                 <span></span>
               </div>
               <div className="flex flex-col">
                 <p className="pb-3 text-lg font-bold">Category:</p>
-                <Link href={""} className="w-fit">
-                  Page 1
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 2
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 3
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 4
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 5
-                </Link>
+                {categoriesName
+                  ?.slice(0, 7)
+                  ?.sort(() => 0.5 - Math.random())
+                  ?.map((categories, idx) => (
+                    <Link
+                      scroll={true}
+                      href={`/category/${categories.Genre}`}
+                      className="w-fit"
+                      key={idx}
+                    >
+                      {categories.Genre}
+                    </Link>
+                  ))}
               </div>
             </div>
           </div>
