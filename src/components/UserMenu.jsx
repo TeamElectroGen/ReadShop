@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import { User, Heart, Library, ShoppingCart, LogOut } from "lucide-react";
+import { User, Heart, Library, ShoppingCart } from "lucide-react";
 import MenuItem from "./MenuItem";
-import { signOut } from "next-auth/react";
 
 const userMenuItems = [
   {

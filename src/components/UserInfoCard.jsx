@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const UserInfoCard = () => {
-  const { data: session } = useSession();
+  const { data: session } = useSession() || {};
 
   return (
     <>
