@@ -39,3 +39,20 @@ export const getBookReviewAndRating = async (bookId) => {
     return {};
   }
 };
+
+
+
+// PATCH API for updating review and rating
+export const patchUpdateReviewAndRating = async (email, bookId, reviewAndRating) => {
+  try {
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/update-user-rr/${email}?bookId=${bookId}`,
+      reviewAndRating
+    );
+    return res.data;
+  } catch (error) {
+    console.log("Error updating review and rating:", error);
+    return { message: "Failed to update review and rating", error };
+  }
+};
+
