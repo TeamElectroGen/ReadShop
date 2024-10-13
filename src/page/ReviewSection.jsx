@@ -1,6 +1,5 @@
-
 "use client";
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import defaultImage from "../../public/assets/profile.png";
 import React, { useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
@@ -10,65 +9,72 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ReactLoading from "react-loading";
-import toast from "react-hot-toast"; 
+import toast from "react-hot-toast";
 import {
   getBookReviewAndRating,
   postReviewAndRating,
-  patchUpdateReviewAndRating
+  patchUpdateReviewAndRating,
 } from "@/services/reviewAndRating";
-
 
 const ReviewSection = ({ bookId }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const { data: session } = useSession() || {}; 
+  const { data: session } = useSession() || {};
   const [reviewText, setReviewText] = useState(5);
   const [hasMore, setHasMore] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
   const [ratingError, setRatingError] = useState("");
-  
-  
 
   const queryClient = useQueryClient();
 
-  const { data: reviewData, isLoading, isError } = useQuery({
-    queryKey: ['reviews', bookId],
+  const {
+    data: reviewData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["reviews", bookId],
     queryFn: () => getBookReviewAndRating(bookId),
     onSuccess: (data) => {
       const userExistingReview = data.reviewAndRatingData?.find(
         (review) => review.user.email === session?.user?.email
       );
       if (userExistingReview) {
-        
         setNewReviewText(userExistingReview.reviewText);
         setSelectedRating(userExistingReview.rating);
       }
-    }
+    },
   });
-  
 
   const reviews = reviewData?.reviewAndRatingData || [];
   const totalRating = reviews.length;
   const totalReviews = reviews.length;
-  const totalRatingCount = reviews.reduce((acc, review) => acc + review.rating, 0);
+  const totalRatingCount = reviews.reduce(
+    (acc, review) => acc + review.rating,
+    0
+  );
 
-  const userReview = reviews.find((review) => review.user.email === session?.user?.email);
+  const userReview = reviews.find(
+    (review) => review.user.email === session?.user?.email
+  );
 
   const mutation = useMutation({
-    mutationFn: (newReview) => 
+    mutationFn: (newReview) =>
       userReview
         ? patchUpdateReviewAndRating(session?.user?.email, bookId, newReview)
         : postReviewAndRating(session?.user?.email, bookId, newReview),
     onSuccess: () => {
-      queryClient.invalidateQueries(['reviews', bookId]);
-      toast.success(userReview ? "Review updated successfully!" : "Review submitted successfully!");
+      queryClient.invalidateQueries(["reviews", bookId]);
+      toast.success(
+        userReview
+          ? "Review updated successfully!"
+          : "Review submitted successfully!"
+      );
       setShowReviewForm(false);
     },
     onError: () => {
       toast.error("Failed to submit review. Please try again.");
-    }
+    },
   });
-  
 
   // ... rest of the component code remains the same(yes)
   const loadReviews = () => {
@@ -120,7 +126,7 @@ const ReviewSection = ({ bookId }) => {
   if (isLoading) {
     return <div>Loading reviews...</div>;
   }
-  
+
   if (isError) {
     return <div>Error loading reviews. Please try again later.</div>;
   }
@@ -138,7 +144,9 @@ const ReviewSection = ({ bookId }) => {
               if (roundedValue >= 1) {
                 return <FaStar key={i} className="text-3xl text-yellow-400" />;
               } else if (roundedValue > 0) {
-                return <FaStarHalfAlt key={i} className="text-3xl text-yellow-400" />;
+                return (
+                  <FaStarHalfAlt key={i} className="text-3xl text-yellow-400" />
+                );
               } else {
                 return <FaStar key={i} className="text-3xl text-gray-300" />;
               }
@@ -179,7 +187,9 @@ const ReviewSection = ({ bookId }) => {
 
       {showReviewForm && (
         <div className="mt-6 rounded-lg bg-white p-6 shadow-lg">
-          <h3 className="mb-4 text-xl font-semibold">{userReview ? "Update Your Review" : "Write a Review"}</h3>
+          <h3 className="mb-4 text-xl font-semibold">
+            {userReview ? "Update Your Review" : "Write a Review"}
+          </h3>
           <form onSubmit={handleSubmitReview}>
             <div className="mb-4">
               <label
@@ -206,20 +216,20 @@ const ReviewSection = ({ bookId }) => {
                   <FaStar
                     key={rating}
                     className={`cursor-pointer text-3xl ${
-                      rating <= selectedRating ? "text-yellow-400" : "text-gray-300"
+                      rating <= selectedRating
+                        ? "text-yellow-400"
+                        : "text-gray-300"
                     }`}
                     onClick={() => handleStarClick(rating)}
                   />
                 ))}
               </div>
-              {ratingError && (
-                <p className="text-red-500">{ratingError}</p>
-              )}
+              {ratingError && <p className="text-red-500">{ratingError}</p>}
             </div>
 
             <Button
               type="submit"
-              className="mt-4 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow"
+              className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-500"
             >
               {userReview ? "Update Review" : "Submit Review"}
             </Button>
@@ -234,18 +244,13 @@ const ReviewSection = ({ bookId }) => {
           hasMore={hasMore}
           loader={
             <div className="mt-10 flex justify-center">
-              <ReactLoading
-                type="bars"
-                color="blue"
-                height={100}
-                width={50}
-              />
+              <ReactLoading type="bars" color="blue" height={100} width={50} />
             </div>
           }
         >
           {reviews?.slice(0, reviewText)?.map((review, index) => (
-            <div key={index} className="rounded-lg bg-white p-4 shadow-md mb-4">
-              <div className="flex items-center justify-between mb-4">
+            <div key={index} className="mb-4 rounded-lg bg-white p-4 shadow-md">
+              <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center">
                   <Image
                     src={review.user.avatar || defaultImage}
@@ -258,23 +263,15 @@ const ReviewSection = ({ bookId }) => {
                     <p className="font-semibold text-gray-800">
                       {review.user.name}
                     </p>
-                    <p className="text-sm text-gray-500">
-                      {review.createdAt}
-                    </p>
+                    <p className="text-sm text-gray-500">{review.createdAt}</p>
                   </div>
                 </div>
                 <div className="flex">
                   {[...Array(review.rating)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className="text-yellow-400 text-lg"
-                    />
+                    <FaStar key={i} className="text-lg text-yellow-400" />
                   ))}
                   {[...Array(5 - review.rating)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className="text-gray-300 text-lg"
-                    />
+                    <FaStar key={i} className="text-lg text-gray-300" />
                   ))}
                 </div>
               </div>
