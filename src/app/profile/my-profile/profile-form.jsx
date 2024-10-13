@@ -108,7 +108,7 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="88019XXXXXXXX" {...field} />
+                <Input placeholder="Your number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
