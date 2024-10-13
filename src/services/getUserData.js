@@ -12,3 +12,16 @@ export const getUserRole = async (email) => {
     return {};
   }
 };
+
+// get user data
+export const getUser = async (email) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/user/${email}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
