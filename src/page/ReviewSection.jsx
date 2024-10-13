@@ -1,15 +1,14 @@
 "use client";
 import defaultImage from "../../public/assets/profile.png";
 import React, { useState, useEffect } from "react";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ReactLoading from "react-loading";
-// import axios from "axios"; // Ensure axios is imported
-import toast from "react-hot-toast"; // If you are using a toast library
+import toast from "react-hot-toast"; 
 import {
   getBookReviewAndRating,
   postReviewAndRating,
@@ -27,6 +26,7 @@ const ReviewSection = ({ bookId }) => {
   const [reviewText, setReviewText] = useState(5);
   const [hasMore, setHasMore] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
+  
   // Fetch dynamic reviews and ratings data (you need to implement this API)
   useEffect(() => {
     const fetchReviewsAndRatings = async () => {
@@ -38,19 +38,15 @@ const ReviewSection = ({ bookId }) => {
       // setTotalRatingCount(reviewAndRatingData.length);
       setTotalRatingCount(
         reviewAndRatingData.reduce((acc, review) => acc + review.rating, 0)
-      );
-      // if (data) {
-      //   setReviews(data.reviews || []);
-      //   setTotalRating(data.totalRating || 0);
-      //   setTotalReviews(data.totalReviews || 0);
-      //   setReviews(data); // Assume API returns an array of reviews
-      //   const totalRating = data.reduce((acc, review) => acc + review.rating, 0) / data.length;
-      //   setTotalRating(totalRating);
-      //   setTotalReviews(data.length);
-      // }
+      ); 
+      
+      
+       
     };
+    
     fetchReviewsAndRatings();
   }, [bookId]);
+  
   const loadReviews = () => {
     if (reviews?.length <= reviewText) {
       setHasMore(false);
@@ -126,22 +122,33 @@ const ReviewSection = ({ bookId }) => {
       <div className="mb-6 flex flex-wrap items-center justify-around gap-5 rounded-lg bg-white p-4 md:gap-0">
         <div className="text-center">
           <div className="mb-2 flex justify-center">
-            {[...Array(5)].map((_, i) => (
+            {[...Array(5)].map((_, i) => {
+              const ratingValue=totalRatingCount/totalRating;
+              const roundedValue = ratingValue-i
+              if(roundedValue>=1){
+                return(<FaStar key={i} className="text-3xl text-yellow-400" />)
+              }else if(roundedValue>0){
+                return <FaStarHalfAlt key={i} className="text-3xl text-yellow-400" />
+              }else{
+                return(<FaStar key={i} className="text-3xl text-gray-300" />)
+              }
+            })}
+            {/* {[...Array(5)].map((_, i) => (
               <FaStar
                 key={i}
                 className={`text-3xl ${
-                  i < Math.floor(totalRating)
+                  i < Math.floor((totalRatingCount/totalRating).toFixed(2))
                     ? "text-yellow-400"
                     : "text-gray-300"
                 }`}
               />
-            ))}
+            ))} */}
           </div>
           <p className="text-2xl font-semibold text-gray-800">
-            {totalRating?.toFixed(1) || 0} / 5
+            {(totalRatingCount/totalRating).toFixed(2) || 0} 
           </p>
           <p className="text-sm text-gray-500">
-            Based on {totalRatingCount} total ratings
+            Based on {totalRating} total ratings
           </p>
         </div>
         <div className="text-center">
