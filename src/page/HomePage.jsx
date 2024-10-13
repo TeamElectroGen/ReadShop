@@ -23,6 +23,7 @@ import AuthorSectionSlide from "@/components/AuthorSectionSlide";
 import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 import { useQuery } from "@tanstack/react-query";
 import { CgSpinnerTwo } from "react-icons/cg";
+import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -183,7 +184,7 @@ const HomePage = () => {
       {recentViewedBooks?.length > 0 && (
         <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
           <BookSectionTitle title={"Recently Viewed"} />
-          <BookSectionSlider
+          <RecentlyViewBookSlider
             items={recentViewedBooks} // Pass the recently viewed books
           />
         </section>
