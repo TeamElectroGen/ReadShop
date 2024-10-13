@@ -38,7 +38,7 @@ export const description =
 
 const DashboardLayout = ({ children }) => {
   return (
-    <div className="grid min-h-screen w-full border-t bg-background md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen w-full bg-background md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       {/* Sidebar */}
       <DashboardSidebar />
       <div className="flex flex-col bg-primary/5 sm:gap-4 sm:py-4 md:pl-5">

@@ -25,14 +25,16 @@ import { getReadListBooks } from "@/services/getBooksData";
 
 const ReadingList = () => {
   const [readListBooks, setReadListBooks] = useState([]);
-  const { data: session } = useSession();
+  const { data: session } = useSession() || {};
 
   useEffect(() => {
-    const fetchReadList = async () => {
-      const res = await getReadListBooks(session?.user.email);
-      setReadListBooks(res.books);
-    };
-    fetchReadList();
+    if (session?.user.email) {
+      const fetchReadList = async () => {
+        const res = await getReadListBooks(session?.user.email);
+        setReadListBooks(res.books);
+      };
+      fetchReadList();
+    }
   }, [session?.user.email]);
 
   console.log(readListBooks);
@@ -61,7 +63,9 @@ const ReadingList = () => {
           <TableBody>
             {readListBooks?.map((book, idx) => (
               <TableRow key={book._id}>
-                <TableCell className="hidden sm:table-cell">{idx + 1}.</TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  {idx + 1}.
+                </TableCell>
                 <TableCell className="flex items-center gap-2 font-medium">
                   <Image
                     alt="Product image"
@@ -71,8 +75,10 @@ const ReadingList = () => {
                     width="64"
                   />
                   <div className="space-y-1">
-                    <p className="font-medium text-foreground">{book.BookName}</p>
-                    <p className="text-gray-500 text-xs">{book.AuthorName}</p>
+                    <p className="font-medium text-foreground">
+                      {book.BookName}
+                    </p>
+                    <p className="text-xs text-gray-500">{book.AuthorName}</p>
                   </div>
                 </TableCell>
                 <TableCell>${book.Price}</TableCell>

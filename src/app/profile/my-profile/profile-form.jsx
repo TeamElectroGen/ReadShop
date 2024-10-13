@@ -25,6 +25,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
 
 const profileFormSchema = z.object({
   name: z
@@ -52,16 +53,11 @@ const profileFormSchema = z.object({
   dob: z.date(),
 });
 
-// This can come from your database or API.
-const defaultValues = {
-  name: "Albab ibn Makbul",
-  email: "albabmakbul@gmail.com",
-};
-
 const ProfileForm = () => {
+  const { data: session } = useSession() || {};
+
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
     mode: "onChange",
   });
 
@@ -80,7 +76,11 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} />
+                <Input
+                  placeholder="Your name"
+                  defaultValue={session?.user?.name}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,7 +94,11 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="name@gmail.com" {...field} />
+                <Input
+                  placeholder="name@gmail.com"
+                  defaultValue={session?.user?.email}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Give your verified email addresses{" "}

@@ -6,9 +6,35 @@ import React, { useEffect, useState } from "react";
 
 
 
-const AuthorDetails = () => {
+const AuthorDetails = ({ authorId }) => {
   const [following, setFollowing] = useState(false);
-  const [showFullText, setShowFullText] = useState(false);
+
+  const [author, setAuthor] = useState({});
+  const {
+    name,
+    // username,
+    image,
+    biography,
+    // birthDate,
+    // birthPlace,
+    // nationality,
+    // famousWork,
+    // awards,
+    // booksWrittenIds,
+    // bestAuthor,
+    // socialLinks,
+    // totalBooksSold,
+    // followers,
+    // isFeatured,
+    // authorQuotes,
+  } = author;
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      const { author } = await getAuthorById(authorId);
+      setAuthor(author);
+    };
+    fetchAuthor();
+  }, [authorId]);
 
 
   const [authorData, setAuthorData] = useState([]);
@@ -28,11 +54,6 @@ const AuthorDetails = () => {
     setFollowing(!following);
   };
 
-  //Show full text:
-  const textToggle = () => {
-    setShowFullText(!showFullText);
-  };
-
   return (
     <div>
      <h1>Data: {authorData.length}</h1>
@@ -40,12 +61,13 @@ const AuthorDetails = () => {
         <div className="h-80 w-full rounded-md lg:flex lg:gap-6">
           <div>
             <Image
-              className="mt-20 h-32 w-32 rounded-full border-8 border-gray-200 bg-red-300 object-cover shadow-xl shadow-blue-200"
-              src="/assets/cover.jpg"
+              className="mt-20 size-32 rounded-full border-8 border-gray-200 bg-red-300 object-cover object-cover shadow-xl shadow-blue-200"
+              src={image}
               alt="Author Photo"
               width={600}
               height={600}
             />
+
 
             <Button
               onClick={toggleFollow}
@@ -59,25 +81,8 @@ const AuthorDetails = () => {
             </Button>
           </div>
           <div className="mr-4 lg:mt-24 lg:w-4/5">
-            <h1 className="text-xl font-bold">Eran Ben-Joseph</h1>
-            <p className="text-justify">
-              Eran Ben-Joseph is the Class of 1922 Professor of Landscape
-              Architecture and Urban Planning in the Department of Urban Studies
-              and Planning at the Massachusetts Institute of Technology. Eran
-              served as Head of the Department of Urban Studies and Planning
-              at..
-              {showFullText && (
-                <>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Eum, laboriosam!
-                  </p>
-                </>
-              )}
-              <button onClick={textToggle} className="font-bold text-sky-600">
-                {showFullText ? "See Less" : "Read full bio"}
-              </button>
-            </p>
+            <h1 className="text-xl font-bold">{name}</h1>
+            <p className="text-justify">{biography}</p>
           </div>
         </div>
       </div>
@@ -85,15 +90,8 @@ const AuthorDetails = () => {
       {/*Famous Work of Author Card*/}
       <div className="container mx-auto mt-32">
         <hr className="my-4 border-gray-300" />
-        <h1 className="text-center text-2xl font-bold">
-          Top Eran Ben-Joseph titles
-        </h1>
+        <h1 className="text-center text-2xl font-bold">{name}&apos;s Books</h1>
         <div className="mb-12 mt-8 grid grid-cols-6">
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
           <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
         </div>
       </div>
@@ -106,8 +104,8 @@ const AuthorDetails = () => {
         <hr className="my-4 border-gray-300" />
         <div className="flex justify-center">
           <Image
-            className="h-20 w-20 rounded-full bg-red-300 object-cover shadow-2xl shadow-blue-400"
-            src="/assets/cover.jpg"
+            className="h-20 w-20 rounded-full bg-red-300 object-cover object-cover shadow-2xl shadow-blue-400"
+            src={image}
             alt="Author Photo"
             width={600}
             height={600}
