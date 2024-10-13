@@ -82,10 +82,10 @@ const ReviewSection = ({ bookId }) => {
   };
 
   const handleShowReviewForm = () => {
-    // if (userReview) {
-    //   setNewReviewText(userReview.reviewText);
-    //   setSelectedRating(userReview.rating);
-    // }
+    if (userReview) {
+      setNewReviewText(userReview.reviewText);
+      setSelectedRating(userReview.rating);
+    }
     setShowReviewForm(!showReviewForm);
   };
 
