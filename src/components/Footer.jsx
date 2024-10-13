@@ -42,12 +42,12 @@ const Footer = () => {
     }
   };
 
-  if(pathName.includes('dashboard')) {
+  if (pathName.includes("dashboard")) {
     return;
   }
 
   return (
-    <footer className="-mt-2 w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
+    <footer className="w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-4 text-accent-foreground md:grid-cols-3">
           {/* Logo and Address */}
