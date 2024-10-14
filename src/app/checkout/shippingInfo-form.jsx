@@ -220,6 +220,7 @@ const ShippingInfoForm = ({ totalPrice, shippingFee, onSubmit }) => {
               <CheckoutForm
                 totalPrice={totalPrice}
                 shippingFee={shippingFee}
+                onSubmit={onSubmit}
               ></CheckoutForm>
             </Elements>
           </div>
