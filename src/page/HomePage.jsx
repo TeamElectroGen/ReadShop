@@ -8,6 +8,7 @@ import {
   // getBookDetails,
   getBooksByIds,
   getCategories,
+  getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
@@ -50,6 +51,15 @@ const HomePage = () => {
       const { books } = await getAllBooks();
       return books;
     },
+  });
+
+  const {
+    data: newlyAddedBooks,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["newlyAddedBooks"],
+    queryFn: getNewlyAddedBooks,
   });
 
   //fetch  all authors
@@ -95,7 +105,7 @@ const HomePage = () => {
     },
   });
 
-  // console.log("categoriesName", categoriesName);
+  console.log(newlyAddedBooks);
 
   return (
     <div className="my-6 md:container">
@@ -171,10 +181,18 @@ const HomePage = () => {
       {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
-        <BookSectionSlider
-          items={books?.slice(0, 10)}
-          viewAllLink={"/all-books"}
-        />
+        {isLoading ? (
+          <div className="my-10 flex justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
+          </div>
+        ) : error ? (
+          <p className="text-center">Error loading new books</p>
+        ) : (
+          <BookSectionSlider
+            items={newlyAddedBooks.books}
+            viewAllLink="/all-books"
+          />
+        )}
       </section>
 
       {/* Category Grid */}

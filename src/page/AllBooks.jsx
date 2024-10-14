@@ -98,11 +98,13 @@ const AllBooks = () => {
                     alt={book?.BookName}
                   ></Image>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold">{book.BookName}</h3>
-                  <p className="text-xs">by {book.AuthorName}</p>
-                  <RatingStar rating={book.Rating} />
-                  <p className="pt-3 text-sm font-bold text-primary-foreground">
+                <div className="flex flex-col">
+                  <div className="flex-1">
+                    <h3 className="text-sm font-semibold">{book.BookName}</h3>
+                    <p className="text-xs">by {book.AuthorName}</p>
+                    <RatingStar rating={book.Rating} />
+                  </div>
+                  <p className="text-lg font-bold text-primary-foreground">
                     ${book.Price}
                   </p>
                 </div>

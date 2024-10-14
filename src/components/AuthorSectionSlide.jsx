@@ -67,17 +67,6 @@ const AuthorSectionSlide = ({ items, viewAllLink }) => {
             <AuthorCard key={author._id} author={author} />
           </SwiperSlide>
         ))}
-        {/* Add a "View All" button as the last card */}
-        <SwiperSlide className="rounded-md bg-secondary">
-          <div className="flex h-[190px] items-center justify-center">
-            <Link
-              href={`${viewAllLink}`}
-              className="rounded-md bg-primary-foreground/80 px-5 py-2 text-white hover:bg-primary-foreground"
-            >
-              View All
-            </Link>
-          </div>
-        </SwiperSlide>
       </Swiper>
     </div>
   );
