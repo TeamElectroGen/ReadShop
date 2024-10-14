@@ -49,11 +49,20 @@ const checkoutFormSchema = z.object({
       message:
         "Phone number must contain only digits and optionally + can be added before country code ",
     }),
+  emergencyPhone: z
+    .string()
+    .min(11, { message: "Phone number must be at least 11 digits" })
+    .max(15, { message: "Phone number must not exceed 15 digits" })
+    .regex(/^\+?[0-9]+$/, {
+      message:
+        "Phone number must contain only digits and optionally + can be added before country code ",
+    }),
+  district: z.string(),
+  upazila: z.string(),
   address: z.string().max(160).min(4),
-  dob: z.date(),
 });
 
-const ShippingInfoForm = ({totalPrice, shippingFee, onSubmit}) => {
+const ShippingInfoForm = ({ totalPrice, shippingFee, onSubmit }) => {
   const { data: session } = useSession() || {};
   const form = useForm({
     resolver: zodResolver(checkoutFormSchema),
@@ -123,7 +132,7 @@ const ShippingInfoForm = ({totalPrice, shippingFee, onSubmit}) => {
               {/* Emergency number field */}
               <FormField
                 control={form.control}
-                name="phone"
+                name="emergencyPhone"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Emergency number</FormLabel>
@@ -207,7 +216,7 @@ const ShippingInfoForm = ({totalPrice, shippingFee, onSubmit}) => {
               </div>
               <CreditCardIcon className="size-5" />
             </div>
-            {/* TODO: Card field */}
+            {/* TODO: Stripe payment implementation */}
             {/* Card number field */}
             <FormField
               control={form.control}
