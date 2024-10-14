@@ -1,4 +1,5 @@
-import { getUser } from "@/services/getUserData";
+"use client";
+// import { getUser } from "@/services/getUserData";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -6,15 +7,15 @@ import React, { useState } from "react";
 import { CgSpinner } from "react-icons/cg";
 import { Button } from "./ui/button";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { CardFooter } from "./ui/card";
 
 const CheckoutForm = ({ totalPrice, shippingFee }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const { data: session } = useSession();
-  const router = useRouter();
+  const { data: session } = useSession() || {};
+  // const router = useRouter();
 
   // get clientSecret from server
   const { data: clientSecret = "" } = useQuery({
@@ -23,7 +24,7 @@ const CheckoutForm = ({ totalPrice, shippingFee }) => {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/api/payment-intent`,
         {
-          price: 90,
+          price: totalPrice,
         }
       );
       return data.client_secret;
@@ -31,14 +32,14 @@ const CheckoutForm = ({ totalPrice, shippingFee }) => {
   });
 
   // get userInfo
-  const { data: user = {} } = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const { user } = await getUser(session?.user?.email);
-      return user;
-    },
-    enabled: !!session?.user?.email,
-  });
+  // const { data: user = {} } = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: async () => {
+  //     const { user } = await getUser(session?.user?.email);
+  //     return user;
+  //   },
+  //   enabled: !!session?.user?.email,
+  // });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
