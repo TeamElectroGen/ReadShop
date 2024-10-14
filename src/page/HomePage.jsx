@@ -182,7 +182,7 @@ const HomePage = () => {
 
       {/* Recently Viewed Section */}
       {recentViewedBooks?.length > 0 && (
-        <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
+        <section className="z-10 mt-10 sm:mx-5 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
           <BookSectionTitle title={"Recently Viewed"} />
           <RecentlyViewBookSlider
             items={recentViewedBooks} // Pass the recently viewed books

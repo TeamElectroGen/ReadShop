@@ -50,11 +50,12 @@ const RecentlyViewBookSlider = ({items}) => {
       <Swiper
         ref={swiperRef}
         spaceBetween={20}
-        slidesPerView={2}
+        slidesPerView={1}
         navigation={false}
         modules={[Navigation]}
         breakpoints={{
-          640: { slidesPerView: 2, spaceBetween: 10 },
+          sm: { slidesPerView: 1 },
+          450: { slidesPerView: 2, spaceBetween: 10 },
           768: { slidesPerView: 3, spaceBetween: 20 },
           1024: { slidesPerView: 4, spaceBetween: 30 },
           1280: { slidesPerView: 5, spaceBetween: 20 },
