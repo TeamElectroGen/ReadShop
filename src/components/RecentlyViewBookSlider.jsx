@@ -27,7 +27,7 @@ const RecentlyViewBookSlider = ({items}) => {
   return (
     <div className="slider-container relative">
       {/* Navigation Buttons */}
-      <div className="absolute -right-7 z-10 -mt-14 flex md:gap-2 md:-top-3 md:right-0">
+      <div className="absolute -right-7 z-10 -mt-14 flex gap-1 md:gap-2 md:-top-3 md:right-0">
         <Button
           onClick={handlePrev}
           variant="outline"
@@ -55,7 +55,7 @@ const RecentlyViewBookSlider = ({items}) => {
         modules={[Navigation]}
         breakpoints={{
           320: { slidesPerView: 1, spaceBetween: 10 },
-          640: { slidesPerView: 2, spaceBetween: 10 },
+          425: { slidesPerView: 2, spaceBetween: 10 },
           768: { slidesPerView: 3, spaceBetween: 20 },
           1024: { slidesPerView: 4, spaceBetween: 30 },
           1280: { slidesPerView: 5, spaceBetween: 20 },
