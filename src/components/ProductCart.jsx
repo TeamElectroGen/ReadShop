@@ -118,11 +118,14 @@ const ProductCart = ({ isOpen, onClose }) => {
           {/* Checkout and Details Button */}
           <div className="mt-4 flex justify-between gap-4">
             <Button
+              asChild
               className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90"
               onClick={logCartProductIds}
             >
-              <FaCircle />
-              Cart Details
+              <Link href={'/cart'}>
+                <FaCircle />
+                Cart Details
+              </Link>
             </Button>
             <Button
               asChild
