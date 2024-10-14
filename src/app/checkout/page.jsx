@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "../context/CartContext";
 import Image from "next/image";
 import ShippingInfoForm from "./shippingInfo-form";
+import Link from "next/link";
 
 const Page = () => {
   const { cart } = useCart();
@@ -16,7 +17,7 @@ const Page = () => {
   );
 
   const onSubmit = (data) => {
-    console.log('data');
+    console.log("data");
   };
 
   return (
@@ -52,7 +53,10 @@ const Page = () => {
                       className="flex items-start justify-between gap-3 rounded-sm border-b border-primary bg-primary/10 p-2"
                     >
                       <div className="flex w-full gap-2">
-                        <div className="min-h-14">
+                        <Link
+                          href={`/view-details/${book?.id}`}
+                          className="min-h-14"
+                        >
                           <Image
                             className="max-h-12 min-h-12 min-w-8 max-w-8 bg-primary object-contain"
                             src={book?.coverImage}
@@ -60,14 +64,17 @@ const Page = () => {
                             height={100}
                             alt={book.name}
                           ></Image>
-                        </div>
+                        </Link>
                         <div>
-                          <h3 className="text-xs font-bold">
-                            {book.name}{" "}
+                          <Link
+                            href={`/view-details/${book?.id}`}
+                            className="text-xs font-bold"
+                          >
+                            <span className="hover:underline">{book.name}{" "}</span>
                             <span className="ml-1.5 text-xs font-normal">
                               x{book.quantity}
                             </span>
-                          </h3>
+                          </Link>
                           <p className="text-[0.5rem]">By: {book.author}</p>
                         </div>
                       </div>
