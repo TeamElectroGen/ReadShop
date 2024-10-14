@@ -6,13 +6,6 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "../context/CartContext";
 import Image from "next/image";
 import ShippingInfoForm from "./shippingInfo-form";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "@/components/CheckoutForm";
-
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
 
 const Page = () => {
   const { cart } = useCart();
@@ -23,12 +16,11 @@ const Page = () => {
   );
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log('data');
   };
 
   return (
     <>
-      {" "}
       <section className="container my-12 mb-16 space-y-6">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Checkout</h2>
@@ -115,11 +107,6 @@ const Page = () => {
           </Card>
         </div>
       </section>
-      <div>
-        <Elements stripe={stripePromise}>
-          <CheckoutForm totalPrice={totalPrice}></CheckoutForm>
-        </Elements>
-      </div>
     </>
   );
 };

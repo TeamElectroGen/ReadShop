@@ -2,7 +2,7 @@
 import {
   Card,
   CardContent,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -24,8 +24,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { CreditCardIcon } from "lucide-react";
+// import { Label } from "@/components/ui/label";
+// import { CreditCardIcon } from "lucide-react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "@/components/CheckoutForm";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 
 const checkoutFormSchema = z.object({
   name: z
@@ -71,7 +78,7 @@ const ShippingInfoForm = ({ totalPrice, shippingFee, onSubmit }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <div className="space-y-5">
         {/* contact info */}
         <Card>
           <CardHeader>
@@ -208,81 +215,16 @@ const ShippingInfoForm = ({ totalPrice, shippingFee, onSubmit }) => {
           <CardHeader>
             <CardTitle>Payment</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-8">
-            <div className="flex h-9 w-full items-center justify-between space-x-2 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
-              <div className="flex items-center gap-3">
-                <input type="radio" value="option-one" id="option-one" />
-                <Label htmlFor="option-one">Pay with Credit Card</Label>
-              </div>
-              <CreditCardIcon className="size-5" />
-            </div>
-            {/* TODO: Stripe payment implementation */}
-            {/* Card number field */}
-            <FormField
-              control={form.control}
-              name="cardNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Card Number</FormLabel>
-                  <FormControl>
-                    <Input placeholder="1234 1234 1234" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex w-full flex-col items-center gap-4 *:w-full md:flex-row md:items-center md:*:w-1/3">
-              {/* Expiration date field */}
-              <FormField
-                control={form.control}
-                name="expireData"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Expiration date</FormLabel>
-                    <FormControl>
-                      <Input placeholder="MM/YY" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* CVC field */}
-              <FormField
-                control={form.control}
-                name="cvcCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CVC</FormLabel>
-                    <FormControl>
-                      <Input placeholder="CVC code" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Zip field */}
-              <FormField
-                control={form.control}
-                name="zipCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Zip</FormLabel>
-                    <FormControl>
-                      <Input placeholder="zip code" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button type="submit">
-              Confirm Order ${totalPrice + shippingFee}
-            </Button>
-          </CardFooter>
+          <div>
+            <Elements stripe={stripePromise}>
+              <CheckoutForm
+                totalPrice={totalPrice}
+                shippingFee={shippingFee}
+              ></CheckoutForm>
+            </Elements>
+          </div>
         </Card>
-      </form>
+      </div>
     </Form>
   );
 };

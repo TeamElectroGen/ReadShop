@@ -7,8 +7,9 @@ import { CgSpinner } from "react-icons/cg";
 import { Button } from "./ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { CardFooter } from "./ui/card";
 
-const CheckoutForm = ({ totalPrice }) => {
+const CheckoutForm = ({ totalPrice, shippingFee }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ const CheckoutForm = ({ totalPrice }) => {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/api/payment-intent`,
         {
-          price: totalPrice,
+          price: 90,
         }
       );
       return data.client_secret;
@@ -91,8 +92,9 @@ const CheckoutForm = ({ totalPrice }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="mt-10 w-full">
+      <form onSubmit={handleSubmit} className="w-full">
         <CardElement
+          className="rounded-md bg-white p-4"
           options={{
             style: {
               base: {
@@ -108,13 +110,19 @@ const CheckoutForm = ({ totalPrice }) => {
             },
           }}
         />
-        <Button
-          type="submit"
-          disabled={!stripe || !clientSecret || loading || !session?.user}
-          className="my-5 w-full"
-        >
-          {loading ? <CgSpinner className="w-8 animate-spin text-xl" /> : "Pay"}
-        </Button>
+        <CardFooter className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={!stripe || !clientSecret || loading || !session?.user}
+            className="mt-4"
+          >
+            {loading ? (
+              <CgSpinner className="w-8 animate-spin text-xl" />
+            ) : (
+              `Confirm Order $${totalPrice + shippingFee}`
+            )}
+          </Button>
+        </CardFooter>
       </form>
     </div>
   );
