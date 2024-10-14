@@ -131,7 +131,7 @@ const ReviewSection = ({ bookId }) => {
     return <div>Error loading reviews. Please try again later.</div>;
   }
   return (
-    <div className="reviews-container container mx-auto mt-8 rounded-lg p-6">
+    <div className="reviews-container container md:mx-auto mt-8 rounded-lg p-6">
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>
@@ -142,13 +142,13 @@ const ReviewSection = ({ bookId }) => {
               const ratingValue = totalRatingCount / totalRating;
               const roundedValue = ratingValue - i;
               if (roundedValue >= 1) {
-                return <FaStar key={i} className="text-3xl text-yellow-400" />;
+                return <FaStar key={i} className="md:text-3xl text-yellow-400" />;
               } else if (roundedValue > 0) {
                 return (
-                  <FaStarHalfAlt key={i} className="text-3xl text-yellow-400" />
+                  <FaStarHalfAlt key={i} className="md:text-3xl text-yellow-400" />
                 );
               } else {
-                return <FaStar key={i} className="text-3xl text-gray-300" />;
+                return <FaStar key={i} className="md:text-3xl text-gray-300" />;
               }
             })}
           </div>
@@ -174,10 +174,10 @@ const ReviewSection = ({ bookId }) => {
             {userReview ? "Update Review" : "Write a Review"}
           </button>
         ) : (
-          <div className="text-xl font-semibold">
+          <div className="md:text-xl font-semibold">
             Please login to write a review
             <Link href="/login">
-              <Button className="ghost ml-10 p-5 hover:bg-blue-600 hover:text-white">
+              <Button className="ghost ml-2 md:ml-10 p-5 hover:bg-blue-600 hover:text-white">
                 Login
               </Button>
             </Link>
@@ -237,7 +237,7 @@ const ReviewSection = ({ bookId }) => {
         </div>
       )}
 
-      <div className="reviews mt-8">
+      <div className="reviews mt-8 overflow-x-hidden">
         <InfiniteScroll
           dataLength={reviewText}
           next={loadReviews}
@@ -249,9 +249,9 @@ const ReviewSection = ({ bookId }) => {
           }
         >
           {reviews?.slice(0, reviewText)?.map((review, index) => (
-            <div key={index} className="mb-4 rounded-lg bg-white p-4 shadow-md">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center">
+            <div key={index} className="mb-4 rounded-lg bg-white p-4 md:shadow-md max-w-full">
+              <div className="mb-4 md:flex items-center justify-between">
+                <div className="md:flex items-center justify-center">
                   <Image
                     src={review?.user?.avatar|| review.user.image || defaultImage}
                     alt="Profile Avatar"
@@ -259,7 +259,7 @@ const ReviewSection = ({ bookId }) => {
                     width={50}
                     height={50}
                   />
-                  <div className="ml-3">
+                  <div className="md:ml-3">
                     <p className="font-semibold text-gray-800">
                       {review.user.name}
                     </p>
