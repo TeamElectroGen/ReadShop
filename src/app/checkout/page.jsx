@@ -29,7 +29,7 @@ const Checkout = () => {
         </p>
       </div>
       {/* flex container */}
-      <div className="flex flex-col gap-6 md:flex-row md:gap-16">
+      <div className="flex flex-col gap-6 md:flex-row md:gap-7 lg:gap-14">
         {/* Shipping info form */}
         <div className="w-full rounded-lg md:flex-1">
           <ShippingInfoForm totalPrice={totalPrice} shippingFee={shippingFee} onSubmit={onSubmit} />
