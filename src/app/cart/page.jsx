@@ -104,7 +104,7 @@ const Cart = () => {
                     ${(book.price * book.quantity).toFixed(2)}
                   </TableCell>
                   <TableCell>
-                    <Button size="icon" variant="ghost">
+                    <Button onClick={() => handleRemove(book.id)} size="icon" variant="ghost">
                       <CircleXIcon className="size-5 text-mediumGray-500 hover:text-destructive" />
                     </Button>
                   </TableCell>
