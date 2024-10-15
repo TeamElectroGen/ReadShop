@@ -9,7 +9,7 @@ const HomePageCategoryGrid = ({ books }) => {
     <div className="mt-10 flex grid-cols-1 flex-col gap-2 rounded-sm bg-primary/10 px-10 py-10 shadow-md lg:grid lg:h-[40rem] lg:grid-cols-12">
       {/* Top Book Section */}
       <section className="col-span-1 rounded-sm bg-secondary/50 p-10 lg:col-span-6">
-        <h2 className="pb-4 text-center text-xl font-bold">
+        <h2 className="pb-4 text-center md:text-xl font-bold">
           Top 10 On This Month
         </h2>
         <div className="scrollbar-none hide-scrollbar col-span-1 flex h-[35rem] flex-col gap-2 overflow-scroll lg:col-span-6 lg:h-[26rem]">
@@ -18,9 +18,9 @@ const HomePageCategoryGrid = ({ books }) => {
               <Link
                 href={`/view-details/${book._id}`}
                 key={book._id}
-                className="mb-2 flex items-center justify-between gap-2 rounded-sm border-secondary bg-secondary pr-4 shadow-sm"
+                className="mb-2 md:flex items-center justify-between gap-2 rounded-sm border-secondary bg-secondary pr-4 shadow-sm pb-2"
               >
-                <div className="flex items-center gap-2">
+                <div className="md:flex items-center gap-2">
                   <div className="min-h-16">
                     <Image
                       className="min-h-16 bg-primary-foreground object-contain"
@@ -36,7 +36,7 @@ const HomePageCategoryGrid = ({ books }) => {
                     <RatingStar rating={book.Rating} />
                   </div>
                 </div>
-                <p className="text-md min-w-20 text-right font-bold text-green-600">
+                <p className="md:text-md min-w-20 font-bold text-green-600">
                   $ {book.Price}
                 </p>
               </Link>
@@ -46,7 +46,7 @@ const HomePageCategoryGrid = ({ books }) => {
       </section>
       {/* Top Book Section */}
       <section className="col-span-1 rounded-sm bg-secondary/50 p-10 lg:col-span-6">
-        <h2 className="pb-4 text-center text-xl font-bold">
+        <h2 className="pb-4 text-center md:text-xl font-bold">
           Top 10 On This Month
         </h2>
         <div className="scrollbar-none hide-scrollbar col-span-1 flex h-[35rem] flex-col gap-2 overflow-scroll lg:col-span-6 lg:h-[26rem]">
@@ -55,9 +55,9 @@ const HomePageCategoryGrid = ({ books }) => {
               <Link
                 href={`/view-details/${book._id}`}
                 key={book._id}
-                className="mb-2 flex items-center justify-between gap-2 rounded-sm border-secondary bg-secondary pr-4 shadow-sm"
+                className="mb-2 md:flex items-center justify-between gap-2 rounded-sm border-secondary bg-secondary pr-4 shadow-sm"
               >
-                <div className="flex items-center gap-2">
+                <div className="md:flex items-center gap-2">
                   <div className="min-h-16">
                     <Image
                       className="min-h-16 bg-primary-foreground object-contain"
@@ -73,7 +73,7 @@ const HomePageCategoryGrid = ({ books }) => {
                     <RatingStar rating={book.Rating} />
                   </div>
                 </div>
-                <p className="text-md font-bold text-green-600">
+                <p className="md:text-md font-bold text-green-600">
                   $ {book.Price}
                 </p>
               </Link>

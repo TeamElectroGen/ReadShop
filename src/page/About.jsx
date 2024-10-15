@@ -67,6 +67,7 @@ const About = () => {
                         height={100}
                       />
                       <span className="absolute -bottom-7 -right-7 z-[-1]">
+                        
                         <svg
                           width={134}
                           height={106}
