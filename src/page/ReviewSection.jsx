@@ -154,7 +154,11 @@ const ReviewSection = ({ bookId }) => {
       <div className="flex justify-center">
         {session?.user?.email ? (
           <button
-            onClick={() => setShowReviewForm(!showReviewForm)}
+            onClick={() =>{
+              setShowReviewForm(!showReviewForm);
+              setNewReviewText(userReview?.reviewText || "");
+              setSelectedRating(userReview?.rating || 0);
+            }}
             className="rounded-full bg-blue-600 px-6 py-2 text-white shadow-lg hover:bg-blue-500 focus:outline-none"
           >
             {userReview ? "Update Review" : "Write a Review"}
@@ -187,10 +191,11 @@ const ReviewSection = ({ bookId }) => {
               <textarea
                 id="reviewText"
                 rows="4"
+              
                 className="mt-1 w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Describe your experience"
                 required
-                value={userReview?.reviewText}
+                value={newReviewText}
                 onChange={(e) => setNewReviewText(e.target.value)}
               ></textarea>
             </div>
@@ -202,7 +207,7 @@ const ReviewSection = ({ bookId }) => {
                   <FaStar
                     key={rating}
                     className={`cursor-pointer text-3xl ${
-                      rating <= userReview?.rating
+                      rating <= selectedRating
                         ? "text-yellow-400"
                         : "text-gray-300"
                     }`}
