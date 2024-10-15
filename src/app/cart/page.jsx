@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
 import { useCart } from "../context/CartContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -13,8 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { CircleXIcon, TicketPercentIcon, Trash2 } from "lucide-react";
+import { CircleXIcon } from "lucide-react";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity } = useCart();
@@ -25,6 +23,8 @@ const Cart = () => {
     (total, book) => total + book.price * book.quantity,
     0
   );
+  const total = totalPrice + shippingFee;
+  console.log(total);
 
   const handleRemove = (id) => {
     removeFromCart(id);
@@ -44,11 +44,11 @@ const Cart = () => {
       {/* flex container */}
       <div className="flex flex-col gap-6 md:flex-row md:gap-7 lg:gap-14">
         {/* Cart items table*/}
-        <div className="glassmorphism w-full md:flex-1">
+        <div className="glassmorphism w-full md:flex-1 self-start">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="hidden sm:table-cell">PRODUCT</TableHead>
+                <TableHead className="hidden sm:table-cell pl-4">PRODUCT</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Subtotal</TableHead>
@@ -61,7 +61,7 @@ const Cart = () => {
             <TableBody>
               {cart?.map((book) => (
                 <TableRow key={book._id}>
-                  <TableCell className="flex items-start gap-2 font-medium">
+                  <TableCell className="flex items-start gap-2 font-medium pl-4">
                     <Image
                       alt="Product image"
                       className="rounded-md border object-contain shadow-md"
@@ -132,7 +132,7 @@ const Cart = () => {
               </div>
               <div className="flex items-center justify-between border-dashed py-3">
                 <p className="">Total</p>
-                <p className="text-sm font-semibold">${totalPrice + 5}</p>
+                <p className="text-sm font-semibold">${total.toFixed(2)}</p>
               </div>
             </div>
           </CardContent>
