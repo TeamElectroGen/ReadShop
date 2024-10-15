@@ -1,5 +1,5 @@
 "use client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import defaultImage from "../../public/assets/profile.png";
 import React, { useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
@@ -14,7 +14,9 @@ import {
   getBookReviewAndRating,
   postReviewAndRating,
   patchUpdateReviewAndRating,
+  getUserReviewAndRating,
 } from "@/services/reviewAndRating";
+import { queryClient } from "@/services/Providers";
 
 const ReviewSection = ({ bookId }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -25,45 +27,41 @@ const ReviewSection = ({ bookId }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [ratingError, setRatingError] = useState("");
 
-  const queryClient = useQueryClient();
-
-  const {
-    data: reviewData,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: reviewData = [] } = useQuery({
     queryKey: ["reviews", bookId],
-    queryFn: () => getBookReviewAndRating(bookId),
-    onSuccess: (data) => {
-      const userExistingReview = data.reviewAndRatingData?.find(
-        (review) => review.user.email === session?.user?.email
-      );
-      if (userExistingReview) {
-        setNewReviewText(userExistingReview.reviewText);
-        setSelectedRating(userExistingReview.rating);
-      }
+    queryFn: async () => {
+      const { reviewAndRatingData } = await getBookReviewAndRating(bookId);
+      return reviewAndRatingData;
     },
+    enabled: !!bookId,
   });
 
-  const reviews = reviewData?.reviewAndRatingData || [];
-  const totalRating = reviews.length;
-  const totalReviews = reviews.length;
-  const totalRatingCount = reviews.reduce(
+  const { data: userReview = {} } = useQuery({
+    queryKey: ["myReviews"],
+    queryFn: async () => {
+      const { reviewAndRatingData } = await getUserReviewAndRating(
+        session?.user?.email,
+        bookId
+      );
+      return reviewAndRatingData;
+    },
+    enabled: !!session?.user?.email || bookId,
+  });
+
+  const totalRating = reviewData.length;
+  const totalReviews = reviewData.length;
+  const totalRatingCount = reviewData.reduce(
     (acc, review) => acc + review.rating,
     0
   );
 
-  const userReview = reviews.find(
-    (review) => review.user.email === session?.user?.email
-  );
-
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (newReview) =>
       userReview
         ? patchUpdateReviewAndRating(session?.user?.email, bookId, newReview)
         : postReviewAndRating(session?.user?.email, bookId, newReview),
     onSuccess: () => {
-      queryClient.invalidateQueries(["reviews", bookId]);
+      queryClient.invalidateQueries(["reviews"]);
       toast.success(
         userReview
           ? "Review updated successfully!"
@@ -78,21 +76,13 @@ const ReviewSection = ({ bookId }) => {
 
   // ... rest of the component code remains the same(yes)
   const loadReviews = () => {
-    if (reviews?.length <= reviewText) {
+    if (reviewData?.length <= reviewText) {
       setHasMore(false);
       return;
     }
     setTimeout(() => {
       setReviewText((prevVisible) => prevVisible + 5);
     }, 1000);
-  };
-
-  const handleShowReviewForm = () => {
-    if (userReview) {
-      setNewReviewText(userReview.reviewText);
-      setSelectedRating(userReview.rating);
-    }
-    setShowReviewForm(!showReviewForm);
   };
 
   const handleSubmitReview = async (event) => {
@@ -107,14 +97,14 @@ const ReviewSection = ({ bookId }) => {
       rating: selectedRating,
       reviewText: newReviewText,
       bookId: bookId,
-      createdAt: new Date().toLocaleDateString(),
+      createdAt: new Date(),
       user: {
         name: session?.user?.name,
         avatar: session?.user?.image,
       },
     };
 
-    mutation.mutate(newReview);
+    mutate(newReview);
   };
 
   // ... rest of the component code remains the same
@@ -123,15 +113,8 @@ const ReviewSection = ({ bookId }) => {
     setRatingError("");
   };
 
-  if (isLoading) {
-    return <div>Loading reviews...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading reviews. Please try again later.</div>;
-  }
   return (
-    <div className="reviews-container container md:mx-auto mt-8 rounded-lg p-6">
+    <div className="reviews-container container mt-8 rounded-lg p-6 md:mx-auto">
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>
@@ -142,22 +125,25 @@ const ReviewSection = ({ bookId }) => {
               const ratingValue = totalRatingCount / totalRating;
               const roundedValue = ratingValue - i;
               if (roundedValue >= 1) {
-                return <FaStar key={i} className="md:text-3xl text-yellow-400" />;
+                return (
+                  <FaStar key={i} className="text-yellow-400 md:text-3xl" />
+                );
               } else if (roundedValue > 0) {
                 return (
-                  <FaStarHalfAlt key={i} className="md:text-3xl text-yellow-400" />
+                  <FaStarHalfAlt
+                    key={i}
+                    className="text-yellow-400 md:text-3xl"
+                  />
                 );
               } else {
-                return <FaStar key={i} className="md:text-3xl text-gray-300" />;
+                return <FaStar key={i} className="text-gray-300 md:text-3xl" />;
               }
             })}
           </div>
           <p className="text-2xl font-semibold text-gray-800">
-            {(totalRatingCount / totalRating).toFixed(2) || 0}
+            {(totalRatingCount / totalRating).toFixed(1) || 0}
           </p>
-          <p className="text-sm text-gray-500">
-            Based on {totalRating} total ratings
-          </p>
+          <p className="text-sm text-gray-500">Average Rating</p>
         </div>
         <div className="text-center">
           <p className="text-gray-600">Total Reviews</p>
@@ -168,16 +154,20 @@ const ReviewSection = ({ bookId }) => {
       <div className="flex justify-center">
         {session?.user?.email ? (
           <button
-            onClick={handleShowReviewForm}
+            onClick={() => {
+              setShowReviewForm(!showReviewForm);
+              setNewReviewText(userReview?.reviewText || "");
+              setSelectedRating(userReview?.rating || 0);
+            }}
             className="rounded-full bg-blue-600 px-6 py-2 text-white shadow-lg hover:bg-blue-500 focus:outline-none"
           >
             {userReview ? "Update Review" : "Write a Review"}
           </button>
         ) : (
-          <div className="md:text-xl font-semibold">
+          <div className="font-semibold md:text-xl">
             Please login to write a review
             <Link href="/login">
-              <Button className="ghost ml-2 md:ml-10 p-5 hover:bg-blue-600 hover:text-white">
+              <Button className="ghost ml-2 p-5 hover:bg-blue-600 hover:text-white md:ml-10">
                 Login
               </Button>
             </Link>
@@ -248,12 +238,17 @@ const ReviewSection = ({ bookId }) => {
             </div>
           }
         >
-          {reviews?.slice(0, reviewText)?.map((review, index) => (
-            <div key={index} className="mb-4 rounded-lg bg-white p-4 md:shadow-md max-w-full">
-              <div className="mb-4 md:flex items-center justify-between">
-                <div className="md:flex items-center justify-center">
+          {reviewData?.slice(0, reviewText)?.map((review, index) => (
+            <div
+              key={index}
+              className="mb-4 max-w-full rounded-lg bg-white p-4 md:shadow-md"
+            >
+              <div className="mb-4 items-center justify-between md:flex">
+                <div className="items-center justify-center md:flex">
                   <Image
-                    src={review?.user?.avatar|| review.user.image || defaultImage}
+                    src={
+                      review?.user?.avatar || review.user.image || defaultImage
+                    }
                     alt="Profile Avatar"
                     className="rounded-full"
                     width={50}
@@ -263,7 +258,13 @@ const ReviewSection = ({ bookId }) => {
                     <p className="font-semibold text-gray-800">
                       {review.user.name}
                     </p>
-                    <p className="text-sm text-gray-500">{review.createdAt}</p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(review.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
                   </div>
                 </div>
                 <div className="flex">
