@@ -47,7 +47,7 @@ const ReviewSection = ({ bookId }) => {
       );
       return reviewAndRatingData;
     },
-    enabled: !!session?.user?.email || bookId,
+    enabled: !!session?.user?.email && !!bookId,
   });
 
   const totalRating = reviewData.length;
@@ -169,7 +169,7 @@ const ReviewSection = ({ bookId }) => {
           <div className="font-semibold md:text-xl">
             Please login to write a review
             <Link href={`/login?redirect=${pathname}`}>
-              <Button className="ghost ml-2 md:ml-10 p-5 hover:bg-blue-600 hover:text-white">
+              <Button className="ghost ml-2 p-5 hover:bg-blue-600 hover:text-white md:ml-10">
                 Login
               </Button>
             </Link>
