@@ -115,12 +115,12 @@ const CheckoutForm = ({ totalPrice, shippingFee }) => {
           <Button
             type="submit"
             disabled={!stripe || !clientSecret || loading || !session?.user}
-            className="mt-4"
+            className="mt-4 font-semibold"
           >
             {loading ? (
               <CgSpinner className="w-8 animate-spin text-xl" />
             ) : (
-              `Confirm Order $${totalPrice + shippingFee}`
+              `Confirm Order $${Math.floor(totalPrice + shippingFee)}`
             )}
           </Button>
         </CardFooter>
