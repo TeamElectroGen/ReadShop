@@ -1,12 +1,13 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "../context/CartContext";
 import Image from "next/image";
 import ShippingInfoForm from "./shippingInfo-form";
 import Link from "next/link";
+import BookLoading from "@/components/BookLoading";
 
 const Page = () => {
   const { cart } = useCart();
@@ -15,10 +16,23 @@ const Page = () => {
     (total, book) => total + book.price * book.quantity,
     0
   );
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const onSubmit = (data) => {
-    console.log("data");
+    console.log(data);
   };
+
+  if (!isMounted) {
+    return (
+      <div className="flex h-[50vh] items-center justify-center">
+        <BookLoading />
+      </div>
+    );
+  }
 
   return (
     <>
