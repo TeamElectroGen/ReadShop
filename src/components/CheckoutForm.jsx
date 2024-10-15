@@ -10,7 +10,7 @@ import axios from "axios";
 // import { useRouter } from "next/navigation";
 import { CardFooter } from "./ui/card";
 
-const CheckoutForm = ({ totalPrice, shippingFee }) => {
+const CheckoutForm = ({ totalPrice }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const CheckoutForm = ({ totalPrice, shippingFee }) => {
 
   // get clientSecret from server
   const { data: clientSecret = "" } = useQuery({
-    queryKey: ["paymentIntent"],
+    queryKey: ["paymentIntent", totalPrice],
     queryFn: async () => {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/api/payment-intent`,
@@ -120,7 +120,7 @@ const CheckoutForm = ({ totalPrice, shippingFee }) => {
             {loading ? (
               <CgSpinner className="w-8 animate-spin text-xl" />
             ) : (
-              `Confirm Order $${totalPrice + shippingFee}`
+              `Confirm Order $${totalPrice}`
             )}
           </Button>
         </CardFooter>
