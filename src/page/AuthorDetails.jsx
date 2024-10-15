@@ -2,43 +2,54 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { getAuthorById } from "@/services/getBooksData";
+import { useQuery } from "@tanstack/react-query";
+import BookLoading from "@/components/BookLoading";
 
 const AuthorDetails = ({ authorId }) => {
   const [following, setFollowing] = useState(false);
 
-  const [author, setAuthor] = useState({});
   const {
-    name,
-    // username,
-    image,
-    biography,
-    // birthDate,
-    // birthPlace,
-    // nationality,
-    // famousWork,
-    // awards,
-    // booksWrittenIds,
-    // bestAuthor,
-    // socialLinks,
-    // totalBooksSold,
-    // followers,
-    // isFeatured,
-    // authorQuotes,
-  } = author;
-  useEffect(() => {
-    const fetchAuthor = async () => {
+    data: {
+      name,
+      // username,
+      image,
+      biography,
+      // birthDate,
+      // birthPlace,
+      // nationality,
+      // famousWork,
+      // awards,
+      // booksWrittenIds,
+      // bestAuthor,
+      // socialLinks,
+      // totalBooksSold,
+      // followers,
+      // isFeatured,
+      // authorQuotes,
+    } = {},
+    isFetching,
+  } = useQuery({
+    queryKey: ["author", authorId],
+    queryFn: async () => {
       const { author } = await getAuthorById(authorId);
-      setAuthor(author);
-    };
-    fetchAuthor();
-  }, [authorId]);
+      return author;
+    },
+  });
 
   // Toggle follow/unfollow:
   const toggleFollow = () => {
     setFollowing(!following);
   };
+
+  if (isFetching) {
+    return (
+      <div className="flex h-[50vh] items-center justify-center">
+        <BookLoading />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -84,7 +95,7 @@ const AuthorDetails = ({ authorId }) => {
       <div className="container mx-auto"></div>
 
       {/*Author*/}
-      <div className="container mx-auto">
+      {/* <div className="container mx-auto">
         <hr className="my-4 border-gray-300" />
         <div className="flex justify-center">
           <Image
@@ -107,7 +118,7 @@ const AuthorDetails = ({ authorId }) => {
           promotional offers) and improved recommendations.
         </p>
         <hr className="my-4 border-gray-300" />
-      </div>
+      </div> */}
     </div>
   );
 };
