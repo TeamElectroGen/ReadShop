@@ -15,9 +15,11 @@ import {
   postReviewAndRating,
   patchUpdateReviewAndRating,
 } from "@/services/reviewAndRating";
+import { usePathname } from "next/navigation";
 
 const ReviewSection = ({ bookId }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const pathname = usePathname();
   const { data: session } = useSession() || {};
   const [reviewText, setReviewText] = useState(5);
   const [hasMore, setHasMore] = useState(true);
@@ -176,7 +178,7 @@ const ReviewSection = ({ bookId }) => {
         ) : (
           <div className="md:text-xl font-semibold">
             Please login to write a review
-            <Link href="/login">
+            <Link href={`/login?redirect=${pathname}`}>
               <Button className="ghost ml-2 md:ml-10 p-5 hover:bg-blue-600 hover:text-white">
                 Login
               </Button>
