@@ -11,11 +11,13 @@ import BookLoading from "@/components/BookLoading";
 
 const Page = () => {
   const { cart } = useCart();
+
   const shippingFee = 5;
   const totalPrice = cart.reduce(
     (total, book) => total + book.price * book.quantity,
     0
   );
+  
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -121,7 +123,7 @@ const Page = () => {
                 </div>
                 <div className="flex items-center justify-between border-dashed py-3">
                   <p className="">Total</p>
-                  <p className="text-sm font-semibold">${totalPrice + 5}</p>
+                  <p className="text-sm font-semibold">${Math.floor(totalPrice + shippingFee)}</p>
                 </div>
               </div>
             </CardContent>
