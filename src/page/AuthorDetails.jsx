@@ -1,14 +1,19 @@
 "use client";
-
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
 import { getAuthorById } from "@/services/getBooksData";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import BookLoading from "@/components/BookLoading";
+import {
+  authorToggleFollow,
+  followStatusForUser,
+} from "@/services/authorsCRUD";
+import { getUser } from "@/services/getUserData";
+import { useSession } from "next-auth/react";
+import { queryClient } from "@/services/Providers";
 
 const AuthorDetails = ({ authorId }) => {
-  const [following, setFollowing] = useState(false);
+  const { data: session } = useSession() || {};
 
   const {
     data: {
@@ -38,10 +43,36 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  // Toggle follow/unfollow:
-  const toggleFollow = () => {
-    setFollowing(!following);
-  };
+  const { data: { _id: userId } = {} } = useQuery({
+    queryKey: ["userId", session?.user?.email],
+    queryFn: async () => {
+      const { user } = await getUser(session?.user?.email);
+      return user;
+    },
+    enabled: !!session?.user?.email,
+  });
+
+  const { data: followStatus } = useQuery({
+    queryKey: ["follow-status", authorId],
+    queryFn: async () => {
+      const { status } = await followStatusForUser(authorId, userId);
+      console.log(status);
+      return status;
+    },
+    enabled: !!userId && !!authorId,
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ["toggle-follow", authorId],
+    mutationFn: async () => {
+      const { message } = await authorToggleFollow(authorId, userId);
+      console.log(message);
+      return message;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["follow-status", authorId] });
+    },
+  });
 
   if (isFetching) {
     return (
@@ -65,14 +96,14 @@ const AuthorDetails = ({ authorId }) => {
             />
 
             <Button
-              onClick={toggleFollow}
+              onClick={mutate}
               className={`ml-4 mt-6 border-[1px] px-4 ${
-                following
+                followStatus
                   ? "border-red-500 bg-red-500 text-white"
                   : "border-blue-500 bg-blue-500 text-white"
               }`}
             >
-              {following ? "Unfollow" : "+ Follow"}
+              {followStatus ? "Unfollow" : "+ Follow"}
             </Button>
           </div>
           <div className="mr-4 lg:mt-24 lg:w-4/5">
