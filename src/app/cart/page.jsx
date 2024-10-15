@@ -138,24 +138,6 @@ const Cart = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Coupon code */}
-      <div className="pb-16 pt-14">
-        <h3 className="mb-4 text-xl font-medium">Have a coupon?</h3>
-        <form className="mb-4 flex w-full max-w-sm items-center justify-start space-x-2">
-          <div className="relative ml-auto w-full flex-1">
-            <TicketPercentIcon className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Coupon code"
-              className="w-full rounded-lg bg-background py-5 pl-8"
-            />
-            <Button className="absolute right-2 font-semibold top-1" type="submit" size="sm">
-              Apply
-            </Button>
-          </div>
-        </form>
-      </div>
     </section>
   );
 };
