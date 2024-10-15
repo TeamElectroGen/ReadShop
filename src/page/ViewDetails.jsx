@@ -132,7 +132,7 @@ const ViewDetails = ({ bookid }) => {
                   {detailsBook?.Rating} Stars
                 </span>
                 <span className="ml-2 font-bold text-gray-500">
-                  | 3 Reviews
+                  | {detailsBook?.ReviewCount} Reviews
                 </span>
               </div>
 
@@ -191,7 +191,7 @@ const ViewDetails = ({ bookid }) => {
               <div className="mt-4">
                 <button
                   onClick={() => handleRWList("read")}
-                  className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 w-full md:w-1/2 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+                  className={`flex w-full flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:w-1/2 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
                 >
                   <FaBookOpen className="mr-2 lg:size-4" />
                   {rWStatus.readList ? "Remove from" : "Add to"} Read List
@@ -211,7 +211,6 @@ const ViewDetails = ({ bookid }) => {
             />
           )}
 
-          
           <div>
             <ReviewSection bookId={bookid}></ReviewSection>
           </div>
