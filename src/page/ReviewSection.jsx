@@ -154,7 +154,7 @@ const ReviewSection = ({ bookId }) => {
       <div className="flex justify-center">
         {session?.user?.email ? (
           <button
-            onClick={() =>{
+            onClick={() => {
               setShowReviewForm(!showReviewForm);
               setNewReviewText(userReview?.reviewText || "");
               setSelectedRating(userReview?.rating || 0);
@@ -191,7 +191,6 @@ const ReviewSection = ({ bookId }) => {
               <textarea
                 id="reviewText"
                 rows="4"
-              
                 className="mt-1 w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Describe your experience"
                 required
@@ -259,7 +258,13 @@ const ReviewSection = ({ bookId }) => {
                     <p className="font-semibold text-gray-800">
                       {review.user.name}
                     </p>
-                    <p className="text-sm text-gray-500">{review.createdAt}</p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(review.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
                   </div>
                 </div>
                 <div className="flex">
