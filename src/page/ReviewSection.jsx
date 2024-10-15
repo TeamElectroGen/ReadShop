@@ -17,9 +17,11 @@ import {
   getUserReviewAndRating,
 } from "@/services/reviewAndRating";
 import { queryClient } from "@/services/Providers";
+import { usePathname } from "next/navigation";
 
 const ReviewSection = ({ bookId }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const pathname = usePathname();
   const { data: session } = useSession() || {};
   const [reviewText, setReviewText] = useState(5);
   const [hasMore, setHasMore] = useState(true);
@@ -45,7 +47,7 @@ const ReviewSection = ({ bookId }) => {
       );
       return reviewAndRatingData;
     },
-    enabled: !!session?.user?.email || bookId,
+    enabled: !!session?.user?.email && !!bookId,
   });
 
   const totalRating = reviewData.length;
@@ -166,7 +168,7 @@ const ReviewSection = ({ bookId }) => {
         ) : (
           <div className="font-semibold md:text-xl">
             Please login to write a review
-            <Link href="/login">
+            <Link href={`/login?redirect=${pathname}`}>
               <Button className="ghost ml-2 p-5 hover:bg-blue-600 hover:text-white md:ml-10">
                 Login
               </Button>
