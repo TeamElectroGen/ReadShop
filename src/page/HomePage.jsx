@@ -24,6 +24,7 @@ import AuthorSectionSlide from "@/components/AuthorSectionSlide";
 import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 import { useQuery } from "@tanstack/react-query";
 import { CgSpinnerTwo } from "react-icons/cg";
+import FilterModal from "@/components/FilterModal";
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -136,10 +137,12 @@ const HomePage = () => {
               className="w-full rounded-lg bg-background p-6 pl-9 md:w-[370px] lg:w-[360px]"
             />
           </div>
-          <Button variant="secondary" size="lg" className="p-6">
-            <IoFilter className="mr-2 size-4" />
-            Filter
-          </Button>
+
+          <FilterModal
+            categoryName={categoriesName}
+            AuthorData={authors}
+            booksData={books}
+          />
 
           {/* Show search results dropdown */}
           {showSearchResults && (
