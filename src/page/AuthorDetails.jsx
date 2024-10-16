@@ -53,7 +53,7 @@ const AuthorDetails = ({ authorId }) => {
     enabled: !!session?.user?.email,
   });
 
-  const { data: followStatus, isFetching: l3 } = useQuery({
+  const { data: followStatus } = useQuery({
     queryKey: ["follow-status", authorId],
     queryFn: async () => {
       const { status } = await followStatusForUser(authorId, userId);
@@ -84,7 +84,7 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  if (l1 || l2 || l3 || l4) {
+  if (l1 || l2 || l4) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <BookLoading />
