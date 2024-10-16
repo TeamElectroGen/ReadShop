@@ -46,7 +46,7 @@ const Card = ({ book }) => {
             <span className="font-medium">$</span> {book.Price}
           </p>
           <div className="mt-2">
-            <RatingStar rating={book?.Rating} />
+            <RatingStar rating={book?.Rating || 0} />
           </div>
         </div>
       </div>

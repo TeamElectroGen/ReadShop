@@ -2,7 +2,7 @@ export const books = [
   {
     BookName: "The Courage of Slackers",
     AuthorName: "Daniel Tiernan",
-    AuthorUsername: "danieltiernan",
+    authorId: "670817b00298ede071db1abe",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/210/large_72e8552c889132a5f95e5843bc60a2b9.jpg",
     Description:
@@ -11,7 +11,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2022-05-14",
     Price: 15.99,
-    Rating: 4.5,
     Genre: "Fiction, Drama",
     wishList: [],
     readList: [],
@@ -19,7 +18,7 @@ export const books = [
   {
     BookName: "WORM$",
     AuthorName: "Khari Gordon",
-    AuthorUsername: "kharigordon",
+    authorId: "670817b00298ede071db1abf",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/209/large_9a7204fefedb8bf558ae93108b5799c6.jpg",
     Description:
@@ -28,7 +27,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2021-10-10",
     Price: 13.5,
-    Rating: 4.3,
     Genre: "Science Fiction, Adventure",
     wishList: [],
     readList: [],
@@ -36,7 +34,7 @@ export const books = [
   {
     BookName: "Knot by Knot",
     AuthorName: "Davis Moore",
-    AuthorUsername: "davismoore",
+    authorId: "670817b00298ede071db1ac0",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/205/large_4283954692b297c2b5c45aa2c1d6f7a2.jpg",
     Description:
@@ -45,7 +43,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2020-08-22",
     Price: 17.99,
-    Rating: 4.7,
     Genre: "Non-Fiction, Religion",
     wishList: [],
     readList: [],
@@ -53,7 +50,7 @@ export const books = [
   {
     BookName: "The Countryside Orphanage",
     AuthorName: "D.M. Narok",
-    AuthorUsername: "d.m.narok",
+    authorId: "670817b00298ede071db1ac1",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/204/large_1247539007cd95191f62749e53083655.jpg",
     Description:
@@ -62,7 +59,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2023-03-17",
     Price: 19.25,
-    Rating: 4.6,
     Genre: "Thriller, Suspense",
     wishList: [],
     readList: [],
@@ -70,7 +66,7 @@ export const books = [
   {
     BookName: "A Good Day For A Hike",
     AuthorName: "Jen Congdon",
-    AuthorUsername: "jencongdon",
+    authorId: "670817b00298ede071db1ac2",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/201/large_cd1a2490cec9107538e12c565fa90b3e.jpg",
     Description:
@@ -79,7 +75,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2022-07-05",
     Price: 12.99,
-    Rating: 4.4,
     Genre: "Non-Fiction, Travel",
     wishList: [],
     readList: [],
@@ -87,7 +82,7 @@ export const books = [
   {
     BookName: "Of Friction",
     AuthorName: "S.J. Lee",
-    AuthorUsername: "s.j.lee",
+    authorId: "670817b00298ede071db1ac3",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/192/large_e9b61e3f8f9f151825a06efe11af85d8.jpg",
     Description:
@@ -96,7 +91,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2021-11-29",
     Price: 14.75,
-    Rating: 4.2,
     Genre: "Fantasy, Science Fiction",
     wishList: [],
     readList: [],
@@ -104,7 +98,7 @@ export const books = [
   {
     BookName: "Tunnel of Mirrors",
     AuthorName: "Ferne Arfin",
-    AuthorUsername: "fernearfin",
+    authorId: "670817b00298ede071db1ac4",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/189/large_11787f4cd285774a4c8d8a1c098d5d7d.jpg",
     Description:
@@ -113,7 +107,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2019-12-05",
     Price: 16.99,
-    Rating: 4.8,
     Genre: "Romance, Drama",
     wishList: [],
     readList: [],
@@ -121,7 +114,7 @@ export const books = [
   {
     BookName: "The Day I Had a Dinosaur",
     AuthorName: "Ashley Wall",
-    AuthorUsername: "ashleywall",
+    authorId: "670817b00298ede071db1ac5",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/188/large_ba0c7956751de1f8ddf5b48149a5156f.jpg",
     Description:
@@ -130,7 +123,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2022-09-12",
     Price: 9.99,
-    Rating: 4.1,
     Genre: "Children's, Picture Book",
     wishList: [],
     readList: [],
@@ -138,7 +130,7 @@ export const books = [
   {
     BookName: "Returning to Carthage",
     AuthorName: "Ben Sharafski",
-    AuthorUsername: "bensharafski",
+    authorId: "670817b00298ede071db1ac6",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/186/large_0b5779f4ef3d8c3ec286769d41f3c619.jpg",
     Description:
@@ -147,7 +139,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2021-02-18",
     Price: 18.5,
-    Rating: 4.5,
     Genre: "Short Stories, Fiction",
     wishList: [],
     readList: [],
@@ -155,7 +146,7 @@ export const books = [
   {
     BookName: "Samah The Seed",
     AuthorName: "Sarah Gowayed",
-    AuthorUsername: "sarahgowayed",
+    authorId: "670817b00298ede071db1ac7",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/182/large_fc87ae9b24a402ab642fb02736eb0144.png",
     Description:
@@ -164,7 +155,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2020-06-09",
     Price: 11.99,
-    Rating: 4.7,
     Genre: "Children's, Spiritual",
     wishList: [],
     readList: [],
@@ -172,7 +162,7 @@ export const books = [
   {
     BookName: "It Ate One Hundred",
     AuthorName: "Bill Sugrue",
-    AuthorUsername: "billsugrue",
+    authorId: "670817b00298ede071db1ac8",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/180/large_9ce935fb391ef9cde19a26ef8a9561a1.jpg",
     Description:
@@ -181,7 +171,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2023-04-03",
     Price: 16.75,
-    Rating: 4.3,
     Genre: "Fantasy, Adventure",
     wishList: [],
     readList: [],
@@ -189,7 +178,7 @@ export const books = [
   {
     BookName: "Eternal Seas (The Relic Hunters)",
     AuthorName: "Lexi Rees",
-    AuthorUsername: "lexirees",
+    authorId: "670817b00298ede071db1ac9",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/178/large_6ea9129e49eb8d1a4fd001e8b4a292f6.jpg",
     Description:
@@ -198,7 +187,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2022-01-27",
     Price: 14.99,
-    Rating: 4.6,
     Genre: "Fantasy, Adventure",
     wishList: [],
     readList: [],
@@ -206,7 +194,7 @@ export const books = [
   {
     BookName: "What to Eat During the Apocalypse",
     AuthorName: "Vladimir Stefan",
-    AuthorUsername: "vladimirstefan",
+    authorId: "670817b00298ede071db1aca",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/177/large_2f64ac228f6cd440cfc798f47fa17b95.jpg",
     Description:
@@ -215,7 +203,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2023-08-22",
     Price: 13.99,
-    Rating: 4.4,
     Genre: "Non-Fiction, Humor",
     wishList: [],
     readList: [],
@@ -223,7 +210,7 @@ export const books = [
   {
     BookName: "The Big Shot Trader",
     AuthorName: "Mitesh Desai",
-    AuthorUsername: "miteshdesai",
+    authorId: "670817b00298ede071db1acb",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/171/large_7e4460ab3c5ca4b763328353646ebea2.jpg",
     Description:
@@ -232,7 +219,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2021-05-30",
     Price: 17.5,
-    Rating: 4.5,
     Genre: "Non-Fiction, Finance",
     wishList: [],
     readList: [],
@@ -240,7 +226,7 @@ export const books = [
   {
     BookName: "Question Mark: The Freshman Experience",
     AuthorName: "Shannon Damuth",
-    AuthorUsername: "shannondamuth",
+    authorId: "670817b00298ede071db1acc",
     CoverImage:
       "https://blog-cdn.reedsy.com/directories/gallery/170/large_c59c15221efd0fa2c84916dd5c296ce3.jpg",
     Description:
@@ -249,7 +235,6 @@ export const books = [
     PublicationId: "",
     PublishDate: "2020-11-12",
     Price: 12.99,
-    Rating: 4.1,
     Genre: "Fiction, Young Adult",
     wishList: [],
     readList: [],
