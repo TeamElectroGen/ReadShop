@@ -69,7 +69,7 @@ const checkoutFormSchema = z.object({
   address: z.string().max(160).min(4),
 });
 
-const ShippingInfoForm = ({ totalPrice, shippingFee, onSubmit }) => {
+const ShippingInfoForm = ({ totalPrice, onSubmit }) => {
   const { data: session } = useSession() || {};
   const form = useForm({
     resolver: zodResolver(checkoutFormSchema),
@@ -219,7 +219,6 @@ const ShippingInfoForm = ({ totalPrice, shippingFee, onSubmit }) => {
             <Elements stripe={stripePromise}>
               <CheckoutForm
                 totalPrice={totalPrice}
-                shippingFee={shippingFee}
                 onSubmit={onSubmit}
               ></CheckoutForm>
             </Elements>

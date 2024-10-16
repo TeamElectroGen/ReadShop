@@ -10,7 +10,7 @@ import axios from "axios";
 // import { useRouter } from "next/navigation";
 import { CardFooter } from "./ui/card";
 
-const CheckoutForm = ({ totalPrice, shippingFee }) => {
+const CheckoutForm = ({ totalPrice }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -120,7 +120,7 @@ const CheckoutForm = ({ totalPrice, shippingFee }) => {
             {loading ? (
               <CgSpinner className="w-8 animate-spin text-xl" />
             ) : (
-              `Confirm Order $${Math.floor(totalPrice + shippingFee)}`
+              `Confirm Order $${Math.floor(totalPrice)}`
             )}
           </Button>
         </CardFooter>
