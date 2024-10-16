@@ -102,27 +102,27 @@ const ViewDetails = ({ bookid }) => {
   };
 
   return (
-    <div className="container mx-auto rounded-lg p-6 md:my-10 lg:my-20">
+    <div className="container rounded-lg md:my-10 lg:my-20">
       {isFetching ? (
         <div className="flex h-[50vh] items-center justify-center">
           <BookLoading />
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="flex flex-col gap-5 md:flex-row">
             {/* Left Side - Book Image */}
-            <div className="flex items-center">
+            <div className="w-1/3 flex items-center bg-transparent">
               <Image
                 src={detailsBook?.CoverImage}
                 alt={detailsBook?.BookName}
-                width={500}
-                height={500}
-                className="rounded-lg shadow-md"
+                width={400}
+                height={400}
+                className="rounded-lg shadow-2xl object-cover"
               />
             </div>
 
             {/* Right Side - Book Details */}
-            <div className="rounded-lg bg-white p-6 shadow-md">
+            <div className="flex-1 rounded-lg bg-white p-6 shadow-md">
               <h1 className="text-2xl font-bold text-gray-800">
                 {detailsBook?.BookName}
               </h1>
