@@ -24,3 +24,15 @@ export const followStatusForUser = async (authorId, userId) => {
     return {};
   }
 };
+
+// get specific author books
+export const getAuthorBooks = async (authorId) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/author-books/${authorId}`
+    );
+    return res.data;
+  } catch (error) {
+    return [];
+  }
+};
