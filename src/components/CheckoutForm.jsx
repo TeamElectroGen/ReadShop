@@ -24,7 +24,7 @@ const CheckoutForm = ({ totalPrice }) => {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/api/payment-intent`,
         {
-          price: totalPrice,
+          price: Math.round(totalPrice * 100),
         }
       );
       return data.client_secret;
