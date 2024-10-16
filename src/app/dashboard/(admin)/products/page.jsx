@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import React from 'react';
 
-const Dashboard = () => {
+const Products = () => {
     return (
         <section className="flex flex-1 h-full flex-col gap-4 lg:gap-6">
           <div className="flex items-center">
@@ -22,6 +23,6 @@ const Dashboard = () => {
           </div>
         </section>
     );
-}
+};
 
-export default Dashboard;
+export default Products;
