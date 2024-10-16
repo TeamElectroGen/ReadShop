@@ -167,7 +167,7 @@ const HomePage = () => {
                         <p className="text-sm text-gray-500">
                           {item.AuthorName}
                         </p>
-                        <RatingStar rating={`${item.Rating}`} />
+                        <RatingStar rating={`${item?.Rating || 0}`} />
                       </div>
                     </div>
                   </Link>
