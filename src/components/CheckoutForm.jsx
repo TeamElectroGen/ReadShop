@@ -19,7 +19,7 @@ const CheckoutForm = ({ totalPrice }) => {
 
   // get clientSecret from server
   const { data: clientSecret = "" } = useQuery({
-    queryKey: ["paymentIntent"],
+    queryKey: ["paymentIntent", totalPrice],
     queryFn: async () => {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/api/payment-intent`,
@@ -120,7 +120,7 @@ const CheckoutForm = ({ totalPrice }) => {
             {loading ? (
               <CgSpinner className="w-8 animate-spin text-xl" />
             ) : (
-              `Confirm Order $${Math.floor(totalPrice)}`
+              `Confirm Order $${totalPrice}`
             )}
           </Button>
         </CardFooter>

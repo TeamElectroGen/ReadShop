@@ -1,58 +1,84 @@
 "use client";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import defaultImage from "../../public/assets/profile.png";
-import React, { useState, useEffect } from "react";
-import { FaStar } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ReactLoading from "react-loading";
-// import axios from "axios"; // Ensure axios is imported
-import toast from "react-hot-toast"; // If you are using a toast library
+import toast from "react-hot-toast";
 import {
   getBookReviewAndRating,
   postReviewAndRating,
+  patchUpdateReviewAndRating,
+  getUserReviewAndRating,
 } from "@/services/reviewAndRating";
+import { queryClient } from "@/services/Providers";
+import { usePathname } from "next/navigation";
 
 const ReviewSection = ({ bookId }) => {
-  const [totalRating, setTotalRating] = useState(0);
-  const [totalReviews, setTotalReviews] = useState(0);
-  const [totalRatingCount, setTotalRatingCount] = useState(0);
-  const [selectedRating, setSelectedRating] = useState(0);
-  const [ratingError, setRatingError] = useState("");
-  const [reviews, setReviews] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const { data: session } = useSession() || {}; // session to check if user is logged in
+  const pathname = usePathname();
+  const { data: session } = useSession() || {};
   const [reviewText, setReviewText] = useState(5);
   const [hasMore, setHasMore] = useState(true);
   const [newReviewText, setNewReviewText] = useState("");
-  // Fetch dynamic reviews and ratings data (you need to implement this API)
-  useEffect(() => {
-    const fetchReviewsAndRatings = async () => {
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [ratingError, setRatingError] = useState("");
+
+  const { data: reviewData = [] } = useQuery({
+    queryKey: ["reviews", bookId],
+    queryFn: async () => {
       const { reviewAndRatingData } = await getBookReviewAndRating(bookId);
-      console.log(reviewAndRatingData);
-      setReviews(reviewAndRatingData);
-      setTotalRating(reviewAndRatingData?.length);
-      setTotalReviews(reviewAndRatingData?.length);
-      // setTotalRatingCount(reviewAndRatingData.length);
-      setTotalRatingCount(
-        reviewAndRatingData.reduce((acc, review) => acc + review.rating, 0)
+      return reviewAndRatingData;
+    },
+    enabled: !!bookId,
+  });
+
+  const { data: userReview = {} } = useQuery({
+    queryKey: ["myReviews"],
+    queryFn: async () => {
+      const { reviewAndRatingData } = await getUserReviewAndRating(
+        session?.user?.email,
+        bookId
       );
-      // if (data) {
-      //   setReviews(data.reviews || []);
-      //   setTotalRating(data.totalRating || 0);
-      //   setTotalReviews(data.totalReviews || 0);
-      //   setReviews(data); // Assume API returns an array of reviews
-      //   const totalRating = data.reduce((acc, review) => acc + review.rating, 0) / data.length;
-      //   setTotalRating(totalRating);
-      //   setTotalReviews(data.length);
-      // }
-    };
-    fetchReviewsAndRatings();
-  }, [bookId]);
+      return reviewAndRatingData;
+    },
+    enabled: !!session?.user?.email && !!bookId,
+  });
+
+  const totalRating = reviewData.length;
+  const totalReviews = reviewData.length;
+  const totalRatingCount = reviewData.reduce(
+    (acc, review) => acc + review.rating,
+    0
+  );
+
+  const { mutate } = useMutation({
+    mutationFn: (newReview) =>
+      userReview
+        ? patchUpdateReviewAndRating(session?.user?.email, bookId, newReview)
+        : postReviewAndRating(session?.user?.email, bookId, newReview),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["reviews"]);
+      toast.success(
+        userReview
+          ? "Review updated successfully!"
+          : "Review submitted successfully!"
+      );
+      setShowReviewForm(false);
+    },
+    onError: () => {
+      toast.error("Failed to submit review. Please try again.");
+    },
+  });
+
+  // ... rest of the component code remains the same(yes)
   const loadReviews = () => {
-    if (reviews?.length <= reviewText) {
+    if (reviewData?.length <= reviewText) {
       setHasMore(false);
       return;
     }
@@ -61,88 +87,65 @@ const ReviewSection = ({ bookId }) => {
     }, 1000);
   };
 
-  const handleShowReviewForm = () => {
-    setShowReviewForm(!showReviewForm);
-  };
-
-  // Function to handle review and rating submission
   const handleSubmitReview = async (event) => {
     event.preventDefault();
 
-    // Ensure rating is selected
     if (selectedRating === 0) {
       setRatingError("Please select a rating.");
       return;
     }
 
-    // Create new review object
     const newReview = {
       rating: selectedRating,
       reviewText: newReviewText,
       bookId: bookId,
-      createdAt: new Date().toLocaleDateString(),
+      createdAt: new Date(),
       user: {
         name: session?.user?.name,
         avatar: session?.user?.image,
       },
     };
 
-    // Post the review to the API
-    const result = await postReviewAndRating(
-      session?.user?.email,
-      bookId,
-      newReview
-    );
-    console.log("result", result);
-
-    // Check if the post was successful
-    if (result.message === "Review and Rating successfully added!") {
-      toast.success("Review submitted successfully!");
-      setReviews((prevReviews) => [
-        ...(prevReviews || []),
-        {
-          user: { name: session?.user?.name, avatar: session?.user?.image },
-          rating: selectedRating,
-          text: newReviewText,
-          createdAt: new Date().toLocaleDateString(),
-        },
-      ]);
-      setShowReviewForm(false);
-    } else {
-      toast.error("Failed to submit review. Please try again.");
-    }
+    mutate(newReview);
   };
 
+  // ... rest of the component code remains the same
   const handleStarClick = (rating) => {
     setSelectedRating(rating);
     setRatingError("");
   };
 
   return (
-    <div className="reviews-container container mx-auto mt-8 rounded-lg p-6">
+    <div className="reviews-container container mt-8 rounded-lg p-6 md:mx-auto">
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>
       <div className="mb-6 flex flex-wrap items-center justify-around gap-5 rounded-lg bg-white p-4 md:gap-0">
         <div className="text-center">
           <div className="mb-2 flex justify-center">
-            {[...Array(5)].map((_, i) => (
-              <FaStar
-                key={i}
-                className={`text-3xl ${
-                  i < Math.floor(totalRating)
-                    ? "text-yellow-400"
-                    : "text-gray-300"
-                }`}
-              />
-            ))}
+            {[...Array(5)].map((_, i) => {
+              const ratingValue = totalRatingCount / totalRating;
+              const roundedValue = ratingValue - i;
+              if (roundedValue >= 1) {
+                return (
+                  <FaStar key={i} className="text-yellow-400 md:text-3xl" />
+                );
+              } else if (roundedValue > 0) {
+                return (
+                  <FaStarHalfAlt
+                    key={i}
+                    className="text-yellow-400 md:text-3xl"
+                  />
+                );
+              } else {
+                return <FaStar key={i} className="text-gray-300 md:text-3xl" />;
+              }
+            })}
           </div>
           <p className="text-2xl font-semibold text-gray-800">
-            {totalRating?.toFixed(1) || 0} / 5
+            {(totalRatingCount / totalRating).toFixed(1) || 0}
           </p>
-          <p className="text-sm text-gray-500">
-            Based on {totalRatingCount} total ratings
-          </p>
+          <p className="text-sm text-gray-500">Average Rating</p>
         </div>
         <div className="text-center">
           <p className="text-gray-600">Total Reviews</p>
@@ -153,16 +156,20 @@ const ReviewSection = ({ bookId }) => {
       <div className="flex justify-center">
         {session?.user?.email ? (
           <button
-            onClick={handleShowReviewForm}
+            onClick={() => {
+              setShowReviewForm(!showReviewForm);
+              setNewReviewText(userReview?.reviewText || "");
+              setSelectedRating(userReview?.rating || 0);
+            }}
             className="rounded-full bg-blue-600 px-6 py-2 text-white shadow-lg hover:bg-blue-500 focus:outline-none"
           >
-            Write a Review
+            {userReview ? "Update Review" : "Write a Review"}
           </button>
         ) : (
-          <div className="text-xl font-semibold">
+          <div className="font-semibold md:text-xl">
             Please login to write a review
-            <Link href="/login">
-              <Button className="ghost ml-10 p-5 hover:bg-blue-600 hover:text-white">
+            <Link href={`/login?redirect=${pathname}`}>
+              <Button className="ghost ml-2 p-5 hover:bg-blue-600 hover:text-white md:ml-10">
                 Login
               </Button>
             </Link>
@@ -172,7 +179,9 @@ const ReviewSection = ({ bookId }) => {
 
       {showReviewForm && (
         <div className="mt-6 rounded-lg bg-white p-6 shadow-lg">
-          <h3 className="mb-4 text-xl font-semibold">Write a Review</h3>
+          <h3 className="mb-4 text-xl font-semibold">
+            {userReview ? "Update Your Review" : "Write a Review"}
+          </h3>
           <form onSubmit={handleSubmitReview}>
             <div className="mb-4">
               <label
@@ -210,76 +219,70 @@ const ReviewSection = ({ bookId }) => {
               {ratingError && <p className="text-red-500">{ratingError}</p>}
             </div>
 
-            <div className="flex space-x-4">
-              <button
-                type="submit"
-                className="rounded-lg bg-blue-600 px-6 py-3 text-white"
-              >
-                Submit
-              </button>
-              <button
-                type="button"
-                onClick={handleShowReviewForm}
-                className="rounded-lg bg-gray-300 px-6 py-3 text-gray-700"
-              >
-                Cancel
-              </button>
-            </div>
+            <Button
+              type="submit"
+              className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-500"
+            >
+              {userReview ? "Update Review" : "Submit Review"}
+            </Button>
           </form>
         </div>
       )}
-      {reviews?.length === 0 ? (
-        <p className="mt-6 text-center">
-          No reviews yet. Be the first to leave a review!
-        </p>
-      ) : (
-        <div className="mt-10">
-          <h2 className="mb-4 text-2xl font-bold">Customer Reviews</h2>
 
-          <InfiniteScroll
-            dataLength={reviewText}
-            next={loadReviews}
-            hasMore={hasMore}
-            loader={
-              <ReactLoading type="spin" color="#3498db" className="mx-auto" />
-            }
-          >
-            <div className="space-y-6">
-              {reviews?.slice(0, reviewText).map((review, index) => (
-                <div key={index} className="rounded-lg bg-white p-6 shadow-lg">
-                  <div className="mb-4 flex items-center">
-                    <Image
-                      width={50}
-                      height={50}
-                      src={review?.user?.avatar || defaultImage}
-                      alt={review?.user?.name}
-                      className="mr-4 h-12 w-12 rounded-full"
-                    />
-                    <div>
-                      <h3 className="text-lg font-semibold">
-                        {review?.user?.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {review?.createdAt}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-1">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <FaStar key={i} className="text-yellow-400" />
-                    ))}
-                    {[...Array(5 - review.rating)].map((_, i) => (
-                      <FaStar key={i} className="text-gray-300" />
-                    ))}
-                  </div>
-                  <p className="mt-4 text-gray-800">{review?.reviewText}</p>
-                </div>
-              ))}
+      <div className="reviews mt-8 overflow-x-hidden">
+        <InfiniteScroll
+          dataLength={reviewText}
+          next={loadReviews}
+          hasMore={hasMore}
+          loader={
+            <div className="mt-10 flex justify-center">
+              <ReactLoading type="bars" color="blue" height={100} width={50} />
             </div>
-          </InfiniteScroll>
-        </div>
-      )}
+          }
+        >
+          {reviewData?.slice(0, reviewText)?.map((review, index) => (
+            <div
+              key={index}
+              className="mb-4 max-w-full rounded-lg bg-white p-4 md:shadow-md"
+            >
+              <div className="mb-4 items-center justify-between md:flex">
+                <div className="items-center justify-center md:flex">
+                  <Image
+                    src={
+                      review?.user?.avatar || review.user.image || defaultImage
+                    }
+                    alt="Profile Avatar"
+                    className="rounded-full"
+                    width={50}
+                    height={50}
+                  />
+                  <div className="md:ml-3">
+                    <p className="font-semibold text-gray-800">
+                      {review.user.name}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(review.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <FaStar key={i} className="text-lg text-yellow-400" />
+                  ))}
+                  {[...Array(5 - review.rating)].map((_, i) => (
+                    <FaStar key={i} className="text-lg text-gray-300" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-gray-700">{review.reviewText}</p>
+            </div>
+          ))}
+        </InfiniteScroll>
+      </div>
     </div>
   );
 };

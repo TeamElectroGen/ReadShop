@@ -1,15 +1,16 @@
-import React, { useRef } from "react";
+import React from 'react';
+import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import Link from "next/link";
+
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import Card from "./Card";
 
-const BookSectionSlider = ({ items, viewAllLink }) => {
-  const swiperRef = useRef(null);
+const RecentlyViewBookSlider = ({items}) => {
+    const swiperRef = useRef(null);
 
   const handlePrev = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
@@ -26,7 +27,7 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
   return (
     <div className="slider-container relative">
       {/* Navigation Buttons */}
-      <div className="absolute -right-2 z-10 -mt-14 flex gap-2 md:-top-3 md:right-0">
+      <div className="absolute -right-7 z-10 -mt-14 flex gap-1 md:gap-2 md:-top-3 md:right-0">
         <Button
           onClick={handlePrev}
           variant="outline"
@@ -67,19 +68,10 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
           </SwiperSlide>
         ))}
         {/* Add a "View All" button as the last card */}
-        <SwiperSlide className="rounded-md border bg-secondary">
-          <div className="flex h-[25rem] items-center justify-center lg:h-[25.1rem]">
-            <Link
-              href={`${viewAllLink}`}
-              className="rounded-md bg-primary-foreground/80 px-5 py-2 text-white hover:bg-primary-foreground"
-            >
-              View All
-            </Link>
-          </div>
-        </SwiperSlide>
+        
       </Swiper>
     </div>
   );
-};
+}
 
-export default BookSectionSlider;
+export default RecentlyViewBookSlider;
