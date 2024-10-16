@@ -4,7 +4,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export const POST = async (request) => {
   const { price } = await request.json();
-  const amount = parseFloat(price * 100);
+  const amount = parseInt(price);
 
   const { client_secret } = await stripe.paymentIntents.create({
     amount: amount,
