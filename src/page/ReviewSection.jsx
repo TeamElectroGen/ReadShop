@@ -143,7 +143,9 @@ const ReviewSection = ({ bookId }) => {
             })}
           </div>
           <p className="text-2xl font-semibold text-gray-800">
-            {(totalRatingCount / totalRating).toFixed(1) || 0}
+            {!isNaN((totalRatingCount / totalRating)?.toFixed(1))
+              ? (totalRatingCount / totalRating)?.toFixed(1)
+              : 0}
           </p>
           <p className="text-sm text-gray-500">Average Rating</p>
         </div>
