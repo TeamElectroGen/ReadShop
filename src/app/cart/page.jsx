@@ -43,7 +43,7 @@ const Cart = () => {
       </div>
 
       {cart?.length === 0 ? (
-        <EmptyCart />
+        <EmptyCart title="Your cart is currently empty" desc="Comeback here after adding books to cart" />
       ) : (
         <div className="flex flex-col gap-6 md:flex-row md:gap-7 lg:gap-14">
           {/* Cart items table*/}
