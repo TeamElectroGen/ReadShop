@@ -7,6 +7,7 @@ import BookLoading from "@/components/BookLoading";
 import {
   authorToggleFollow,
   followStatusForUser,
+  getAuthorBooks,
 } from "@/services/authorsCRUD";
 import { getUser } from "@/services/getUserData";
 import { useSession } from "next-auth/react";
@@ -34,7 +35,7 @@ const AuthorDetails = ({ authorId }) => {
       // isFeatured,
       // authorQuotes,
     } = {},
-    isFetching,
+    isFetching: l1,
   } = useQuery({
     queryKey: ["author", authorId],
     queryFn: async () => {
@@ -43,7 +44,7 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  const { data: { _id: userId } = {} } = useQuery({
+  const { data: { _id: userId } = {}, isFetching: l2 } = useQuery({
     queryKey: ["userId", session?.user?.email],
     queryFn: async () => {
       const { user } = await getUser(session?.user?.email);
@@ -52,7 +53,7 @@ const AuthorDetails = ({ authorId }) => {
     enabled: !!session?.user?.email,
   });
 
-  const { data: followStatus } = useQuery({
+  const { data: followStatus, isFetching: l3 } = useQuery({
     queryKey: ["follow-status", authorId],
     queryFn: async () => {
       const { status } = await followStatusForUser(authorId, userId);
@@ -60,6 +61,15 @@ const AuthorDetails = ({ authorId }) => {
       return status;
     },
     enabled: !!userId && !!authorId,
+  });
+
+  const { data: authorBooks, isFetching: l4 } = useQuery({
+    queryKey: ["author-books", authorId],
+    queryFn: async () => {
+      const { authorBooks } = await getAuthorBooks(authorId);
+      return authorBooks;
+    },
+    enabled: !!authorId,
   });
 
   const { mutate } = useMutation({
@@ -74,7 +84,7 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  if (isFetching) {
+  if (l1 || l2 || l3 || l4) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <BookLoading />
@@ -118,7 +128,12 @@ const AuthorDetails = ({ authorId }) => {
         <hr className="my-4 border-gray-300" />
         <h1 className="text-center text-2xl font-bold">{name}&apos;s Books</h1>
         <div className="mb-12 mt-8 grid grid-cols-6">
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
+          {authorBooks?.length > 0 &&
+            authorBooks?.map((book) => (
+              <div key={book._id} className="h-32 w-24 rounded-md bg-green-200">
+                Book Card
+              </div>
+            ))}
         </div>
       </div>
 
