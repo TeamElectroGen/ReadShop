@@ -9,14 +9,15 @@ import ShippingInfoForm from "./shippingInfo-form";
 import Link from "next/link";
 import BookLoading from "@/components/BookLoading";
 
-const Page = () => {
+const Checkout = () => {
   const { cart } = useCart();
 
   const shippingFee = 5;
-  const totalPrice = cart.reduce(
+  const subtotalPrice = cart.reduce(
     (total, book) => total + book.price * book.quantity,
     0
   );
+  const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
   
   const [isMounted, setIsMounted] = useState(false);
 
@@ -51,7 +52,6 @@ const Page = () => {
           <div className="w-full rounded-lg md:flex-1">
             <ShippingInfoForm
               totalPrice={totalPrice}
-              shippingFee={shippingFee}
               onSubmit={onSubmit}
             />
           </div>
@@ -114,7 +114,7 @@ const Page = () => {
                 <div className="flex items-center justify-between border-b border-dashed py-3">
                   <p>Subtotal</p>
                   <p className="text-sm font-semibold">
-                    ${totalPrice.toFixed(2)}
+                    ${subtotalPrice.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex items-center justify-between border-b border-dashed py-3">
@@ -123,7 +123,7 @@ const Page = () => {
                 </div>
                 <div className="flex items-center justify-between border-dashed py-3">
                   <p className="">Total</p>
-                  <p className="text-sm font-semibold">${Math.floor(totalPrice + shippingFee)}</p>
+                  <p className="text-sm font-semibold">${totalPrice}</p>
                 </div>
               </div>
             </CardContent>
@@ -134,4 +134,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Checkout;

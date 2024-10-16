@@ -19,12 +19,11 @@ const Cart = () => {
   console.log(cart);
 
   const shippingFee = 5;
-  const totalPrice = cart.reduce(
+  const subtotalPrice = cart.reduce(
     (total, book) => total + book.price * book.quantity,
     0
   );
-  const total = totalPrice + shippingFee;
-  console.log(total);
+  const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
 
   const handleRemove = (id) => {
     removeFromCart(id);
@@ -123,7 +122,7 @@ const Cart = () => {
               <div className="flex items-center justify-between border-b border-dashed py-3">
                 <p>Subtotal</p>
                 <p className="text-sm font-semibold">
-                  ${totalPrice.toFixed(2)}
+                  ${subtotalPrice.toFixed(2)}
                 </p>
               </div>
               <div className="flex items-center justify-between border-b border-dashed py-3">
@@ -132,7 +131,7 @@ const Cart = () => {
               </div>
               <div className="flex items-center justify-between border-dashed py-3">
                 <p className="">Total</p>
-                <p className="text-sm font-semibold">${total.toFixed(2)}</p>
+                <p className="text-sm font-semibold">${totalPrice}</p>
               </div>
             </div>
           </CardContent>
