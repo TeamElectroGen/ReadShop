@@ -30,6 +30,13 @@ export const GET = async (request, { params }) => {
     const averageRating =
       ReviewCount > 0 ? ratingSum[0]?.totalRating / ReviewCount : 0;
 
+    await db
+      .collection("books")
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { Rating: parseFloat(averageRating.toFixed(1)) } }
+      );
+
     // Add reviewCount and rating to bookDetails
     const modifiedBookDetails = {
       ...bookDetails,
