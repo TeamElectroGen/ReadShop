@@ -8,6 +8,7 @@ import {
   // getBookDetails,
   getBooksByIds,
   getCategories,
+  getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
@@ -49,6 +50,14 @@ const HomePage = () => {
     queryKey: ["books"],
     queryFn: async () => {
       const { books } = await getAllBooks();
+      return books;
+    },
+  });
+
+  const { data: newBooks } = useQuery({
+    queryKey: ["newBooks"],
+    queryFn: async () => {
+      const { books } = await getNewlyAddedBooks();
       return books;
     },
   });
@@ -170,9 +179,9 @@ const HomePage = () => {
       </section>
 
       {/* New Arrival Book Slider  (Albab updated this section) */}
-      <section className=" z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
-        <BookSectionSlider items={books?.slice(0, 10)} />
+        <BookSectionSlider items={newBooks?.slice(0, 10)} />
       </section>
 
       {/* Category Grid */}
@@ -182,7 +191,7 @@ const HomePage = () => {
 
       {/* Recently Viewed Section */}
       {recentViewedBooks?.length > 0 && (
-        <section className="z-10 mt-10 sm:mx-5 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
+        <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5">
           <BookSectionTitle title={"Recently Viewed"} />
           <RecentlyViewBookSlider
             items={recentViewedBooks} // Pass the recently viewed books
