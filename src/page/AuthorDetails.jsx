@@ -34,7 +34,7 @@ const AuthorDetails = ({ authorId }) => {
       // isFeatured,
       // authorQuotes,
     } = {},
-    isFetching,
+    isFetching: l1,
   } = useQuery({
     queryKey: ["author", authorId],
     queryFn: async () => {
@@ -43,7 +43,7 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  const { data: { _id: userId } = {} } = useQuery({
+  const { data: { _id: userId } = {}, isFetching: l2 } = useQuery({
     queryKey: ["userId", session?.user?.email],
     queryFn: async () => {
       const { user } = await getUser(session?.user?.email);
@@ -52,7 +52,7 @@ const AuthorDetails = ({ authorId }) => {
     enabled: !!session?.user?.email,
   });
 
-  const { data: followStatus } = useQuery({
+  const { data: followStatus, isFetching: l3 } = useQuery({
     queryKey: ["follow-status", authorId],
     queryFn: async () => {
       const { status } = await followStatusForUser(authorId, userId);
@@ -74,7 +74,7 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  if (isFetching) {
+  if (l1 || l2 || l3) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <BookLoading />
