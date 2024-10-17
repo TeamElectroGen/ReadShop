@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import Card from "../../src/components/Card"; // adjust the path accordingly
 import "@testing-library/jest-dom"; // for additional matchers
 import { describe, expect, it } from "@jest/globals";
-import RatingStar from "@/components/RatingStar";
+
 
 // Mock data for the book
 const mockBook = {
