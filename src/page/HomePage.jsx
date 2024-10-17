@@ -8,6 +8,7 @@ import {
   getBooksByIds,
   getCategories,
   getNewlyAddedBooks,
+  getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
@@ -22,6 +23,7 @@ import AuthorSectionSlide from "@/components/AuthorSectionSlide";
 import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 import { useQuery } from "@tanstack/react-query";
 import { CgSpinnerTwo } from "react-icons/cg";
+import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
 import FilterModal from "@/components/FilterModal";
 
 const HomePage = () => {
@@ -53,12 +55,15 @@ const HomePage = () => {
   });
 
   const {
-    data: newlyAddedBooks,
-    isLoading,
+    data: newBooks,
+    isFetching,
     error,
   } = useQuery({
-    queryKey: ["newlyAddedBooks"],
-    queryFn: getNewlyAddedBooks,
+    queryKey: ["newBooks"],
+    queryFn: async () => {
+      const { books } = await getNewlyAddedBooks();
+      return books;
+    },
   });
 
   //fetch  all authors
@@ -168,7 +173,7 @@ const HomePage = () => {
                         <p className="text-sm text-gray-500">
                           {item.AuthorName}
                         </p>
-                        <RatingStar rating={`${item.Rating}`} />
+                        <RatingStar rating={`${item?.Rating || 0}`} />
                       </div>
                     </div>
                   </Link>
@@ -182,7 +187,7 @@ const HomePage = () => {
       {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
-        {isLoading ? (
+        {isFetching ? (
           <div className="my-10 flex justify-center">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
           </div>
@@ -190,7 +195,7 @@ const HomePage = () => {
           <p className="text-center">Error loading new books</p>
         ) : (
           <BookSectionSlider
-            items={newlyAddedBooks.books}
+            items={newBooks?.slice(0, 10)}
             viewAllLink="/all-books"
           />
         )}
@@ -203,10 +208,9 @@ const HomePage = () => {
 
       {/* Recently Viewed Section */}
       {recentViewedBooks?.length > 0 && (
-        <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md">
+        <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5">
           <BookSectionTitle title={"Recently Viewed"} />
-          <BookSectionSlider
-            viewAllLink={"/all-books"}
+          <RecentlyViewBookSlider
             items={recentViewedBooks} // Pass the recently viewed books
           />
         </section>

@@ -14,6 +14,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getCategories } from "@/services/getBooksData";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -41,6 +43,14 @@ const Footer = () => {
       setEmail("");
     }
   };
+
+  const { data: categoriesName } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { categories } = await getCategories();
+      return categories;
+    },
+  });
 
   if (pathName.includes("dashboard")) {
     return;
@@ -84,7 +94,7 @@ const Footer = () => {
   );
 
   return (
-    <footer className="-mt-2 w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
+    <footer className="w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-4 text-accent-foreground md:grid-cols-3">
           {/* Logo and Address */}
@@ -110,12 +120,33 @@ const Footer = () => {
             <div className="grid grid-cols-2 text-sm">
               <div className="flex flex-col">
                 <p className="pb-3 text-lg font-bold">Pages:</p>
-
-                {footerPagesMenu}
+                <span></span>
+                <Link href={"/"} className="w-fit">
+                  Home
+                </Link>
+                <Link href={"/about"} className="w-fit">
+                  About
+                </Link>
+                <Link href={"/contact-us"} className="w-fit">
+                  Contact us
+                </Link>
+                <span></span>
               </div>
               <div className="flex flex-col">
                 <p className="pb-3 text-lg font-bold">Category:</p>
-                {footerCategoryMenu}
+                {categoriesName
+                  ?.slice(0, 7)
+                  ?.sort(() => 0.5 - Math.random())
+                  ?.map((categories, idx) => (
+                    <Link
+                      scroll={true}
+                      href={`/category/${categories.Genre}`}
+                      className="w-fit"
+                      key={idx}
+                    >
+                      {categories.Genre}
+                    </Link>
+                  ))}
               </div>
             </div>
           </div>

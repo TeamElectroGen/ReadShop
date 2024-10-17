@@ -34,20 +34,26 @@ const addBookFormSchema = z.object({
   Genre: z.string(),
   Price: z.string(),
   PublicationName: z.string(),
+  PublicationEmail: z.string(),
 });
 
 // This can come from your database or API.
 
 const AddBookForm = () => {
   const { data: session } = useSession() || {};
-  const defaultValues = {
-    PublicationName: session?.user?.name,
-    PublicationEmail: session?.user?.email,
-  };
 
   const form = useForm({
     resolver: zodResolver(addBookFormSchema),
-    defaultValues,
+    defaultValues: {
+      BookName: "",
+      AuthorName: "",
+      Description: "",
+      CoverImage: "",
+      Genre: "",
+      Price: "",
+      PublicationName: session?.user?.name,
+      PublicationEmail: session?.user?.email,
+    },
     mode: "onChange",
   });
 

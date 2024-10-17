@@ -4,6 +4,7 @@ import { MdDelete } from "react-icons/md";
 import { Button } from "./ui/button";
 import { FaCircle, FaCircleArrowRight } from "react-icons/fa6";
 import { useCart } from "@/app/context/CartContext";
+import Link from "next/link";
 
 const ProductCart = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity } = useCart();
@@ -117,18 +118,24 @@ const ProductCart = ({ isOpen, onClose }) => {
           {/* Checkout and Details Button */}
           <div className="mt-4 flex justify-between gap-4">
             <Button
+              asChild
               className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90"
               onClick={logCartProductIds}
             >
-              <FaCircle />
-              Cart Details
+              <Link href={"/cart"}>
+                <FaCircle />
+                Cart Details
+              </Link>
             </Button>
             <Button
+              asChild
               className="flex w-full gap-2 bg-primary"
               onClick={logCartProductIds}
             >
-              Checkout
-              <FaCircleArrowRight />
+              <Link onClick={onClose} href={"/checkout"}>
+                Checkout
+                <FaCircleArrowRight />
+              </Link>
             </Button>
           </div>
         </SheetContent>

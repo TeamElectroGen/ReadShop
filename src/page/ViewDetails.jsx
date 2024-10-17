@@ -102,27 +102,27 @@ const ViewDetails = ({ bookid }) => {
   };
 
   return (
-    <div className="container mx-auto rounded-lg p-6 md:my-10 lg:my-20">
+    <div className="container rounded-lg md:my-10 lg:my-20">
       {isFetching ? (
         <div className="flex h-[50vh] items-center justify-center">
           <BookLoading />
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="flex flex-col gap-5 md:flex-row">
             {/* Left Side - Book Image */}
-            <div className="flex items-center">
+            <div className="w-1/3 flex items-center bg-transparent">
               <Image
                 src={detailsBook?.CoverImage}
                 alt={detailsBook?.BookName}
-                width={500}
-                height={500}
-                className="rounded-lg shadow-md"
+                width={400}
+                height={400}
+                className="rounded-lg shadow-2xl object-cover"
               />
             </div>
 
             {/* Right Side - Book Details */}
-            <div className="rounded-lg bg-white p-6 shadow-md">
+            <div className="flex-1 rounded-lg bg-white p-6 shadow-md">
               <h1 className="text-2xl font-bold text-gray-800">
                 {detailsBook?.BookName}
               </h1>
@@ -132,7 +132,7 @@ const ViewDetails = ({ bookid }) => {
                   {detailsBook?.Rating} Stars
                 </span>
                 <span className="ml-2 font-bold text-gray-500">
-                  | 3 Reviews
+                  | {detailsBook?.ReviewCount} Reviews
                 </span>
               </div>
 
@@ -191,7 +191,7 @@ const ViewDetails = ({ bookid }) => {
               <div className="mt-4">
                 <button
                   onClick={() => handleRWList("read")}
-                  className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:w-1/2 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+                  className={`flex w-full flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:w-1/2 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
                 >
                   <FaBookOpen className="mr-2 lg:size-4" />
                   {rWStatus.readList ? "Remove from" : "Add to"} Read List
@@ -211,13 +211,6 @@ const ViewDetails = ({ bookid }) => {
             />
           )}
 
-          {/* Additional Section Below (if needed) */}
-          {/* <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
-        <h2 className="text-xl font-semibold text-gray-800">More Details</h2>
-        <p className="mt-2 text-gray-600">
-          Explore more information about the book, author, and publication here.
-        </p>
-      </div> */}
           <div>
             <ReviewSection bookId={bookid}></ReviewSection>
           </div>

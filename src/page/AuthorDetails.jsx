@@ -1,44 +1,96 @@
 "use client";
-
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
 import { getAuthorById } from "@/services/getBooksData";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import BookLoading from "@/components/BookLoading";
+import {
+  authorToggleFollow,
+  followStatusForUser,
+  getAuthorBooks,
+} from "@/services/authorsCRUD";
+import { getUser } from "@/services/getUserData";
+import { useSession } from "next-auth/react";
+import { queryClient } from "@/services/Providers";
 
 const AuthorDetails = ({ authorId }) => {
-  const [following, setFollowing] = useState(false);
+  const { data: session } = useSession() || {};
 
-  const [author, setAuthor] = useState({});
   const {
-    name,
-    // username,
-    image,
-    biography,
-    // birthDate,
-    // birthPlace,
-    // nationality,
-    // famousWork,
-    // awards,
-    // booksWrittenIds,
-    // bestAuthor,
-    // socialLinks,
-    // totalBooksSold,
-    // followers,
-    // isFeatured,
-    // authorQuotes,
-  } = author;
-  useEffect(() => {
-    const fetchAuthor = async () => {
+    data: {
+      name,
+      // username,
+      image,
+      biography,
+      // birthDate,
+      // birthPlace,
+      // nationality,
+      // famousWork,
+      // awards,
+      // booksWrittenIds,
+      // bestAuthor,
+      // socialLinks,
+      // totalBooksSold,
+      // followers,
+      // isFeatured,
+      // authorQuotes,
+    } = {},
+    isFetching: l1,
+  } = useQuery({
+    queryKey: ["author", authorId],
+    queryFn: async () => {
       const { author } = await getAuthorById(authorId);
-      setAuthor(author);
-    };
-    fetchAuthor();
-  }, [authorId]);
+      return author;
+    },
+  });
 
-  // Toggle follow/unfollow:
-  const toggleFollow = () => {
-    setFollowing(!following);
-  };
+  const { data: { _id: userId } = {}, isFetching: l2 } = useQuery({
+    queryKey: ["userId", session?.user?.email],
+    queryFn: async () => {
+      const { user } = await getUser(session?.user?.email);
+      return user;
+    },
+    enabled: !!session?.user?.email,
+  });
+
+  const { data: followStatus } = useQuery({
+    queryKey: ["follow-status", authorId],
+    queryFn: async () => {
+      const { status } = await followStatusForUser(authorId, userId);
+      console.log(status);
+      return status;
+    },
+    enabled: !!userId && !!authorId,
+  });
+
+  const { data: authorBooks, isFetching: l4 } = useQuery({
+    queryKey: ["author-books", authorId],
+    queryFn: async () => {
+      const { authorBooks } = await getAuthorBooks(authorId);
+      return authorBooks;
+    },
+    enabled: !!authorId,
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ["toggle-follow", authorId],
+    mutationFn: async () => {
+      const { message } = await authorToggleFollow(authorId, userId);
+      console.log(message);
+      return message;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["follow-status", authorId] });
+    },
+  });
+
+  if (l1 || l2 || l4) {
+    return (
+      <div className="flex h-[50vh] items-center justify-center">
+        <BookLoading />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -54,14 +106,14 @@ const AuthorDetails = ({ authorId }) => {
             />
 
             <Button
-              onClick={toggleFollow}
+              onClick={mutate}
               className={`ml-4 mt-6 border-[1px] px-4 ${
-                following
+                followStatus
                   ? "border-red-500 bg-red-500 text-white"
                   : "border-blue-500 bg-blue-500 text-white"
               }`}
             >
-              {following ? "Unfollow" : "+ Follow"}
+              {followStatus ? "Unfollow" : "+ Follow"}
             </Button>
           </div>
           <div className="mr-4 lg:mt-24 lg:w-4/5">
@@ -76,7 +128,12 @@ const AuthorDetails = ({ authorId }) => {
         <hr className="my-4 border-gray-300" />
         <h1 className="text-center text-2xl font-bold">{name}&apos;s Books</h1>
         <div className="mb-12 mt-8 grid grid-cols-6">
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
+          {authorBooks?.length > 0 &&
+            authorBooks?.map((book) => (
+              <div key={book._id} className="h-32 w-24 rounded-md bg-green-200">
+                Book Card
+              </div>
+            ))}
         </div>
       </div>
 
@@ -84,7 +141,7 @@ const AuthorDetails = ({ authorId }) => {
       <div className="container mx-auto"></div>
 
       {/*Author*/}
-      <div className="container mx-auto">
+      {/* <div className="container mx-auto">
         <hr className="my-4 border-gray-300" />
         <div className="flex justify-center">
           <Image
@@ -107,7 +164,7 @@ const AuthorDetails = ({ authorId }) => {
           promotional offers) and improved recommendations.
         </p>
         <hr className="my-4 border-gray-300" />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -26,6 +26,7 @@ import AdminMenu from "./AdminMenu";
 import PublisherMenu from "./PublisherMenu";
 import { getUserRole } from "@/services/getUserData";
 import LogoutButton from "./LogoutButton";
+import { useQuery } from "@tanstack/react-query";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -35,21 +36,19 @@ const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
   const pathName = usePathname();
-  const [role, setRole] = useState("");
-  // const role = "publisher";
+
+  const { data: role } = useQuery({
+    queryKey: ["userRole", data?.user?.email],
+    queryFn: async () => {
+      const { role } = await getUserRole(data?.user?.email);
+      return role;
+    },
+    enabled: !!data?.user?.email,
+  });
 
   useEffect(() => {
-    if (data?.user?.email) {
-      const getRole = async () => {
-        const { role } = await getUserRole(data?.user?.email);
-        console.log(role);
-        setRole(role);
-      };
-      getRole();
-    }
     setIsClient(true);
-  }, [data?.user?.email]);
-  // const { cart } = useCart();
+  }, []);
 
   const navLinks = (
     <>

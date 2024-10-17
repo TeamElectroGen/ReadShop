@@ -10,12 +10,12 @@ const adminMenuItems = [
   },
   {
     title: "Inventory",
-    href: "/dashboard/books",
+    href: "/dashboard/products",
     icon: BookOpen,
   },
   {
-    title: "Orders",
-    href: "/dashboard/orders",
+    title: "Manage Orders",
+    href: "/dashboard/manage-orders",
     icon: ShoppingCart,
   },
   {
