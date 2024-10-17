@@ -1,8 +1,8 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React from "react";
-import { useCart } from "../context/CartContext";
+import BookLoading from "@/components/BookLoading";
+import EmptyCart from "@/components/EmptyCart";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -11,12 +11,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from "next/image";
 import { CircleXIcon } from "lucide-react";
-import EmptyCart from "@/components/EmptyCart";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useCart } from "../context/CartContext";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity } = useCart();
+  const [isMounted, setIsMounted] = useState(false);
   console.log(cart);
 
   const shippingFee = 5;
@@ -36,6 +38,18 @@ const Cart = () => {
     }
   };
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <div className="flex h-[50vh] items-center justify-center">
+        <BookLoading />
+      </div>
+    );
+  }
+
   return (
     <section className="container my-12 mb-16 space-y-6">
       <div className="space-y-0.5 text-center">
@@ -43,7 +57,10 @@ const Cart = () => {
       </div>
 
       {cart?.length === 0 ? (
-        <EmptyCart title="Your cart is currently empty" desc="Comeback here after adding books to cart" />
+        <EmptyCart
+          title="Your cart is currently empty"
+          desc="Comeback here after adding books to cart"
+        />
       ) : (
         <div className="flex flex-col gap-6 md:flex-row md:gap-7 lg:gap-14">
           {/* Cart items table*/}
@@ -64,8 +81,8 @@ const Cart = () => {
               </TableHeader>
               {/* Table content */}
               <TableBody>
-                {cart?.map((book) => (
-                  <TableRow key={book._id}>
+                {cart?.map((book, index) => (
+                  <TableRow key={index}>
                     <TableCell className="flex items-start gap-2 pl-4 font-medium">
                       <Image
                         alt="Product image"
