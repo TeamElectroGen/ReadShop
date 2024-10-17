@@ -8,7 +8,6 @@ import {
   getBooksByIds,
   getCategories,
   getNewlyAddedBooks,
-  getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
@@ -56,7 +55,7 @@ const HomePage = () => {
 
   const {
     data: newBooks,
-    isFetching,
+    isFetching: newBookLoading,
     error,
   } = useQuery({
     queryKey: ["newBooks"],
@@ -109,8 +108,6 @@ const HomePage = () => {
     },
   });
 
-  console.log(newlyAddedBooks);
-
   return (
     <div className="my-6 md:container">
       {/* Search & Filter Banner */}
@@ -150,7 +147,7 @@ const HomePage = () => {
           {/* Show search results dropdown */}
           {showSearchResults && (
             <div className="absolute left-0 top-[4.2rem] z-50 mt-5 max-h-96 w-full overflow-scroll rounded-sm bg-white shadow-lg">
-              {isFetching ? (
+              {newBookLoading ? (
                 <div className="my-12 flex items-center justify-center p-4">
                   <CgSpinnerTwo className="animate-spin text-2xl" />
                 </div>
@@ -208,7 +205,7 @@ const HomePage = () => {
 
       {/* Recently Viewed Section */}
       {recentViewedBooks?.length > 0 && (
-        <section className="z-10 mt-10 rounded-xl bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5">
+        <section className="z-10 mt-10 rounded-md bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5 sm:rounded-xl">
           <BookSectionTitle title={"Recently Viewed"} />
           <RecentlyViewBookSlider
             items={recentViewedBooks} // Pass the recently viewed books
