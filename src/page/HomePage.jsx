@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { IoMdSearch } from "react-icons/io";
-import { IoFilter } from "react-icons/io5";
 import {
   getAllBooks,
   getAuthors,
@@ -9,13 +8,13 @@ import {
   getBooksByIds,
   getCategories,
   getNewlyAddedBooks,
+  getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
 import Link from "next/link";
 import BookSectionSlider from "@/components/BookSectionSlider";
 import Card from "@/components/Card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
@@ -25,6 +24,7 @@ import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 import { useQuery } from "@tanstack/react-query";
 import { CgSpinnerTwo } from "react-icons/cg";
 import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
+import FilterModal from "@/components/FilterModal";
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -54,7 +54,11 @@ const HomePage = () => {
     },
   });
 
-  const { data: newBooks } = useQuery({
+  const {
+    data: newBooks,
+    isFetching,
+    error,
+  } = useQuery({
     queryKey: ["newBooks"],
     queryFn: async () => {
       const { books } = await getNewlyAddedBooks();
@@ -105,7 +109,7 @@ const HomePage = () => {
     },
   });
 
-  // console.log("categoriesName", categoriesName);
+  console.log(newlyAddedBooks);
 
   return (
     <div className="my-6 md:container">
@@ -136,10 +140,12 @@ const HomePage = () => {
               className="w-full rounded-lg bg-background p-6 pl-9 md:w-[370px] lg:w-[360px]"
             />
           </div>
-          <Button variant="secondary" size="lg" className="p-6">
-            <IoFilter className="mr-2 size-4" />
-            Filter
-          </Button>
+
+          <FilterModal
+            categoryName={categoriesName}
+            AuthorData={authors}
+            booksData={books}
+          />
 
           {/* Show search results dropdown */}
           {showSearchResults && (
@@ -181,7 +187,18 @@ const HomePage = () => {
       {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
-        <BookSectionSlider items={newBooks?.slice(0, 10)} />
+        {isFetching ? (
+          <div className="my-10 flex justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
+          </div>
+        ) : error ? (
+          <p className="text-center">Error loading new books</p>
+        ) : (
+          <BookSectionSlider
+            items={newBooks?.slice(0, 10)}
+            viewAllLink="/all-books"
+          />
+        )}
       </section>
 
       {/* Category Grid */}
@@ -217,14 +234,17 @@ const HomePage = () => {
       {/* New Best Sellers Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Best Sellers"} />
-        <BookSectionSlider items={books?.slice(0, 10)} />
+        <BookSectionSlider
+          items={books?.slice(0, 10)}
+          viewAllLink={"/all-books"}
+        />
       </section>
 
       {/* Top of the month Books Slider */}
       <section className="z-10 mb-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         <BookSectionSlider
-          viewAllLink={"/category/Fiction"}
+          viewAllLink={"/all-books"}
           items={books?.slice(0, 10)} // Show 10 books
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
