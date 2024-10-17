@@ -25,3 +25,16 @@ export const getUser = async (email) => {
     return {};
   }
 };
+
+// update user info
+export const updateProfile = async (userId, data) => {
+  try {
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/my-profile-update/${userId}`,
+      data
+    );
+    return res.data;
+  } catch (error) {
+    return error;
+  }
+};
