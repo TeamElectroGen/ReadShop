@@ -8,7 +8,6 @@ import {
   getBooksByIds,
   getCategories,
   getNewlyAddedBooks,
-  getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
 import Image from "next/image";
@@ -56,7 +55,7 @@ const HomePage = () => {
 
   const {
     data: newBooks,
-    isFetching,
+    isFetching: isNewBookFetching,
     error,
   } = useQuery({
     queryKey: ["newBooks"],
@@ -76,7 +75,7 @@ const HomePage = () => {
   });
 
   // search books
-  const { data: searchItems, isFetching } = useQuery({
+  const { data: searchItems, isFetching: isSearchItemsFetching } = useQuery({
     queryKey: ["searchBooks", search],
     queryFn: async () => {
       if (search) {
@@ -108,8 +107,6 @@ const HomePage = () => {
       return categories;
     },
   });
-
-  console.log(newlyAddedBooks);
 
   return (
     <div className="my-6 md:container">
@@ -150,7 +147,7 @@ const HomePage = () => {
           {/* Show search results dropdown */}
           {showSearchResults && (
             <div className="absolute left-0 top-[4.2rem] z-50 mt-5 max-h-96 w-full overflow-scroll rounded-sm bg-white shadow-lg">
-              {isFetching ? (
+              {isSearchItemsFetching ? (
                 <div className="my-12 flex items-center justify-center p-4">
                   <CgSpinnerTwo className="animate-spin text-2xl" />
                 </div>
@@ -187,7 +184,7 @@ const HomePage = () => {
       {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
-        {isFetching ? (
+        {isNewBookFetching ? (
           <div className="my-10 flex justify-center">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
           </div>
