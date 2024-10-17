@@ -83,7 +83,7 @@ const FilterModal = ({
   return (
     <section>
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <Button
             variant="secondary"
             size="lg"

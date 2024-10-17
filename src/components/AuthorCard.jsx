@@ -3,23 +3,20 @@ import Link from "next/link";
 
 const AuthorCard = ({ author }) => {
   return (
-    <Link
-      href={`/author/${author?._id}`}
-      className="flex flex-col items-center hover:bg-slate-700 rounded hover:bg-opacity-15"
-    >
-      {/* author Cover Image */}
-      <div className="relative flex h-[150px] w-[150px] justify-center overflow-hidden rounded-full bg-[#f3f2f2] shadow-sm">
-        <Image
-          src={author?.image}
-          alt={author?.image}
-          className="h-full w-full object-cover"
-          height={200}
-          width={200}
-        />
-      </div>
+    <Link href={`/author/${author?._id}`} className="group flex transform cursor-pointer flex-col items-center rounded-xl border p-8 transition-colors duration-300 hover:border-transparent hover:bg-primary/10 dark:border-gray-700 dark:hover:border-transparent">
+      <Image
+        className="rounded-full object-cover ring-4 ring-gray-300"
+        src={author?.image}
+        alt={author.name + "image"}
+        height={200}
+        width={200}
+      />
+
       {/* Author Info */}
-      <div className="mt-4 text-center font-serif">
-        <h1>{author?.name}</h1>
+      <div className="mt-4 text-center">
+        <h1 className="text-sm font-semibold capitalize text-gray-700 group-hover:text-primary-foreground dark:text-white">
+          {author?.name}
+        </h1>
       </div>
     </Link>
   );
