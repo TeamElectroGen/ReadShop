@@ -122,7 +122,7 @@ const ProductCart = ({ isOpen, onClose }) => {
               className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90"
               onClick={logCartProductIds}
             >
-              <Link href={'/cart'}>
+              <Link href={"/cart"}>
                 <FaCircle />
                 Cart Details
               </Link>
@@ -132,7 +132,7 @@ const ProductCart = ({ isOpen, onClose }) => {
               className="flex w-full gap-2 bg-primary"
               onClick={logCartProductIds}
             >
-              <Link href={"/checkout"}>
+              <Link onClick={onClose} href={"/checkout"}>
                 Checkout
                 <FaCircleArrowRight />
               </Link>

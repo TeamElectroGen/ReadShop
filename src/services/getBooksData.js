@@ -160,6 +160,24 @@ export const getCategoryCount = async (category) => {
   }
 };
 
+//Get All Books with pagination
+export const getBooksByPage = async (size, page) => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/all-books/pagination?page=${page}&limit=${size}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {
+      books: [],
+      page: 1,
+      totalPages: 0,
+      totalBooks: 0,
+    };
+  }
+};
+
 // ============================= Author ================================
 
 // Fetch All Authors
