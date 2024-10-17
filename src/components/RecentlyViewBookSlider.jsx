@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -9,8 +9,8 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import Card from "./Card";
 
-const RecentlyViewBookSlider = ({items}) => {
-    const swiperRef = useRef(null);
+const RecentlyViewBookSlider = ({ items }) => {
+  const swiperRef = useRef(null);
 
   const handlePrev = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
@@ -27,12 +27,12 @@ const RecentlyViewBookSlider = ({items}) => {
   return (
     <div className="slider-container relative">
       {/* Navigation Buttons */}
-      <div className="absolute -right-7 z-10 -mt-14 flex gap-1 md:gap-2 md:-top-3 md:right-0">
+      <div className="absolute -right-2 z-10 -mt-14 flex gap-2 md:-top-3 md:right-0">
         <Button
           onClick={handlePrev}
           variant="outline"
           size="icon"
-          className="hover:bg-primary/60"
+          className="size-7 hover:bg-primary/60 md:size-9"
         >
           <FaArrowLeft />
         </Button>
@@ -40,7 +40,7 @@ const RecentlyViewBookSlider = ({items}) => {
           onClick={handleNext}
           variant="outline"
           size="icon"
-          className="hover:bg-primary/60"
+          className="size-7 hover:bg-primary/60 md:size-9"
         >
           <FaArrowRight />
         </Button>
@@ -64,14 +64,15 @@ const RecentlyViewBookSlider = ({items}) => {
         {/* Render all the book items */}
         {items?.map((item) => (
           <SwiperSlide key={item._id}>
-            <Card key={item._id} book={item} />
+            <div className="mx-auto w-fit">
+              <Card key={item._id} book={item} />
+            </div>
           </SwiperSlide>
         ))}
         {/* Add a "View All" button as the last card */}
-        
       </Swiper>
     </div>
   );
-}
+};
 
 export default RecentlyViewBookSlider;
