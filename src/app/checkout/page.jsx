@@ -1,17 +1,51 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React, { useEffect, useState } from "react";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-import { useCart } from "../context/CartContext";
-import Image from "next/image";
-import ShippingInfoForm from "./shippingInfo-form";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import BookLoading from "@/components/BookLoading";
 import EmptyCart from "@/components/EmptyCart";
+import { getUser } from "@/services/getUserData";
+import { postPaymentData } from "@/services/payment";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useCart } from "../context/CartContext";
+import ShippingInfoForm from "./shippingInfo-form";
+
+const checkoutFormSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: "Name must be at least 2 characters.",
+    })
+    .max(30, {
+      message: "Name must not be longer than 30 characters.",
+    }),
+  email: z
+    .string({
+      required_error: "Please give an email address.",
+    })
+    .email(),
+  phone: z
+    .string()
+    .min(11, { message: "Phone number must be at least 11 digits" })
+    .max(20, { message: "Phone number must not exceed 15 digits" }),
+  emergencyPhone: z
+    .string()
+    .min(11, { message: "Phone number must be at least 11 digits" })
+    .max(20, { message: "Phone number must not exceed 15 digits" }),
+  district: z.string(),
+  upazila: z.string(),
+  address: z.string().max(160).min(4),
+});
 
 const Checkout = () => {
   const { cart } = useCart();
+  const { data: session } = useSession() || {};
+  const [isMounted, setIsMounted] = useState(false);
 
   const shippingFee = 5;
   const subtotalPrice = cart.reduce(
@@ -20,14 +54,49 @@ const Checkout = () => {
   );
   const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
 
-  const [isMounted, setIsMounted] = useState(false);
+  const form = useForm({
+    resolver: zodResolver(checkoutFormSchema),
+    values: {
+      name: session?.user?.name || "",
+      email: session?.user?.email || "",
+      phone: "",
+      emergencyPhone: "",
+      district: "",
+      upazila: "",
+      address: "",
+    },
+    mode: "onChange",
+  });
+
+  const { data: { _id: userId } = {} } = useQuery({
+    queryKey: ["userId", session?.user?.email],
+    queryFn: async () => {
+      const { user } = await getUser(session?.user?.email);
+      return user;
+    },
+    enabled: !!session?.user?.email,
+  });
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (paymentIntent) => {
+    const paymentInfo = {
+      ...form.watch(),
+      userId,
+      subtotalPrice: subtotalPrice.toFixed(2),
+      shippingFee,
+      totalPrice,
+      txnId: paymentIntent.id,
+    };
+    console.log(paymentInfo);
+    const res = await postPaymentData(paymentInfo);
+
+    if (res.insertedId) {
+      localStorage.removeItem("cart");
+      window.location.href = `/checkout/success/${paymentInfo.txnId}`;
+    }
   };
 
   if (!isMounted) {
@@ -56,7 +125,11 @@ const Checkout = () => {
           <div className="flex flex-col gap-6 md:flex-row md:gap-7 lg:gap-14">
             {/* Shipping info form */}
             <div className="w-full rounded-lg md:flex-1">
-              <ShippingInfoForm totalPrice={totalPrice} onSubmit={onSubmit} />
+              <ShippingInfoForm
+                form={form}
+                totalPrice={totalPrice}
+                onSubmit={onSubmit}
+              />
             </div>
             {/* summary card */}
             <Card className="w-full self-start md:w-2/6">
