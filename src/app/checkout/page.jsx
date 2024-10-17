@@ -1,8 +1,8 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
 import { useCart } from "../context/CartContext";
 import Image from "next/image";
 import ShippingInfoForm from "./shippingInfo-form";
@@ -48,7 +48,10 @@ const Checkout = () => {
           </p>
         </div>
         {cart?.length === 0 ? (
-          <EmptyCart title="Can't checkout! your cart is empty" desc="Add books to cart before checkout" />
+          <EmptyCart
+            title="Can't checkout! your cart is empty"
+            desc="Add books to cart before checkout"
+          />
         ) : (
           <div className="flex flex-col gap-6 md:flex-row md:gap-7 lg:gap-14">
             {/* Shipping info form */}
@@ -105,12 +108,14 @@ const Checkout = () => {
                     ))}
                   </ul>
                 )}
-                <div className="mb-4 flex w-full max-w-sm items-center space-x-2">
+                {/* TODO: coupon code implementation */}
+
+                {/* <div className="mb-4 flex w-full max-w-sm items-center space-x-2">
                   <Input type="email" placeholder="Coupon code" />
                   <Button type="submit" size="sm">
                     Apply
                   </Button>
-                </div>
+                </div> */}
 
                 <div className="">
                   <div className="flex items-center justify-between border-b border-dashed py-3">
