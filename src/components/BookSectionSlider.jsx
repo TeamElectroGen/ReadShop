@@ -1,12 +1,12 @@
-import React, { useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import Link from "next/link";
+import { useRef } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import "swiper/css";
 import "swiper/css/navigation";
-import Link from "next/link";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import { Button } from "./ui/button";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import Card from "./Card";
+import { Button } from "./ui/button";
 
 const BookSectionSlider = ({ items, viewAllLink, specialClass }) => {
   const swiperRef = useRef(null);
@@ -22,8 +22,6 @@ const BookSectionSlider = ({ items, viewAllLink, specialClass }) => {
       swiperRef.current.swiper.slideNext();
     }
   };
-
-  console.log(items);
 
   return (
     <div className="slider-container relative">

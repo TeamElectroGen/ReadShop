@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import RatingStar from "./RatingStar";
-import WishlistBtn from "./WishlistBtn";
+// import WishlistBtn from "./WishlistBtn";
 
 const Card = ({ book }) => {
-  const [wishListed, setWishListed] = useState(false);
+  // const [wishListed, setWishListed] = useState(false);
 
-  const handleWishlistClick = (event) => {
-    event.preventDefault();
-    console.log("wishlist got clicked");
-    setWishListed(!wishListed);
-  };
+  // const handleWishlistClick = (event) => {
+  //   event.preventDefault();
+  //   console.log("wishlist got clicked");
+  //   setWishListed(!wishListed);
+  // };
 
   return (
     <Link
@@ -27,10 +27,10 @@ const Card = ({ book }) => {
           height={228}
           width={168}
         />
-        <WishlistBtn
+        {/* <WishlistBtn
           wishListed={wishListed}
           onWishlistClick={handleWishlistClick}
-        />
+        /> */}
       </div>
       {/* Book Info */}
       <div className="flex flex-1 flex-col">
