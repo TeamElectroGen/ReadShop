@@ -20,7 +20,7 @@ import Image from "next/image";
 import RatingStar from "@/components/RatingStar";
 import Link from "next/link";
 
-const AllBooks = () => {
+const AllBooks = ({ query }) => {
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -30,12 +30,13 @@ const AllBooks = () => {
 
   useEffect(() => {
     fetchBooks();
-  }, [page, itemsPerPage]);
+  }, [page, itemsPerPage, query]); // Add query to dependencies
 
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const data = await getBooksByPage(itemsPerPage, page);
+      // Pass query parameters to getBooksByPage
+      const data = await getBooksByPage(itemsPerPage, page, query);
       setBooks(data.books);
       setTotalPages(data.totalPages);
       setTotalBooks(data.totalBooks);
@@ -96,7 +97,7 @@ const AllBooks = () => {
                     height={100}
                     className="h-full min-w-16 object-cover"
                     alt={book?.BookName}
-                  ></Image>
+                  />
                 </div>
                 <div className="flex flex-col">
                   <div className="flex-1">

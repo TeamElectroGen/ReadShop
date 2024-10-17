@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { IoMdSearch } from "react-icons/io";
-import { IoFilter } from "react-icons/io5";
 import {
   getAllBooks,
   getAuthors,
@@ -15,7 +14,6 @@ import Image from "next/image";
 import Link from "next/link";
 import BookSectionSlider from "@/components/BookSectionSlider";
 import Card from "@/components/Card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import RatingStar from "@/components/RatingStar";
