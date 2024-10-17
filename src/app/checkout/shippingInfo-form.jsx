@@ -48,22 +48,14 @@ const checkoutFormSchema = z.object({
       required_error: "Please give an email address.",
     })
     .email(),
-  phoneNumber: z
+  phone: z
     .string()
     .min(11, { message: "Phone number must be at least 11 digits" })
-    .max(15, { message: "Phone number must not exceed 15 digits" })
-    .regex(/^\+?[0-9]+$/, {
-      message:
-        "Phone number must contain only digits and optionally + can be added before country code ",
-    }),
+    .max(20, { message: "Phone number must not exceed 15 digits" }),
   emergencyPhone: z
     .string()
     .min(11, { message: "Phone number must be at least 11 digits" })
-    .max(15, { message: "Phone number must not exceed 15 digits" })
-    .regex(/^\+?[0-9]+$/, {
-      message:
-        "Phone number must contain only digits and optionally + can be added before country code ",
-    }),
+    .max(20, { message: "Phone number must not exceed 15 digits" }),
   district: z.string(),
   upazila: z.string(),
   address: z.string().max(160).min(4),
@@ -73,6 +65,15 @@ const ShippingInfoForm = ({ totalPrice, onSubmit }) => {
   const { data: session } = useSession() || {};
   const form = useForm({
     resolver: zodResolver(checkoutFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      emergencyPhone: "",
+      district: "",
+      upazila: "",
+      address: "",
+    },
     mode: "onChange",
   });
 
