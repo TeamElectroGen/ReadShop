@@ -56,6 +56,43 @@ const Footer = () => {
     return;
   }
 
+  const footerPagesMenu = (
+    <>
+      <Link href={"/"} className="w-fit">
+        Home
+      </Link>
+      <Link href={"/about"} className="w-fit">
+        About
+      </Link>
+      <Link href={"/contact-us"} className="w-fit">
+        Contact us
+      </Link>
+      <Link href={"/all-books"} className="w-fit">
+        All Books
+      </Link>
+    </>
+  );
+
+  const footerCategoryMenu = (
+    <>
+      <Link href={"/category/Fiction"} className="w-fit">
+        Fiction
+      </Link>
+      <Link href={"/category/Short Stories"} className="w-fit">
+        Short Stories
+      </Link>
+      <Link href={"/category/Children's"} className="w-fit">
+        Children&apos;s
+      </Link>
+      <Link href={"/category/Fantasy"} className="w-fit">
+        Fantasy
+      </Link>
+      <Link href={"/category/Drama"} className="w-fit">
+        Drama
+      </Link>
+    </>
+  );
+
   return (
     <footer className="w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
       <div className="container mx-auto">

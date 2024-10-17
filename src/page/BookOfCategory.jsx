@@ -1,5 +1,4 @@
 "use client";
-import Card from "@/components/Card";
 import PagesHeader from "@/components/PagesHeader";
 import {
   Pagination,
@@ -10,17 +9,28 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { getBooksByCategory, getCategoryCount } from "@/services/getBooksData";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import RatingStar from "@/components/RatingStar";
+import Image from "next/image";
+import { FaArrowDown, FaSadCry } from "react-icons/fa";
+import { FaArrowUp } from "react-icons/fa6";
+import Link from "next/link";
 
 const BookOfCategory = ({ genre }) => {
   const categoryName = genre.genre;
   const decodeText = decodeURIComponent(categoryName);
   const [booksByCategory, setBooksByCategory] = useState([]);
-
   const [totalBooks, setTotalBooks] = useState(0);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
-
+  const [size, setSize] = useState(4);
+  const [buttonIcon, setButtonIcon] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const fetchCategoryCount = async (categoryName) => {
@@ -38,14 +48,16 @@ const BookOfCategory = ({ genre }) => {
       setBooksByCategory(books || []);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (categoryName) {
+      setLoading(true);
       fetchCategoryCount(categoryName);
       fetchBooksByCategory(categoryName, size, page);
-      setLoading(false);
     }
   }, [categoryName, size, page]);
 
@@ -53,16 +65,13 @@ const BookOfCategory = ({ genre }) => {
     setPage(newPage);
   };
 
-  const handleSizeChange = (event) => {
-    setSize(Number(event.target.value));
+  const handleItemsPerPageChange = (newSize) => {
+    setSize(newSize);
     setPage(1);
+    setButtonIcon(!buttonIcon);
   };
 
   const totalPages = Math.ceil(totalBooks / size);
-
-  if (loading) {
-    return <div className="my-10 h-20 w-full animate-ping">Loading...</div>;
-  }
 
   return (
     <section className="container">
@@ -74,30 +83,71 @@ const BookOfCategory = ({ genre }) => {
       />
 
       <div className="mt-10 flex items-center justify-end">
-        <label htmlFor="pageSize" className="mr-2">
-          Items per page:
-        </label>
-        <select
-          id="pageSize"
-          value={size}
-          onChange={handleSizeChange}
-          className="rounded border border-gray-300 px-2 py-1"
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-        </select>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="flex items-center justify-center gap-2">
+              <span>{size} items/page</span>
+              {buttonIcon ? <FaArrowDown /> : <FaArrowUp />}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {[4, 8, 12, 40].map((sizeOption) => (
+              <DropdownMenuItem
+                key={sizeOption}
+                onClick={() => handleItemsPerPageChange(sizeOption)}
+              >
+                {sizeOption} items per page
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      <div className="flex items-center justify-center">
-        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          {booksByCategory.length > 0 ? (
-            booksByCategory.map((book) => <Card key={book._id} book={book} />)
-          ) : (
-            <p>No books available for this category.</p>
-          )}
+      {loading ? (
+        <div className="my-10 flex justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
         </div>
-      </div>
+      ) : (
+        <div className="flex items-center justify-center">
+          <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {booksByCategory.length > 0 ? (
+              booksByCategory.map((book) => (
+                <Link
+                  href={`/view-details/${book._id}`}
+                  key={book._id}
+                  className="flex gap-4 rounded border p-4 shadow-sm"
+                >
+                  <div>
+                    <Image
+                      src={book?.CoverImage}
+                      width={70}
+                      height={100}
+                      className="h-full min-w-16 object-cover"
+                      alt={book?.BookName}
+                    ></Image>
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold">{book.BookName}</h3>
+                      <p className="text-xs">by {book.AuthorName}</p>
+                      <RatingStar rating={book.Rating} />
+                    </div>
+                    <p className="text-lg font-bold text-primary-foreground">
+                      ${book.Price}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p className="flex w-full flex-col items-center justify-center p-4 text-center md:col-span-3 lg:col-span-4">
+                <FaSadCry className="text-7xl text-primary/50" />
+                <br />
+                Sorry! I Don&apos;t find any data!
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Pagination */}
       {totalPages > 0 && (

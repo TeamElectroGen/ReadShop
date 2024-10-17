@@ -1,18 +1,5 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  // CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
-import React from "react";
-import { useForm } from "react-hook-form";
-
-import { z } from "zod";
-// import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -24,61 +11,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-// import { Label } from "@/components/ui/label";
-// import { CreditCardIcon } from "lucide-react";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "@/components/CheckoutForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
 
-const checkoutFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Name must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    }),
-  email: z
-    .string({
-      required_error: "Please give an email address.",
-    })
-    .email(),
-  phoneNumber: z
-    .string()
-    .min(11, { message: "Phone number must be at least 11 digits" })
-    .max(15, { message: "Phone number must not exceed 15 digits" })
-    .regex(/^\+?[0-9]+$/, {
-      message:
-        "Phone number must contain only digits and optionally + can be added before country code ",
-    }),
-  emergencyPhone: z
-    .string()
-    .min(11, { message: "Phone number must be at least 11 digits" })
-    .max(15, { message: "Phone number must not exceed 15 digits" })
-    .regex(/^\+?[0-9]+$/, {
-      message:
-        "Phone number must contain only digits and optionally + can be added before country code ",
-    }),
-  district: z.string(),
-  upazila: z.string(),
-  address: z.string().max(160).min(4),
-});
-
-const ShippingInfoForm = ({ totalPrice, onSubmit }) => {
-  const { data: session } = useSession() || {};
-  const form = useForm({
-    resolver: zodResolver(checkoutFormSchema),
-    mode: "onChange",
-  });
-
+const ShippingInfoForm = ({ form, totalPrice, onSubmit }) => {
   return (
     <Form {...form}>
-      <div className="space-y-5">
+      <form className="space-y-5">
         {/* contact info */}
         <Card>
           <CardHeader>
@@ -93,11 +37,7 @@ const ShippingInfoForm = ({ totalPrice, onSubmit }) => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Your name"
-                      defaultValue={session?.user?.name}
-                      {...field}
-                    />
+                    <Input placeholder="Your name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,11 +51,7 @@ const ShippingInfoForm = ({ totalPrice, onSubmit }) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="name@gmail.com"
-                      defaultValue={session?.user?.email}
-                      {...field}
-                    />
+                    <Input placeholder="name@gmail.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -210,21 +146,21 @@ const ShippingInfoForm = ({ totalPrice, onSubmit }) => {
             />
           </CardContent>
         </Card>
-        {/* Payment */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment</CardTitle>
-          </CardHeader>
-          <div>
-            <Elements stripe={stripePromise}>
-              <CheckoutForm
-                totalPrice={totalPrice}
-                onSubmit={onSubmit}
-              ></CheckoutForm>
-            </Elements>
-          </div>
-        </Card>
-      </div>
+      </form>
+      {/* Payment */}
+      <Card className="mt-5">
+        <CardHeader>
+          <CardTitle>Payment</CardTitle>
+        </CardHeader>
+        <div>
+          <Elements stripe={stripePromise}>
+            <CheckoutForm
+              totalPrice={totalPrice}
+              onSubmit={onSubmit}
+            ></CheckoutForm>
+          </Elements>
+        </div>
+      </Card>
     </Form>
   );
 };
