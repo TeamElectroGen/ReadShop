@@ -1,51 +1,50 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import RatingStar from "@/components/RatingStar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
-  PaginationPrevious,
   PaginationNext,
+  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { getBooksByPage } from "@/services/getBooksData";
 import Image from "next/image";
-import RatingStar from "@/components/RatingStar";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const AllBooks = ({ query }) => {
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [totalBooks, setTotalBooks] = useState(0);
+  // const [totalBooks, setTotalBooks] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchBooks = async () => {
+      setLoading(true);
+      try {
+        // Pass query parameters to getBooksByPage
+        const data = await getBooksByPage(itemsPerPage, page, query);
+        setBooks(data.books);
+        setTotalPages(data.totalPages);
+        // setTotalBooks(data.totalBooks);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchBooks();
   }, [page, itemsPerPage, query]); // Add query to dependencies
-
-  const fetchBooks = async () => {
-    setLoading(true);
-    try {
-      // Pass query parameters to getBooksByPage
-      const data = await getBooksByPage(itemsPerPage, page, query);
-      setBooks(data.books);
-      setTotalPages(data.totalPages);
-      setTotalBooks(data.totalBooks);
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleItemsPerPageChange = (size) => {
     setItemsPerPage(size);

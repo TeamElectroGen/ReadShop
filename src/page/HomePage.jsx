@@ -75,7 +75,7 @@ const HomePage = () => {
   });
 
   // search books
-  const { data: searchItems, isFetching } = useQuery({
+  const { data: searchItems, isFetching: isSearchItemsFetching } = useQuery({
     queryKey: ["searchBooks", search],
     queryFn: async () => {
       if (search) {
@@ -184,7 +184,7 @@ const HomePage = () => {
       {/* New Arrival Book Slider  (Albab updated this section) */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
-        {isFetching ? (
+        {isNewBookFetching ? (
           <div className="my-10 flex justify-center">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
           </div>
@@ -246,6 +246,8 @@ const HomePage = () => {
           renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
         />
       </section>
+
+      {/* Author section */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <AuthorSectionTitle title={"Author"} />
         <AuthorSectionSlide items={authors?.slice(0, 10)} />

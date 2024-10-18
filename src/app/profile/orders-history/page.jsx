@@ -1,4 +1,13 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -7,51 +16,37 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { getReadListBooks } from "@/services/getBooksData";
 import { MdDetails } from "react-icons/md";
 
 const OrdersHistory = () => {
-//   const [readListBooks, setReadListBooks] = useState([]);
-//   const { data: session } = useSession();
+  //   const [readListBooks, setReadListBooks] = useState([]);
+  //   const { data: session } = useSession();
 
-//   useEffect(() => {
-//     if (session?.user.email) {
-//       const fetchReadList = async () => {
-//         const res = await getReadListBooks(session?.user.email);
-//         setReadListBooks(res.books);
-//       };
-//       fetchReadList();
-//     }
-//   }, [session?.user.email]);
+  //   useEffect(() => {
+  //     if (session?.user.email) {
+  //       const fetchReadList = async () => {
+  //         const res = await getReadListBooks(session?.user.email);
+  //         setReadListBooks(res.books);
+  //       };
+  //       fetchReadList();
+  //     }
+  //   }, [session?.user.email]);
 
-//   console.log(readListBooks);
+  //   console.log(readListBooks);
   const ordersHistory = [
     {
       _id: "3435",
-       date: "October 8, 2024",
-       total: 30.99,
-       status: "Delivered"
+      date: "October 8, 2024",
+      total: 30.99,
+      status: "Delivered",
     },
     {
-        _id: "3495",
-       date: "October 9, 2025",
-       total: 20.99,
-       status: "Processing"
-    }]
+      _id: "3495",
+      date: "October 9, 2025",
+      total: 20.99,
+      status: "Processing",
+    },
+  ];
 
   return (
     <Card>
@@ -62,9 +57,7 @@ const OrdersHistory = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden sm:table-cell">
-                Order ID
-              </TableHead>
+              <TableHead className="hidden sm:table-cell">Order ID</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Status</TableHead>
