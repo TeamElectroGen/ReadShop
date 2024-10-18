@@ -88,6 +88,8 @@ const Checkout = () => {
       subtotalPrice: subtotalPrice.toFixed(2),
       shippingFee,
       totalPrice,
+      payTime: new Date(),
+      status: "pending",
       txnId: paymentIntent.id,
     };
     console.log(paymentInfo);

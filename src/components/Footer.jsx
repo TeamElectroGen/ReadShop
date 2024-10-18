@@ -1,21 +1,21 @@
 "use client";
 
+import { getCategories } from "@/services/getBooksData";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React, { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import {
   FaBookOpenReader,
-  FaFacebook,
-  FaInstagram,
+  // FaFacebook,
+  // FaInstagram,
+  // FaXTwitter,
+  // FaYoutube,
   FaLocationArrow,
-  FaXTwitter,
-  FaYoutube,
 } from "react-icons/fa6";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import toast, { Toaster } from "react-hot-toast";
-import { usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { getCategories } from "@/services/getBooksData";
+import { Input } from "./ui/input";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -55,43 +55,6 @@ const Footer = () => {
   if (pathName.includes("dashboard")) {
     return;
   }
-
-  const footerPagesMenu = (
-    <>
-      <Link href={"/"} className="w-fit">
-        Home
-      </Link>
-      <Link href={"/about"} className="w-fit">
-        About
-      </Link>
-      <Link href={"/contact-us"} className="w-fit">
-        Contact us
-      </Link>
-      <Link href={"/all-books"} className="w-fit">
-        All Books
-      </Link>
-    </>
-  );
-
-  const footerCategoryMenu = (
-    <>
-      <Link href={"/category/Fiction"} className="w-fit">
-        Fiction
-      </Link>
-      <Link href={"/category/Short Stories"} className="w-fit">
-        Short Stories
-      </Link>
-      <Link href={"/category/Children's"} className="w-fit">
-        Children&apos;s
-      </Link>
-      <Link href={"/category/Fantasy"} className="w-fit">
-        Fantasy
-      </Link>
-      <Link href={"/category/Drama"} className="w-fit">
-        Drama
-      </Link>
-    </>
-  );
 
   return (
     <footer className="w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
@@ -175,23 +138,6 @@ const Footer = () => {
                 >
                   Subscribe
                 </Button>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-4 lg:justify-start">
-              <p className="">Follow Us:</p>
-              <div className="flex gap-4 text-xl">
-                <Link href={""}>
-                  <FaFacebook />
-                </Link>
-                <Link href={""}>
-                  <FaInstagram />
-                </Link>
-                <Link href={""}>
-                  <FaYoutube />
-                </Link>
-                <Link href={""}>
-                  <FaXTwitter />
-                </Link>
               </div>
             </div>
           </div>
