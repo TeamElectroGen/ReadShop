@@ -1,6 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -16,37 +16,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MdDetails } from "react-icons/md";
+import { getOrderHistoryOfUser } from "@/services/payment";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+// import { MdDetails } from "react-icons/md";
 
-const OrdersHistory = () => {
-  //   const [readListBooks, setReadListBooks] = useState([]);
-  //   const { data: session } = useSession();
+const Page = () => {
+  const { data: session } = useSession() || {};
 
-  //   useEffect(() => {
-  //     if (session?.user.email) {
-  //       const fetchReadList = async () => {
-  //         const res = await getReadListBooks(session?.user.email);
-  //         setReadListBooks(res.books);
-  //       };
-  //       fetchReadList();
-  //     }
-  //   }, [session?.user.email]);
-
-  //   console.log(readListBooks);
-  const ordersHistory = [
-    {
-      _id: "3435",
-      date: "October 8, 2024",
-      total: 30.99,
-      status: "Delivered",
+  const { data: ordersHistory } = useQuery({
+    queryKey: ["user-orders"],
+    queryFn: async () => {
+      const { orders } = await getOrderHistoryOfUser(session?.user?.email);
+      return orders;
     },
-    {
-      _id: "3495",
-      date: "October 9, 2025",
-      total: 20.99,
-      status: "Processing",
-    },
-  ];
+    enabled: !!session?.user?.email,
+  });
 
   return (
     <Card>
@@ -61,19 +46,19 @@ const OrdersHistory = () => {
               <TableHead>Date</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>
+              {/* <TableHead>
                 <span className="sr-only">Actions</span>
-              </TableHead>
+              </TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
             {ordersHistory?.map((order) => (
               <TableRow key={order._id}>
                 <TableCell className="hidden sm:table-cell">
-                  #{order._id}.
+                  #{order.txnId}
                 </TableCell>
                 <TableCell className="flex items-center gap-2 font-medium">
-                  {order?.date}
+                  {new Date(order.payTime).toLocaleString()}
                 </TableCell>
                 <TableCell>{order.total}</TableCell>
                 <TableCell>
@@ -84,11 +69,11 @@ const OrdersHistory = () => {
                     {order?.status}
                   </Badge>
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Button size="sm">
                     <MdDetails className="mr-2 size-5" /> Details
                   </Button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
@@ -103,4 +88,4 @@ const OrdersHistory = () => {
   );
 };
 
-export default OrdersHistory;
+export default Page;
