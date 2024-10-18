@@ -1,9 +1,10 @@
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useCart } from "@/app/context/CartContext";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import Image from "next/image";
+import Link from "next/link";
+import { FaCircle, FaCircleArrowRight } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { Button } from "./ui/button";
-import { FaCircle, FaCircleArrowRight } from "react-icons/fa6";
-import { useCart } from "@/app/context/CartContext";
 
 const ProductCart = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity } = useCart();
@@ -23,19 +24,19 @@ const ProductCart = ({ isOpen, onClose }) => {
     }
   };
 
-  const logCartProductIds = () => {
-    const productIds = cart.map((book) => book.id);
-    console.log("Cart Product IDs:", productIds);
-  };
+  // const logCartProductIds = () => {
+  //   const productIds = cart.map((book) => book.id);
+  //   console.log("Cart Product IDs:", productIds);
+  // };
 
   return (
     <div>
       <Sheet open={isOpen} onOpenChange={onClose}>
         <SheetContent className="scroll w-[400px]">
           <div className="border-b border-primary">
-            <h2 className="w-fit rounded-t-sm bg-primary px-2 py-1 text-lg font-semibold">
+            <SheetTitle className="w-fit rounded-t-sm bg-primary px-2 py-1 text-lg font-semibold">
               Your Cart
-            </h2>
+            </SheetTitle>
           </div>
 
           {/* Cart Item */}
@@ -117,18 +118,19 @@ const ProductCart = ({ isOpen, onClose }) => {
           {/* Checkout and Details Button */}
           <div className="mt-4 flex justify-between gap-4">
             <Button
+              asChild
               className="flex w-full gap-2 bg-primary-foreground text-white hover:bg-primary-foreground/90"
-              onClick={logCartProductIds}
             >
-              <FaCircle />
-              Cart Details
+              <Link href={"/cart"}>
+                <FaCircle />
+                Cart Details
+              </Link>
             </Button>
-            <Button
-              className="flex w-full gap-2 bg-primary"
-              onClick={logCartProductIds}
-            >
-              Checkout
-              <FaCircleArrowRight />
+            <Button asChild className="flex w-full gap-2 bg-primary">
+              <Link onClick={onClose} href={"/checkout"}>
+                Checkout
+                <FaCircleArrowRight />
+              </Link>
             </Button>
           </div>
         </SheetContent>

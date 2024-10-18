@@ -1,19 +1,21 @@
 "use client";
 
+import { getCategories } from "@/services/getBooksData";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React, { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import {
   FaBookOpenReader,
-  FaFacebook,
-  FaInstagram,
+  // FaFacebook,
+  // FaInstagram,
+  // FaXTwitter,
+  // FaYoutube,
   FaLocationArrow,
-  FaXTwitter,
-  FaYoutube,
 } from "react-icons/fa6";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import toast, { Toaster } from "react-hot-toast";
-import { usePathname } from "next/navigation";
+import { Input } from "./ui/input";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -42,12 +44,20 @@ const Footer = () => {
     }
   };
 
-  if(pathName.includes('dashboard')) {
+  const { data: categoriesName } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { categories } = await getCategories();
+      return categories;
+    },
+  });
+
+  if (pathName.includes("dashboard")) {
     return;
   }
 
   return (
-    <footer className="-mt-2 w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
+    <footer className="w-full rounded-t-sm bg-secondary bg-opacity-20 pt-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-4 text-accent-foreground md:grid-cols-3">
           {/* Logo and Address */}
@@ -83,37 +93,23 @@ const Footer = () => {
                 <Link href={"/contact-us"} className="w-fit">
                   Contact us
                 </Link>
-                <Link href={""} className="w-fit">
-                  Page 4
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 5
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 6
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 7
-                </Link>
                 <span></span>
               </div>
               <div className="flex flex-col">
                 <p className="pb-3 text-lg font-bold">Category:</p>
-                <Link href={""} className="w-fit">
-                  Page 1
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 2
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 3
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 4
-                </Link>
-                <Link href={""} className="w-fit">
-                  Page 5
-                </Link>
+                {categoriesName
+                  ?.slice(0, 7)
+                  ?.sort(() => 0.5 - Math.random())
+                  ?.map((categories, idx) => (
+                    <Link
+                      scroll={true}
+                      href={`/category/${categories.Genre}`}
+                      className="w-fit"
+                      key={idx}
+                    >
+                      {categories.Genre}
+                    </Link>
+                  ))}
               </div>
             </div>
           </div>
@@ -142,23 +138,6 @@ const Footer = () => {
                 >
                   Subscribe
                 </Button>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-4 lg:justify-start">
-              <p className="">Follow Us:</p>
-              <div className="flex gap-4 text-xl">
-                <Link href={""}>
-                  <FaFacebook />
-                </Link>
-                <Link href={""}>
-                  <FaInstagram />
-                </Link>
-                <Link href={""}>
-                  <FaYoutube />
-                </Link>
-                <Link href={""}>
-                  <FaXTwitter />
-                </Link>
               </div>
             </div>
           </div>

@@ -1,115 +1,159 @@
 "use client";
-
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
 import { getAuthorById } from "@/services/getBooksData";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import BookLoading from "@/components/BookLoading";
+import {
+  authorToggleFollow,
+  followStatusForUser,
+  getAuthorBooks,
+} from "@/services/authorsCRUD";
+import { getUser } from "@/services/getUserData";
+import { useSession } from "next-auth/react";
+import { queryClient } from "@/services/Providers";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { Separator } from "@/components/ui/separator";
+import AuthorBookCard from "@/components/AuthorBookCard";
 
 const AuthorDetails = ({ authorId }) => {
-  const [following, setFollowing] = useState(false);
+  const { data: session } = useSession() || {};
 
-  const [author, setAuthor] = useState({});
   const {
-    name,
-    // username,
-    image,
-    biography,
-    // birthDate,
-    // birthPlace,
-    // nationality,
-    // famousWork,
-    // awards,
-    // booksWrittenIds,
-    // bestAuthor,
-    // socialLinks,
-    // totalBooksSold,
-    // followers,
-    // isFeatured,
-    // authorQuotes,
-  } = author;
-  useEffect(() => {
-    const fetchAuthor = async () => {
+    data: {
+      name,
+      // username,
+      image,
+      biography,
+      // birthDate,
+      // birthPlace,
+      // nationality,
+      // famousWork,
+      // awards,
+      // booksWrittenIds,
+      // bestAuthor,
+      // socialLinks,
+      // totalBooksSold,
+      // followers,
+      // isFeatured,
+      // authorQuotes,
+    } = {},
+    isFetching: l1,
+  } = useQuery({
+    queryKey: ["author", authorId],
+    queryFn: async () => {
       const { author } = await getAuthorById(authorId);
-      setAuthor(author);
-    };
-    fetchAuthor();
-  }, [authorId]);
+      return author;
+    },
+  });
 
-  // Toggle follow/unfollow:
-  const toggleFollow = () => {
-    setFollowing(!following);
-  };
+  const { data: { _id: userId } = {} } = useQuery({
+    queryKey: ["userId", session?.user?.email],
+    queryFn: async () => {
+      const { user } = await getUser(session?.user?.email);
+      return user;
+    },
+    enabled: !!session?.user?.email,
+  });
+
+  const { data: followStatus } = useQuery({
+    queryKey: ["follow-status", authorId],
+    queryFn: async () => {
+      const { status } = await followStatusForUser(authorId, userId);
+      console.log(status);
+      return status;
+    },
+    enabled: !!userId && !!authorId,
+  });
+
+  const { data: authorBooks } = useQuery({
+    queryKey: ["author-books", authorId],
+    queryFn: async () => {
+      const { authorBooks } = await getAuthorBooks(authorId);
+      return authorBooks;
+    },
+    enabled: !!authorId,
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ["toggle-follow", authorId],
+    mutationFn: async () => {
+      const { message } = await authorToggleFollow(authorId, userId);
+      console.log(message);
+      return message;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["follow-status", authorId] });
+    },
+  });
+
+  if (l1) {
+    return (
+      <div className="flex h-[50vh] items-center justify-center">
+        <BookLoading />
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <div className="container mx-auto">
-        <div className="h-80 w-full rounded-md lg:flex lg:gap-6">
-          <div>
+    <section className="container mt-20">
+      <Card className="">
+        {/* Author introduction */}
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div className="flex items-center gap-4">
             <Image
-              className="mt-20 size-32 rounded-full border-8 border-gray-200 bg-red-300 object-cover shadow-xl shadow-blue-200"
+              className="size-32 rounded-full object-cover drop-shadow-xl"
               src={image}
               alt="Author Photo"
-              width={150}
-              height={150}
+              width={100}
+              height={100}
             />
+            <div>
+              <h2 className="mb-2 font-serif text-sm font-semibold md:text-lg">
+                {name}
+                <RiVerifiedBadgeFill className="-mt-1 ml-2 inline-block text-blue-400" />
+              </h2>
+              <p className="text-xs text-mediumGray-500 sm:text-sm">
+                {authorBooks?.length} books • 10k followers
+              </p>
+            </div>
+          </div>
+          <Button
+            onClick={mutate}
+            className={`font-semibold ${followStatus && "bg-gr"}`}
+          >
+            {followStatus ? "Unfollow" : "+ Follow"}
+          </Button>
+        </CardHeader>
 
-            <Button
-              onClick={toggleFollow}
-              className={`ml-4 mt-6 border-[1px] px-4 ${
-                following
-                  ? "border-red-500 bg-red-500 text-white"
-                  : "border-blue-500 bg-blue-500 text-white"
-              }`}
-            >
-              {following ? "Unfollow" : "+ Follow"}
-            </Button>
-          </div>
-          <div className="mr-4 lg:mt-24 lg:w-4/5">
-            <h1 className="text-xl font-bold">{name}</h1>
-            <p className="text-justify">{biography}</p>
-          </div>
-        </div>
-      </div>
+        <CardContent className="">
+          <p className="max-w-2xl text-justify text-sm font-normal text-darkGray-800">
+            {biography}
+          </p>
+        </CardContent>
+      </Card>
 
       {/*Famous Work of Author Card*/}
-      <div className="container mx-auto mt-32">
-        <hr className="my-4 border-gray-300" />
-        <h1 className="text-center text-2xl font-bold">{name}&apos;s Books</h1>
-        <div className="mb-12 mt-8 grid grid-cols-6">
-          <div className="h-32 w-24 rounded-md bg-green-200">Book Card</div>
+      <div className="mt-12">
+        <h1 className="text-lg font-bold">{name}&apos;s Books</h1>
+        <Separator />
+        <div className="mb-12 mt-6 grid gap-5 md:grid-cols-2">
+          {authorBooks?.length > 0 &&
+            authorBooks?.map((book) => (
+              <AuthorBookCard key={book.id} book={book} />
+            ))}
         </div>
       </div>
-
-      {/*Filtering Author's Book*/}
-      <div className="container mx-auto"></div>
-
-      {/*Author*/}
-      <div className="container mx-auto">
-        <hr className="my-4 border-gray-300" />
-        <div className="flex justify-center">
-          <Image
-            className="h-20 w-20 rounded-full bg-red-300 object-cover shadow-2xl shadow-blue-400"
-            src={image}
-            alt="Author Photo"
-            width={150}
-            height={150}
-          />
-        </div>
-        <h1 className="mt-4 text-center text-xl font-bold">Eran Ben-Joseph</h1>
-        <button
-          onClick={toggleFollow}
-          className="mx-auto mb-4 mt-4 block border-[1px] border-black px-28"
-        >
-          {following ? "Following" : "+ Follow"}
-        </button>
-        <p className="mx-auto mb-12 w-72 text-center">
-          Follow to get new release updates, special offers (including
-          promotional offers) and improved recommendations.
-        </p>
-        <hr className="my-4 border-gray-300" />
-      </div>
-    </div>
+    </section>
   );
 };
 
 export default AuthorDetails;
+
+{
+  /*Filtering Author's Book*/
+}
+{
+  /* <div className=""></div> */
+}

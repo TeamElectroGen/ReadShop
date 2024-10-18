@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-const Page = () => {
+const Dashboard = () => {
     return (
         <section className="flex flex-1 h-full flex-col gap-4 lg:gap-6">
           <div className="flex items-center">
@@ -24,4 +24,4 @@ const Page = () => {
     );
 }
 
-export default Page;
+export default Dashboard;

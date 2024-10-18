@@ -1,14 +1,14 @@
-import React, { useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import Link from "next/link";
+import { useRef } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import "swiper/css";
 import "swiper/css/navigation";
-import Link from "next/link";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import { Button } from "./ui/button";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import Card from "./Card";
+import { Button } from "./ui/button";
 
-const BookSectionSlider = ({ items, viewAllLink }) => {
+const BookSectionSlider = ({ items, viewAllLink, specialClass }) => {
   const swiperRef = useRef(null);
 
   const handlePrev = () => {
@@ -31,7 +31,7 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
           onClick={handlePrev}
           variant="outline"
           size="icon"
-          className="hover:bg-primary/60"
+          className="size-7 hover:bg-primary/60 md:size-9"
         >
           <FaArrowLeft />
         </Button>
@@ -39,7 +39,7 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
           onClick={handleNext}
           variant="outline"
           size="icon"
-          className="hover:bg-primary/60"
+          className="size-7 hover:bg-primary/60 md:size-9"
         >
           <FaArrowRight />
         </Button>
@@ -49,11 +49,12 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
       <Swiper
         ref={swiperRef}
         spaceBetween={20}
-        slidesPerView={2}
+        slidesPerView={1}
         navigation={false}
         modules={[Navigation]}
         breakpoints={{
-          640: { slidesPerView: 2, spaceBetween: 10 },
+          320: { slidesPerView: 1, spaceBetween: 10 },
+          425: { slidesPerView: 2, spaceBetween: 10 },
           768: { slidesPerView: 3, spaceBetween: 20 },
           1024: { slidesPerView: 4, spaceBetween: 30 },
           1280: { slidesPerView: 5, spaceBetween: 20 },
@@ -62,11 +63,15 @@ const BookSectionSlider = ({ items, viewAllLink }) => {
         {/* Render all the book items */}
         {items?.map((item) => (
           <SwiperSlide key={item._id}>
-            <Card key={item._id} book={item} />
+            <div className="mx-auto w-fit">
+              <Card key={item._id} book={item} />
+            </div>
           </SwiperSlide>
         ))}
         {/* Add a "View All" button as the last card */}
-        <SwiperSlide className="rounded-md border bg-secondary">
+        <SwiperSlide
+          className={`rounded-md border bg-secondary ${specialClass}`}
+        >
           <div className="flex h-[25rem] items-center justify-center lg:h-[25.1rem]">
             <Link
               href={`${viewAllLink}`}
