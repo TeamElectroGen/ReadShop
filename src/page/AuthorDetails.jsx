@@ -48,7 +48,7 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  const { data: { _id: userId } = {}, isFetching: l2 } = useQuery({
+  const { data: { _id: userId } = {} } = useQuery({
     queryKey: ["userId", session?.user?.email],
     queryFn: async () => {
       const { user } = await getUser(session?.user?.email);
@@ -67,7 +67,7 @@ const AuthorDetails = ({ authorId }) => {
     enabled: !!userId && !!authorId,
   });
 
-  const { data: authorBooks, isFetching: l4 } = useQuery({
+  const { data: authorBooks } = useQuery({
     queryKey: ["author-books", authorId],
     queryFn: async () => {
       const { authorBooks } = await getAuthorBooks(authorId);
@@ -88,7 +88,7 @@ const AuthorDetails = ({ authorId }) => {
     },
   });
 
-  if (l1 || l2 || l4) {
+  if (l1) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <BookLoading />
@@ -121,7 +121,7 @@ const AuthorDetails = ({ authorId }) => {
           </div>
           <Button
             onClick={mutate}
-            className={`font-semibold ${followStatus && "bg-foreground"}`}
+            className={`font-semibold ${followStatus && "bg-gr"}`}
           >
             {followStatus ? "Unfollow" : "+ Follow"}
           </Button>
@@ -133,12 +133,12 @@ const AuthorDetails = ({ authorId }) => {
           </p>
         </CardContent>
       </Card>
-      
+
       {/*Famous Work of Author Card*/}
       <div className="mt-12">
         <h1 className="text-lg font-bold">{name}&apos;s Books</h1>
         <Separator />
-        <div className="mb-12 mt-6 grid md:grid-cols-2 gap-5">
+        <div className="mb-12 mt-6 grid gap-5 md:grid-cols-2">
           {authorBooks?.length > 0 &&
             authorBooks?.map((book) => (
               <AuthorBookCard key={book.id} book={book} />
