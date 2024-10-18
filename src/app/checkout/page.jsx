@@ -82,9 +82,12 @@ const Checkout = () => {
   }, []);
 
   const onSubmit = async (paymentIntent) => {
+    const bookIds = JSON.parse(localStorage.getItem("cart"));
+
     const paymentInfo = {
       ...form.watch(),
       userId,
+      bookIds,
       subtotalPrice: subtotalPrice.toFixed(2),
       shippingFee,
       totalPrice,
