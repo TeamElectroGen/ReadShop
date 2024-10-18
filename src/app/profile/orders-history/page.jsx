@@ -60,7 +60,7 @@ const Page = () => {
                 <TableCell className="flex items-center gap-2 font-medium">
                   {new Date(order.payTime).toLocaleString()}
                 </TableCell>
-                <TableCell>{order.total}</TableCell>
+                <TableCell>{order.totalPrice} $</TableCell>
                 <TableCell>
                   <Badge
                     variant="outline"
