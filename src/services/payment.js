@@ -12,3 +12,16 @@ export const postPaymentData = async (paymentInfo) => {
     return error;
   }
 };
+
+// get order history for user
+export const getOrderHistoryOfUser = async (email) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/get-order-history/${email}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
