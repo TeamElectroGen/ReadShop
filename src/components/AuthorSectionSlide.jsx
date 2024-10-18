@@ -1,15 +1,14 @@
-import React, { useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { useRef } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import "swiper/css";
 import "swiper/css/navigation";
-import Link from "next/link";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Button } from "./ui/button";
 
 import AuthorCard from "./AuthorCard";
 
-const AuthorSectionSlide = ({ items, viewAllLink }) => {
+const AuthorSectionSlide = ({ items }) => {
   // console.log(items);
   const swiperRef = useRef(null);
 
