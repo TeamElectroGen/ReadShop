@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import UserMenu from "@/components/UserMenu";
 import UserInfoCard from "@/components/UserInfoCard";
+import UserMenu from "@/components/UserMenu";
 
 export const metadata = {
   title: "Profile | User name here..",
@@ -9,7 +9,6 @@ export const metadata = {
 };
 
 const ProfileLayout = ({ children }) => {
-  
   return (
     <>
       <div className="container my-12 space-y-6">
@@ -23,7 +22,7 @@ const ProfileLayout = ({ children }) => {
         {/* Dashboard container */}
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           {/* navigation */}
-          <aside className="-mr-4 px-2 lg:px-4 lg:self-start rounded-lg py-8 lg:w-1/4 glassmorphism">
+          <aside className="glassmorphism -mr-4 rounded-lg px-2 py-8 lg:w-1/4 lg:self-start lg:px-4">
             <header className="flex flex-col items-center justify-center gap-2 text-center">
               {/* user infos */}
               <UserInfoCard />
