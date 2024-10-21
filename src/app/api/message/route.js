@@ -1,37 +1,37 @@
 import { chatbotPrompt } from "@/helpers/constants/chatbot-prompt";
-import { OpenAIStream } from "@/lib/openai-stream";
 import { MessageArraySchema } from "@/lib/validators/message";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// Initialize the Google AI client with the free API key from Google AI Studio
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(req) {
   const { messages } = await req.json();
-console.log(messages);
+
   const parsedMessages = MessageArraySchema.parse(messages);
 
-  const outboundMessages = parsedMessages.map((message) => {
-    return {
-      role: message.isUserMessage ? "user" : "system",
-      content: message.text,
-    };
+  // Combine all messages into a single prompt
+  let combinedPrompt = chatbotPrompt + "\n\n";
+  parsedMessages.forEach((message) => {
+    combinedPrompt += `${message.isUserMessage ? "User" : "Assistant"}: ${message.text}\n`;
   });
+  combinedPrompt += "Assistant: ";
 
-  outboundMessages.unshift({
-    role: "system",
-    content: chatbotPrompt,
+  // Use the Gemini Pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // gemini-1.5-flash
+
+  // Generate the response
+  const result = await model.generateContent(combinedPrompt);
+  const response = result.response;
+
+  // Return the response as a stream
+  const stream = new ReadableStream({
+    async start(controller) {
+      const encoder = new TextEncoder();
+      controller.enqueue(encoder.encode(response.text()));
+      controller.close();
+    },
   });
-
-  const payload = {
-    model: "gpt-3.5-turbo",
-    messages: outboundMessages,
-    temperature: 0.4,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-    max_tokens: 150,
-    stream: true,
-    n: 1,
-  };
-
-  const stream = await OpenAIStream(payload);
 
   return new Response(stream);
 }
