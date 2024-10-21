@@ -179,9 +179,11 @@ const FilterModal = ({
             </Accordion>
 
             {/* Rating and Date Range */}
-            <div className="flex justify-between gap-5 rounded-sm border border-primary p-5">
+            <div className="flex justify-between gap-5 p-5">
               <div>
-                <h2 className="w-fit pb-3 font-bold">Rating</h2>
+                <h2 className="w-fit pb-3 text-sm font-bold text-primary-foreground">
+                  Rating
+                </h2>
                 <RadioGroup
                   value={selectedRating}
                   onValueChange={setSelectedRating}
@@ -204,10 +206,12 @@ const FilterModal = ({
                   </div>
                 </RadioGroup>
               </div>
-
-              <div className="flex-1 rounded-sm border border-primary p-2 text-left">
+              <hr className="h-full border-l border-primary" />
+              <div className="flex-1 p-2 pt-0 text-left">
                 <div className="flex w-full flex-col gap-1">
-                  <h2 className="w-full pb-2 font-bold">Date Range:</h2>
+                  <h2 className="w-fit pb-3 text-sm font-bold text-primary-foreground">
+                    Date Range:
+                  </h2>
                   <DatePicker
                     selectsRange
                     startDate={dateRange[0]}
@@ -220,7 +224,9 @@ const FilterModal = ({
                   />
                 </div>
                 <div className="mt-4">
-                  <h2 className="pb-2 font-bold">Price Range:</h2>
+                  <h2 className="w-fit pb-3 text-sm font-bold text-primary-foreground">
+                    Price Range:
+                  </h2>
                   <div className="px-3">
                     <Slider
                       range
@@ -253,7 +259,7 @@ const FilterModal = ({
               Apply Filter
             </Button>
             <Button
-              className="bg-gray-300"
+              className="bg-gray-300 hover:bg-primary-foreground hover:text-white"
               onClick={() => {
                 setSelectedCategories([]);
                 setSelectedAuthors([]);

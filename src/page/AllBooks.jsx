@@ -1,4 +1,5 @@
 "use client";
+import FilterSidebar from "@/components/FilterSidebar";
 import RatingStar from "@/components/RatingStar";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,37 +16,118 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { getBooksByPage } from "@/services/getBooksData";
+import { authorName } from "@/services/authorsCRUD";
+import {
+  getAllBooks,
+  getBooksByPage,
+  getCategories,
+  getPublicationName,
+} from "@/services/getBooksData";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const AllBooks = ({ query }) => {
+const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  // const [totalBooks, setTotalBooks] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [selectedRating, setSelectedRating] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedPublishers, setSelectedPublishers] = useState([]);
+  const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const searchParams = useSearchParams();
+  const [filteredBooks, setFilteredBooks] = useState([]);
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      setLoading(true);
-      try {
-        // Pass query parameters to getBooksByPage
-        const data = await getBooksByPage(itemsPerPage, page, query);
+  //For Data Fetching
+  const fetchBooks = async () => {
+    setLoading(true);
+    try {
+      // Check if there are any search parameters or filters applied
+      if (
+        searchParams.toString() ||
+        selectedCategories.length ||
+        selectedAuthors.length ||
+        selectedPublishers.length ||
+        selectedRating ||
+        dateRange[0] ||
+        dateRange[1] ||
+        priceRange[0] !== 0 ||
+        priceRange[1] !== 1000
+      ) {
+        // Fetch filtered books when there are filters or searchParams
+        const data = await getBooksByPage(itemsPerPage, page, searchParams);
         setBooks(data.books);
         setTotalPages(data.totalPages);
-        // setTotalBooks(data.totalBooks);
-      } catch (error) {
-        console.error("Error fetching books:", error);
-      } finally {
-        setLoading(false);
+      } else {
+        // Fetch all books when no filters or searchParams are applied
+        const data = await getAllBooks(itemsPerPage, page);
+        setBooks(data.books);
+        setTotalPages(data.totalPages);
       }
-    };
-    fetchBooks();
-  }, [page, itemsPerPage, query]); // Add query to dependencies
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  //For Apply Filter From Filter Sidebar
+  const handleApplyFilters = () => {
+    const filteredBooks = books?.filter((book) => {
+      const matchesPrice =
+        book.price >= priceRange[0] && book.price <= priceRange[1];
+      const matchesRating = selectedRating
+        ? book.rating === selectedRating
+        : true;
+      const matchesDate =
+        dateRange[0] && dateRange[1]
+          ? new Date(book.publishDate) >= dateRange[0] &&
+            new Date(book.publishDate) <= dateRange[1]
+          : true;
+      const matchesCategory = selectedCategories.length
+        ? selectedCategories.includes(book.category)
+        : true;
+      const matchesAuthor = selectedAuthors.length
+        ? selectedAuthors.includes(book.author)
+        : true;
+      const matchesPublisher = selectedPublishers.length
+        ? selectedPublishers.includes(book.publisher)
+        : true;
+
+      return (
+        matchesPrice &&
+        matchesRating &&
+        matchesDate &&
+        matchesCategory &&
+        matchesAuthor &&
+        matchesPublisher
+      );
+    });
+
+    setFilteredBooks(filteredBooks);
+  };
+
+  useEffect(() => {
+    fetchBooks();
+  }, [
+    page,
+    itemsPerPage,
+    searchParams,
+    selectedCategories,
+    selectedAuthors,
+    selectedPublishers,
+    selectedRating,
+    dateRange,
+    priceRange,
+  ]);
+
+  //For Pagination
   const handleItemsPerPageChange = (size) => {
     setItemsPerPage(size);
     setPage(1);
@@ -55,106 +137,177 @@ const AllBooks = ({ query }) => {
     setPage(newPage);
   };
 
-  return (
-    <div className="container mx-auto p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">All Books</h1>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button>{itemsPerPage} items per page</Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {[4, 8, 12, 40].map((size) => (
-              <DropdownMenuItem
-                key={size}
-                onClick={() => handleItemsPerPageChange(size)}
-              >
-                {size} items per page
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+  //For Filter SideBar Data Show
+  const { data: categoriesName, error: categoryError } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { categories } = await getCategories();
+      return categories;
+    },
+  });
+
+  const { data: AuthorData, error: authorError } = useQuery({
+    queryKey: ["authorData"],
+    queryFn: async () => {
+      const { authorNames } = await authorName();
+      return authorNames;
+    },
+  });
+
+  const {
+    data: publicationName,
+    error: publicationError,
+    isLoading,
+  } = useQuery({
+    queryKey: ["publicationName"],
+    queryFn: async () => {
+      const data = await getPublicationName();
+      return data;
+    },
+  });
+
+  //For Filter SideBar Data Input
+  const handleAuthorChange = (authorName) => {
+    setSelectedAuthors((prev) =>
+      prev.includes(authorName)
+        ? prev.filter((author) => author !== authorName)
+        : [...prev, authorName]
+    );
+  };
+
+  const handleCategoryChange = (genre) => {
+    setSelectedCategories((prev) =>
+      prev.includes(genre)
+        ? prev.filter((category) => category !== genre)
+        : [...prev, genre]
+    );
+  };
+
+  const handlePublisherChange = (publisherName) => {
+    setSelectedPublishers((prev) =>
+      prev.includes(publisherName)
+        ? prev.filter((publisher) => publisher !== publisherName)
+        : [...prev, publisherName]
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <div className="my-10 flex justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
       </div>
+    );
+  }
 
-      {loading ? (
-        <div className="my-10 flex justify-center">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
+  return (
+    <div className="container mx-auto flex flex-col-reverse items-center justify-between gap-3 md:flex-row md:items-start">
+      <FilterSidebar
+        AuthorData={AuthorData}
+        categoriesName={categoriesName}
+        publicationName={publicationName}
+        authorError={authorError}
+        categoryError={categoryError}
+        handleAuthorChange={handleAuthorChange}
+        selectedAuthors={selectedAuthors}
+        searchParams={searchParams}
+        handleApplyFilters={handleApplyFilters}
+        handleCategoryChange={handleCategoryChange}
+        handlePublisherChange={handlePublisherChange}
+        setDateRange={setDateRange}
+        setPriceRange={setPriceRange}
+        setSelectedRating={setSelectedRating}
+        setSelectedCategories={setSelectedCategories}
+        setSelectedPublishers={setSelectedPublishers}
+        setSelectedAuthors={setSelectedAuthors}
+        selectedCategories={selectedCategories}
+        selectedPublishers={selectedPublishers}
+        priceRange={priceRange}
+        dateRange={dateRange}
+        selectedRating={selectedRating}
+      />
+      <section className="flex-1">
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold">All Books</h1>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button>{itemsPerPage} items per page</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {[4, 8, 12, 40].map((size) => (
+                <DropdownMenuItem
+                  key={size}
+                  onClick={() => handleItemsPerPageChange(size)}
+                >
+                  {size} items per page
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {books.length > 0 ? (
-            books.map((book) => (
-              <Link
-                href={`/view-details/${book._id}`}
-                key={book._id}
-                className="flex gap-4 rounded border p-4 shadow-sm"
-              >
-                <div>
-                  <Image
-                    src={book?.CoverImage}
-                    width={70}
-                    height={100}
-                    className="h-full min-w-16 object-cover"
-                    alt={book?.BookName}
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <div className="flex-1">
-                    <h3 className="text-sm font-semibold">{book.BookName}</h3>
-                    <p className="text-xs">by {book.AuthorName}</p>
-                    <RatingStar rating={book.Rating} />
+
+        {loading ? (
+          <div className="my-10 flex justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {books.length > 0 ? (
+              books.map((book) => (
+                <Link
+                  href={`/view-details/${book._id}`}
+                  key={book._id}
+                  className="flex gap-4 rounded border p-4 shadow-sm"
+                >
+                  <div>
+                    <Image
+                      src={book?.CoverImage}
+                      width={70}
+                      height={100}
+                      className="h-full min-w-16 object-cover"
+                      alt={book?.BookName}
+                    />
                   </div>
-                  <p className="text-lg font-bold text-primary-foreground">
-                    ${book.Price}
-                  </p>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <p className="flex w-full flex-col items-center justify-center p-4 text-center md:col-span-3 lg:col-span-4">
-              No books found!
-            </p>
-          )}
-        </div>
-      )}
+                  <div className="flex flex-col">
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold">{book.BookName}</h3>
+                      <p className="text-xs">by {book.AuthorName}</p>
+                      <RatingStar rating={book.Rating} />
+                    </div>
+                    <p className="text-lg font-bold text-primary-foreground">
+                      ${book.Price}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p>No books found.</p>
+            )}
+          </div>
+        )}
 
-      {/* Pagination */}
-      {totalPages > 0 && (
-        <Pagination
-          total={totalPages}
-          current={page}
-          onChange={handlePageChange}
-          className="mb-20 mt-8"
-        >
+        <Pagination>
           <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className={"hover:cursor-pointer"}
-                onClick={() => handlePageChange(page > 1 ? page - 1 : 1)}
-              />
-            </PaginationItem>
-            {[...Array(totalPages)].map((_, index) => (
+            <PaginationPrevious
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+            />
+            {Array.from({ length: totalPages }).map((_, index) => (
               <PaginationItem key={index}>
                 <PaginationLink
+                  active={page === index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  isActive={page === index + 1}
-                  className={"hover:cursor-pointer"}
                 >
                   {index + 1}
                 </PaginationLink>
               </PaginationItem>
             ))}
-            <PaginationItem>
-              <PaginationNext
-                className={"hover:cursor-pointer"}
-                onClick={() =>
-                  handlePageChange(page < totalPages ? page + 1 : totalPages)
-                }
-              />
-            </PaginationItem>
+            <PaginationNext
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === totalPages}
+            />
           </PaginationContent>
         </Pagination>
-      )}
+      </section>
     </div>
   );
 };
