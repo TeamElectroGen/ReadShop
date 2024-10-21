@@ -12,7 +12,7 @@ const ChatInput = ({ className, ...props }) => {
 
   const { mutate: sendMessage, isPending } = useMutation({
     mutationFn: async (message) => {
-      const res = await axios.post("/api/message", { message: "hello" });
+      const res = await axios.post("/api/message", { messages: [message] });
       return res.data;
     },
     onSuccess: () => {
