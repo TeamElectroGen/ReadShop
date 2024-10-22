@@ -1,44 +1,54 @@
 export const bookData = `
 <url>
-<loc>https://books.toscrape.com/</loc>
-<desc>Your book store</desc>
+<loc>https://readshop.vercel.app/</loc>
+<desc>Your one-stop bookstore for physical books and more. Search for your favorite books directly from the homepage</desc>
 </url>
 <url>
-<loc>https://books.toscrape.com/catalogue/category/books_1/index.html</loc>
-<desc>An overview about our book collection</desc>
+<loc>https://readshop.vercel.app/all-books</loc>
+<desc>Explore our entire collection of books, including trending and best-selling titles</desc>
 </url>
 <url>
-<loc>https://books.toscrape.com/catalogue/category/books/travel_2/index.html</loc>
-<content>
-    <book>
-    <url>https://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html</url>
-    <desc>A book about travelling the himalayas</desc>
-    <price>45.17</price>
-    <availability>in stock</availability>
-    </book>
-    <book>
-    <url>https://books.toscrape.com/catalogue/full-moon-over-noahs-ark-an-odyssey-to-mount-ararat-and-beyond_811/index.html</url>
-    <desc>A book by Rick Ansonson about his journey to Mount Ararat</desc>
-    <price>49.43</price>
-    <availability>in stock</availability>
-    </book>
-</content>
+<loc>https://readshop.vercel.app/view-details/{bookId}</loc>
+<desc>View detailed information about a specific book, including reviews, author details, and availability</desc>
 </url>
 <url>
-<loc>https://books.toscrape.com/catalogue/category/books/mystery_3/index.html</loc>
-<content>
-    <book>
-    <url>https://books.toscrape.com/catalogue/sharp-objects_997/index.html</url>
-    <desc>A book about by Gillian Flynn about Camille Preaker's troubled past</desc>
-    <price>47.87</price>
-    <availability>in stock</availability>
-    </book>
-    <book>
-    <url>https://books.toscrape.com/catalogue/the-past-never-ends_942/index.html</url>
-    <desc>A book by Jackson Burnett about the attourney Chester Morgan. His friend died in an unexplained accidental death.</desc>
-    <price>56.50</price>
-    <availability>in stock</availability>
-    </book>
-</content>
+<loc>https://readshop.vercel.app/author/{authorId}</loc>
+<desc>Learn more about your favorite authors, including their biography, works, and achievements</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/category/{categoryName}</loc>
+<desc>Explore books from a specific category. Replace {categoryName} with the desired category, like 'Adventure', 'Fantasy', etc.</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/all-books?categories=Adventure%2CFantasy%2CHumor%2CNon-Fiction&authors=Ashley+Wall%2CBill+Sugrue%2CLexi+Rees&publishers=&startDate=2022-06-21T18%3A00%3A00.000Z&endDate=2024-03-28T18%3A00%3A00.000Z&priceMin=4&priceMax=1000&rating=3</loc>
+<desc>Filter and find books by categories, authors, price, rating, and more</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/contact-us</loc>
+<desc>Contact us for inquiries, support, or feedback by sending an email to our team</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/about</loc>
+<desc>Learn more about ReadShop, our mission, and what we offer</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/checkout</loc>
+<desc>Securely complete your purchase and make payments via Stripe on our checkout page</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/profile/wishlist</loc>
+<desc>View and manage all the books you have added to your wishlist</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/profile/reading-list</loc>
+<desc>Access and organize your personalized reading list</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/profile/orders-history</loc>
+<desc>Check your past orders and review your order history</desc>
+</url>
+<url>
+<loc>https://readshop.vercel.app/profile/my-profile</loc>
+<desc>View and edit your account information and personal details</desc>
 </url>
 `;
