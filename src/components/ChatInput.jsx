@@ -118,6 +118,10 @@ const ChatInput = ({ className, ...props }) => {
             )}
           </kbd>
         </div>
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-indigo-600"
+        />
       </div>
     </div>
   );
