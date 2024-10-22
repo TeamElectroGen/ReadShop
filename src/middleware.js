@@ -29,15 +29,25 @@ export async function middleware(request) {
       if (isApi) {
         return NextResponse.json({ message: "Unauthorized" });
       }
-      return NextResponse.redirect(new URL(`/unauthorized`, request.url));
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
     }
 
-    if (path.startsWith("/dashboard/admin") && role !== "admin") {
-      return NextResponse.redirect(new URL(`/unauthorized`, request.url));
+    if (
+      path.startsWith("/dashboard") &&
+      role !== "admin" &&
+      role !== "publisher"
+    ) {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
     }
 
     if (path.startsWith("/publisher") && role !== "publisher") {
-      return NextResponse.redirect(new URL(`/unauthorized`, request.url));
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
     }
 
     return NextResponse.next();
@@ -52,9 +62,8 @@ export const config = {
     "/profile/:path*", // user
     "/api/private/:path*", // user
     "/checkout/:path*", // user
-    "/dashboard/admin/:path*", // admin
+    "/dashboard/:path*", // admin and publisher
     "/api/admin/:path*", // admin
-    "/dashboard/publisher/:path*", // publisher
     "/api/publisher/:path*", // publisher
   ],
 };
