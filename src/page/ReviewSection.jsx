@@ -1,23 +1,23 @@
 "use client";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import defaultImage from "../../public/assets/profile.png";
-import React, { useState } from "react";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
+import CircleLoading from "@/components/CircleLoading";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ReactLoading from "react-loading";
-import toast from "react-hot-toast";
+import { queryClient } from "@/services/Providers";
 import {
   getBookReviewAndRating,
-  postReviewAndRating,
-  patchUpdateReviewAndRating,
   getUserReviewAndRating,
+  patchUpdateReviewAndRating,
+  postReviewAndRating,
 } from "@/services/reviewAndRating";
-import { queryClient } from "@/services/Providers";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import InfiniteScroll from "react-infinite-scroll-component";
+import defaultImage from "../../public/assets/profile.png";
 
 const ReviewSection = ({ bookId }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -29,7 +29,7 @@ const ReviewSection = ({ bookId }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [ratingError, setRatingError] = useState("");
 
-  const { data: reviewData = [] } = useQuery({
+  const { data: reviewData = [], isLoading: isReviewDataLoading } = useQuery({
     queryKey: ["reviews", bookId],
     queryFn: async () => {
       const { reviewAndRatingData } = await getBookReviewAndRating(bookId);
@@ -238,51 +238,60 @@ const ReviewSection = ({ bookId }) => {
           hasMore={hasMore}
           loader={
             <div className="mt-10 flex justify-center">
-              <ReactLoading type="bars" color="blue" height={100} width={50} />
+              <CircleLoading />
             </div>
           }
         >
-          {reviewData?.slice(0, reviewText)?.map((review, index) => (
-            <div
-              key={index}
-              className="mb-4 max-w-full rounded-lg bg-white p-4 md:shadow-md"
-            >
-              <div className="mb-4 items-center justify-between md:flex">
-                <div className="items-center justify-center md:flex">
-                  <Image
-                    src={
-                      review?.user?.avatar || review.user.image || defaultImage
-                    }
-                    alt="Profile Avatar"
-                    className="rounded-full"
-                    width={50}
-                    height={50}
-                  />
-                  <div className="md:ml-3">
-                    <p className="font-semibold text-gray-800">
-                      {review.user.name}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(review.createdAt).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
+          {isReviewDataLoading ? (
+            <CircleLoading />
+          ) : (
+            reviewData?.slice(0, reviewText)?.map((review, index) => (
+              <div
+                key={index}
+                className="mb-4 max-w-full rounded-lg bg-white p-4 md:shadow-md"
+              >
+                <div className="mb-4 items-center justify-between md:flex">
+                  <div className="items-center justify-center md:flex">
+                    <Image
+                      src={
+                        review?.user?.avatar ||
+                        review.user.image ||
+                        defaultImage
+                      }
+                      alt="Profile Avatar"
+                      className="rounded-full"
+                      width={50}
+                      height={50}
+                    />
+                    <div className="md:ml-3">
+                      <p className="font-semibold text-gray-800">
+                        {review.user.name}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(review.createdAt).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          }
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    {[...Array(review.rating)].map((_, i) => (
+                      <FaStar key={i} className="text-lg text-yellow-400" />
+                    ))}
+                    {[...Array(5 - review.rating)].map((_, i) => (
+                      <FaStar key={i} className="text-lg text-gray-300" />
+                    ))}
                   </div>
                 </div>
-                <div className="flex">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-lg text-yellow-400" />
-                  ))}
-                  {[...Array(5 - review.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-lg text-gray-300" />
-                  ))}
-                </div>
+                <p className="text-gray-700">{review.reviewText}</p>
               </div>
-              <p className="text-gray-700">{review.reviewText}</p>
-            </div>
-          ))}
+            ))
+          )}
         </InfiniteScroll>
       </div>
     </div>
