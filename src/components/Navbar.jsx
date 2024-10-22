@@ -1,10 +1,4 @@
 "use client";
-
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { FaCircleUser } from "react-icons/fa6";
-import { FaBookOpenReader } from "react-icons/fa6";
-import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,21 +6,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
-import HamburgerMenu from "./HamburgerMenu";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { FaBookOpenReader, FaCircleUser } from "react-icons/fa6";
+import HamburgerMenu from "./HamburgerMenu";
 import ProductCart from "./ProductCart";
+import { Button } from "./ui/button";
 import UserMenu from "./UserMenu";
 // import { useCart } from "@/app/context/CartContext";
-import dynamic from "next/dynamic";
 import useScrollPosition from "@/hooks/useScrollPosition";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import AdminMenu from "./AdminMenu";
-import PublisherMenu from "./PublisherMenu";
 import { getUserRole } from "@/services/getUserData";
-import LogoutButton from "./LogoutButton";
 import { useQuery } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
+import AdminMenu from "./AdminMenu";
+import CircleLoading from "./CircleLoading";
+import LogoutButton from "./LogoutButton";
+import PublisherMenu from "./PublisherMenu";
 
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
@@ -37,7 +36,7 @@ const Navbar = () => {
   const scrollPosition = useScrollPosition();
   const pathName = usePathname();
 
-  const { data: role } = useQuery({
+  const { data: role, isPending } = useQuery({
     queryKey: ["userRole", data?.user?.email],
     queryFn: async () => {
       const { role } = await getUserRole(data?.user?.email);
@@ -123,7 +122,9 @@ const Navbar = () => {
             {isClient && (
               <DynamicCartButton onClick={() => setCartOpen(true)} />
             )}
-            {data?.user ? (
+            {isPending ? (
+              <CircleLoading className="!size-7" />
+            ) : data?.user ? (
               <>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
