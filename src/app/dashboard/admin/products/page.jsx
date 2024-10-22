@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { EditIcon, Trash2 } from "lucide-react";
+import DashboardHeading from "@/components/DashboardHeading";
 
 const Products = () => {
   // all books
@@ -35,9 +36,7 @@ const Products = () => {
 
   return (
     <section className="flex h-full flex-1 flex-col gap-4 lg:gap-6">
-      <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">Manage Books</h1>
-      </div>
+      <DashboardHeading heading="Manage Books" />
       {books ? (
         <>
           <div className="w-full self-start rounded-lg border bg-background shadow-sm md:flex-1">
@@ -61,7 +60,7 @@ const Products = () => {
               <TableBody>
                 {books?.map((book, index) => (
                   <TableRow key={index}>
-                    <TableCell className="flex items-start gap-2 pl-4 font-medium">
+                    <TableCell className="flex items-start gap-2 pl-5 font-medium">
                       <Image
                         alt="Product image"
                         className="rounded-md border object-contain shadow-md"
