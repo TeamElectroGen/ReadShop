@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { getAllBooks } from "@/services/getBooksData";
 import { useQuery } from "@tanstack/react-query";
 import {
   Table,
@@ -10,8 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from "next/image";
-import { EditIcon, Trash2 } from "lucide-react";
 import DashboardHeading from "@/components/DashboardHeading";
 import { getAllOrders } from "@/services/payment";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 const ManageOrders = () => {
   // fetch all orders history
   const { data: orders, isLoading } = useQuery({
-    queryKey: ["user-orders"],
+    queryKey: ["all-orders"],
     queryFn: async () => {
       const { orders } = await getAllOrders();
       return orders;
@@ -41,7 +38,7 @@ const ManageOrders = () => {
       <DashboardHeading heading="Manage Orders" />
       {orders ? (
         <>
-          <div className="w-full self-start rounded-lg border bg-background shadow-sm md:flex-1">
+          <div className="w-full self-start rounded-lg border bg-background shadow-sm">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -65,7 +62,9 @@ const ManageOrders = () => {
                     <TableCell className="flex items-center gap-2 font-medium">
                       {new Date(order.payTime).toLocaleString()}
                     </TableCell>
-                    <TableCell>{order.totalPrice} $</TableCell>
+                    <TableCell className="font-xs font-semibold text-red-600">
+                      ${order.totalPrice}
+                    </TableCell>
                     <TableCell>
                       <Badge
                         variant="outline"
@@ -83,6 +82,9 @@ const ManageOrders = () => {
                 ))}
               </TableBody>
             </Table>
+            <div className="text-xs px-5 py-4 text-muted-foreground">
+              Showing <strong>{orders?.length}</strong> of <strong>{orders.length}</strong> products
+            </div>
           </div>
         </>
       ) : (
