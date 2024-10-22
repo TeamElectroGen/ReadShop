@@ -83,6 +83,7 @@ const Products = () => {
                       {book.PublicationName}
                     </TableCell>
                     <TableCell className="text-xs sm:text-sm">4.6</TableCell>
+                    {/* TODO: make the delete and edit functional */}
                     <TableCell>
                       <div className="flex gap-3">
                         <Button size="icon" variant="outline">
