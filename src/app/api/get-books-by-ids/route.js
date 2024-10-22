@@ -15,13 +15,11 @@ export const POST = async (request) => {
       .find({ _id: { $in: ids.map((id) => new ObjectId(id)) } })
       .toArray();
 
-    // Create a map of books using their IDs as keys
     const booksMap = booksFromDB.reduce((acc, book) => {
       acc[book._id.toString()] = book;
       return acc;
     }, {});
 
-    // Construct the result array in the order of the original ids
     const orderedBooks = ids.map((id) => booksMap[id]).filter(Boolean);
 
     return NextResponse.json({ books: orderedBooks });

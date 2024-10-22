@@ -1,6 +1,5 @@
 "use client";
 import ViewDetails from "@/page/ViewDetails";
-import React from "react";
 
 const Page = ({ params }) => {
   // console.log(params.bookid);
@@ -8,4 +7,3 @@ const Page = ({ params }) => {
 };
 
 export default Page;
-  

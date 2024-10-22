@@ -1,6 +1,14 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-import { IoMdSearch } from "react-icons/io";
+import AuthorSectionSlide from "@/components/AuthorSectionSlide";
+import AuthorSectionTitle from "@/components/AuthorSectionTitle";
+import BookSectionSlider from "@/components/BookSectionSlider";
+import BookSectionTitle from "@/components/BookSectionTitle";
+import Card from "@/components/Card";
+import FilterModal from "@/components/FilterModal";
+import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
+import RatingStar from "@/components/RatingStar";
+import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
+import { Input } from "@/components/ui/input";
 import {
   getAllBooks,
   getAuthors,
@@ -10,20 +18,12 @@ import {
   getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import BookSectionSlider from "@/components/BookSectionSlider";
-import Card from "@/components/Card";
-import { Input } from "@/components/ui/input";
-import BookSectionTitle from "@/components/BookSectionTitle";
-import RatingStar from "@/components/RatingStar";
-import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
-import AuthorSectionSlide from "@/components/AuthorSectionSlide";
-import AuthorSectionTitle from "@/components/AuthorSectionTitle";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { CgSpinnerTwo } from "react-icons/cg";
-import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
-import FilterModal from "@/components/FilterModal";
+import { IoMdSearch } from "react-icons/io";
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -147,7 +147,7 @@ const HomePage = () => {
           {/* Show search results dropdown */}
           {showSearchResults && (
             <div className="absolute left-0 top-[4.2rem] z-50 mt-5 max-h-96 w-full overflow-scroll rounded-sm bg-white shadow-lg">
-              {newBookLoading ? (
+              {isSearchItemsFetching ? (
                 <div className="my-12 flex items-center justify-center p-4">
                   <CgSpinnerTwo className="animate-spin text-2xl" />
                 </div>

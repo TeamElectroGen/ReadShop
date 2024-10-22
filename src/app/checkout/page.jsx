@@ -1,8 +1,7 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useEffect, useState } from "react";
 import BookLoading from "@/components/BookLoading";
 import EmptyCart from "@/components/EmptyCart";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/services/getUserData";
 import { postPaymentData } from "@/services/payment";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCart } from "../context/CartContext";
@@ -82,9 +82,12 @@ const Checkout = () => {
   }, []);
 
   const onSubmit = async (paymentIntent) => {
+    const bookIds = JSON.parse(localStorage.getItem("cart"));
+
     const paymentInfo = {
       ...form.watch(),
       userId,
+      bookIds,
       subtotalPrice: subtotalPrice.toFixed(2),
       shippingFee,
       totalPrice,
