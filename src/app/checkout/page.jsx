@@ -14,6 +14,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCart } from "../context/CartContext";
 import ShippingInfoForm from "./shippingInfo-form";
+import { getCouponCode } from "@/services/couponCode";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const checkoutFormSchema = z.object({
   name: z
@@ -47,13 +50,24 @@ const Checkout = () => {
   const { data: session } = useSession() || {};
   const [isMounted, setIsMounted] = useState(false);
 
+  const [coupon, setCoupon] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const shippingFee = 5;
   const subtotalPrice = cart.reduce(
     (total, book) => total + book.price * book.quantity,
     0
   );
-  const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
 
+  const discountAmount = (subtotalPrice * discount) / 100;
+  const discountedPrice = subtotalPrice - discountAmount;
+  const totalPrice = (discountedPrice + shippingFee).toFixed(2);
+
+  // const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
+  
   const form = useForm({
     resolver: zodResolver(checkoutFormSchema),
     values: {
@@ -77,9 +91,34 @@ const Checkout = () => {
     enabled: !!session?.user?.email,
   });
 
+  
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleApplyCoupon = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const couponData = await getCouponCode(coupon);
+      console.log("couponData:", couponData); 
+
+      if (couponData && couponData.couponCode === coupon) {
+        // Assume couponData has a discountAmount field
+        setDiscount(couponData.discount);
+      } else {
+        setError("Invalid coupon code.");
+        setDiscount(0);
+      }
+    } catch (error) {
+      setError("Error applying coupon. Please try again.");
+      setDiscount(0);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onSubmit = async (paymentIntent) => {
     const bookIds = JSON.parse(localStorage.getItem("cart"));
@@ -188,12 +227,20 @@ const Checkout = () => {
                 )}
                 {/* TODO: coupon code implementation */}
 
-                {/* <div className="mb-4 flex w-full max-w-sm items-center space-x-2">
-                  <Input type="email" placeholder="Coupon code" />
-                  <Button type="submit" size="sm">
-                    Apply
+                <div className="mb-4 flex w-full max-w-sm items-center space-x-2">
+                  <Input 
+                  type="text" 
+                  placeholder="Coupon code"
+                  className="input-field"
+                  value={coupon}
+                  onChange={(e) => setCoupon(e.target.value)}
+                   />
+                  <Button type="submit" size="sm" onClick={handleApplyCoupon}>
+                    {isLoading ? "Applying..." : "Apply"}
                   </Button>
-                </div> */}
+                  
+                </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
 
                 <div className="">
                   <div className="flex items-center justify-between border-b border-dashed py-3">
@@ -202,10 +249,18 @@ const Checkout = () => {
                       ${subtotalPrice.toFixed(2)}
                     </p>
                   </div>
+                  <div className="flex items-center justify-between border-dashed py-3">
+                    <p className="">Discount ({discount}%)</p>
+                    <p className="text-sm font-semibold">
+                    -${discountAmount.toFixed(2)}
+                    </p>
+                  </div>
+
                   <div className="flex items-center justify-between border-b border-dashed py-3">
                     <p className="">Shipping</p>
                     <p className="text-sm font-semibold">$5.00</p>
                   </div>
+
                   <div className="flex items-center justify-between border-dashed py-3">
                     <p className="">Total</p>
                     <p className="text-sm font-semibold">${totalPrice}</p>
