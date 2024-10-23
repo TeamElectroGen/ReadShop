@@ -25,3 +25,16 @@ export const getOrderHistoryOfUser = async (email) => {
     return [];
   }
 };
+
+// get order history for admin
+export const getAllOrders = async () => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/order-history`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};

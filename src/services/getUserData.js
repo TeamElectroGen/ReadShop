@@ -1,5 +1,18 @@
 import axios from "axios";
 
+// get all users
+export const getUsers = async () => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/users`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
 // get user role
 export const getUserRole = async (email) => {
   try {
