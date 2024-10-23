@@ -26,6 +26,10 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast, useToast } from "@/hooks/use-toast";
+import { getUser, updateProfile } from "@/services/getUserData";
+import { useState } from "react";
 
 const profileFormSchema = z.object({
   name: z
@@ -36,11 +40,6 @@ const profileFormSchema = z.object({
     .max(30, {
       message: "Name must not be longer than 30 characters.",
     }),
-  email: z
-    .string({
-      required_error: "Please give an email address.",
-    })
-    .email(),
   phone: z
     .string()
     .min(11, { message: "Phone number must be at least 11 digits" })
@@ -51,14 +50,58 @@ const profileFormSchema = z.object({
 
 const ProfileForm = () => {
   const { data: session } = useSession() || {};
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const { data: userData = {}, isLoading: isUserDataLoading } = useQuery({
+    queryKey: ["userId", session?.user?.email],
+    queryFn: async () => {
+      const { user } = await getUser(session?.user?.email);
+      return user;
+    },
+    enabled: !!session?.user?.email,
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async (profileData) => {
+      console.log(profileData);
+      const { data } = await updateProfile(userData?._id, profileData);
+      console.log(data);
+      return data;
+    },
+    onSuccess: () => {
+      console.log("Profile updated");
+      toast({
+        title: "Profile Updated Successfully",
+      });
+    },
+  });
+
+  console.log(userData);
 
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: userData ? userData?.name : "",
+      phone: userData ? userData?.phone : "",
+      address: userData ? userData?.address : "",
+      dob: userData ? userData?.dob : "",
+    },
     mode: "onChange",
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setIsLoading(true);
     console.log(data);
+    try {
+      console.log(data);
+      await mutateAsync(data);
+    } catch (err) {
+      console.log(err);
+      toast(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -74,8 +117,8 @@ const ProfileForm = () => {
               <FormControl>
                 <Input
                   placeholder="Your name"
-                  defaultValue={session?.user?.name}
                   {...field}
+                  value={userData?.name}
                 />
               </FormControl>
               <FormMessage />
@@ -92,13 +135,11 @@ const ProfileForm = () => {
               <FormControl>
                 <Input
                   placeholder="name@gmail.com"
-                  defaultValue={session?.user?.email}
                   {...field}
+                  value={userData?.email}
+                  disabled
                 />
               </FormControl>
-              <FormDescription>
-                Give your verified email addresses{" "}
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -111,7 +152,11 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="Your number" {...field} />
+                <Input
+                  placeholder="Your number"
+                  value={userData?.phone} 
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,6 +173,7 @@ const ProfileForm = () => {
                 <Textarea
                   placeholder="Your specific address"
                   className="resize-none"
+                  value={userData?.address}
                   {...field}
                 />
               </FormControl>

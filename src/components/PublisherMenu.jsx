@@ -10,22 +10,22 @@ const publisherMenuItems = [
   },
   {
     title: "Published Books",
-    href: "/dashboard/books",
+    href: "/dashboard/publisher/books",
     icon: Book,
   },
   {
     title: "Publish New Book",
-    href: "/dashboard/add-book",
+    href: "/dashboard/publisher/add-book",
     icon: PlusSquare,
   },
   {
     title: "Publisher Profile",
-    href: "/dashboard/publishers",
+    href: "/dashboard/publisher/profile",
     icon: User,
   },
   {
     title: "Orders",
-    href: "/dashboard/orders",
+    href: "/dashboard/publisher/orders",
     icon: Package,
   },
 ];
