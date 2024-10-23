@@ -5,7 +5,7 @@ import MenuItem from "./MenuItem";
 const adminMenuItems = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/dashboard/admin",
     icon: Home,
   },
   {
