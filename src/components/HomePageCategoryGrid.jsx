@@ -5,6 +5,8 @@ import poster from "../../public/assets/poster.jpg";
 import RatingStar from "./RatingStar";
 import Card from "./Card";
 import { CardContent } from "./ui/card";
+import { IoPeople } from "react-icons/io5";
+import { FaUser } from "react-icons/fa6";
 
 const HomePageCategoryGrid = ({ books }) => {
   const sortedBooks = books?.sort((a, b) => b.Rating - a.Rating);
@@ -113,9 +115,18 @@ const HomePageCategoryGrid = ({ books }) => {
                         width={100}
                       ></Image>
                     </div>
-                    <div className="absolute bottom-0 flex h-full w-full items-center justify-center bg-primary opacity-0 backdrop-blur-sm duration-500 group-hover:opacity-80">
-                      <p>{book.BookName}</p>
-                    </div>
+                    <Link
+                      href={`/view-details/${book._id}`}
+                      className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500 group-hover:opacity-90"
+                    >
+                      <p className="p-5 text-center text-xl font-bold text-black">
+                        {book.BookName}
+                      </p>
+                      <p className="text-md flex items-baseline gap-1 text-center text-darkGray-800">
+                        <FaUser className="rounded-full border text-sm" />
+                        {book.AuthorName}
+                      </p>
+                    </Link>
                   </div>
                 ))}
             </div>
@@ -147,9 +158,18 @@ const HomePageCategoryGrid = ({ books }) => {
                           width={100}
                         ></Image>
                       </div>
-                      <div className="absolute bottom-0 flex h-full w-full items-center justify-center bg-primary opacity-0 backdrop-blur-sm duration-500 group-hover:opacity-80">
-                        <p>{book.BookName}</p>
-                      </div>
+                      <Link
+                        href={`/view-details/${book._id}`}
+                        className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500 group-hover:opacity-90"
+                      >
+                        <p className="p-1 text-center text-sm font-bold text-black">
+                          {book.BookName}
+                        </p>
+                        <p className="flex items-baseline gap-1 text-center text-xs text-darkGray-800">
+                          <FaUser className="rounded-full border text-sm" />
+                          {book.AuthorName}
+                        </p>
+                      </Link>
                     </div>
                   ))}
               </div>
@@ -178,9 +198,18 @@ const HomePageCategoryGrid = ({ books }) => {
                         width={100}
                       ></Image>
                     </div>
-                    <div className="absolute bottom-0 flex h-full w-full items-center justify-center bg-primary opacity-0 backdrop-blur-sm duration-500 group-hover:opacity-80">
-                      <p>{book.BookName}</p>
-                    </div>
+                    <Link
+                      href={`/view-details/${book._id}`}
+                      className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500 group-hover:opacity-90"
+                    >
+                      <p className="p-1 text-center text-sm font-bold text-black">
+                        {book.BookName}
+                      </p>
+                      <p className="flex items-baseline gap-1 text-center text-xs text-darkGray-800">
+                        <FaUser className="rounded-full border text-sm" />
+                        {book.AuthorName}
+                      </p>
+                    </Link>
                   </div>
                 ))}
               </div>
