@@ -68,6 +68,19 @@ export const patchRWList = async (which, bookId, email) => {
   }
 };
 
+// Delete single read/wish book
+export const deleteRWList = async (which, bookId, email) => {
+  try {
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/wish-read/remove-single-${which}?bookId=${bookId}&email=${email}`
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 // Fetches search results books.
 export const getSearchBooks = async (q) => {
   try {
