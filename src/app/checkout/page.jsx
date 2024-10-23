@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCart } from "../context/CartContext";
 import ShippingInfoForm from "./shippingInfo-form";
+import { getCouponCode } from "@/services/couponCode";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -49,18 +50,24 @@ const Checkout = () => {
   const { data: session } = useSession() || {};
   const [isMounted, setIsMounted] = useState(false);
 
-   // New states for promo code and discount
-   const [promoCode, setPromoCode] = useState("");
-   const [discount, setDiscount] = useState(0);
-   const [error, setError] = useState("");
+  const [coupon, setCoupon] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const shippingFee = 5;
   const subtotalPrice = cart.reduce(
     (total, book) => total + book.price * book.quantity,
     0
   );
-  const totalPrice = (subtotalPrice + shippingFee-discount).toFixed(2);
 
+
+  const discountedPrice = subtotalPrice - discount;
+  const totalPrice = (discountedPrice + shippingFee).toFixed(2);
+
+  // const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
+  
   const form = useForm({
     resolver: zodResolver(checkoutFormSchema),
     values: {
@@ -84,9 +91,34 @@ const Checkout = () => {
     enabled: !!session?.user?.email,
   });
 
+  
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleApplyCoupon = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const couponData = await getCouponCode(coupon);
+      console.log("couponData:", couponData); 
+
+      if (couponData && couponData.couponCode === coupon) {
+        // Assume couponData has a discountAmount field
+        setDiscount(couponData.discount);
+      } else {
+        setError("Invalid coupon code.");
+        setDiscount(0);
+      }
+    } catch (error) {
+      setError("Error applying coupon. Please try again.");
+      setDiscount(0);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onSubmit = async (paymentIntent) => {
     const bookIds = JSON.parse(localStorage.getItem("cart"));
@@ -97,7 +129,6 @@ const Checkout = () => {
       bookIds,
       subtotalPrice: subtotalPrice.toFixed(2),
       shippingFee,
-      discount: discount.toFixed(2),
       totalPrice,
       payTime: new Date(),
       status: "pending",
@@ -109,18 +140,6 @@ const Checkout = () => {
     if (res.insertedId) {
       localStorage.removeItem("cart");
       window.location.href = `/checkout/success/${paymentInfo.txnId}`;
-    }
-  };
-
-  // Function to handle promo code validation
-  const handleApplyPromo = () => {
-    // Simulate promo code validation
-    if (promoCode === "DISCOUNT10") {
-      setDiscount(subtotalPrice * 0.1); // Apply 10% discount
-      setError("");
-    } else {
-      setDiscount(0);
-      setError("Invalid promo code");
     }
   };
 
@@ -208,30 +227,21 @@ const Checkout = () => {
                 )}
                 {/* TODO: coupon code implementation */}
 
-                {/* <div className="mb-4 flex w-full max-w-sm items-center space-x-2">
-                  <Input type="email" placeholder="Coupon code" />
-                  <Button type="submit" size="sm">
-                    Apply
-                  </Button>
-                </div> */}
-
-                {/* =============================== */}
-
-                {/* Promo code input */}
                 <div className="mb-4 flex w-full max-w-sm items-center space-x-2">
-                  <Input
-                    type="text"
-                    placeholder="Promo code"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                    
-                  />
-                  <Button type="button" size="sm" onClick={handleApplyPromo} >
-                    Apply
+                  <Input 
+                  type="text" 
+                  placeholder="Coupon code"
+                  className="input-field"
+                  value={coupon}
+                  onChange={(e) => setCoupon(e.target.value)}
+                   />
+                  <Button type="submit" size="sm" onClick={handleApplyCoupon}>
+                    {isLoading ? "Applying..." : "Apply"}
                   </Button>
+                  
                 </div>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
-                       {/* =============================== */}
+
                 <div className="">
                   <div className="flex items-center justify-between border-b border-dashed py-3">
                     <p>Subtotal</p>
@@ -239,21 +249,18 @@ const Checkout = () => {
                       ${subtotalPrice.toFixed(2)}
                     </p>
                   </div>
+                  <div className="flex items-center justify-between border-dashed py-3">
+                    <p className="">Discount</p>
+                    <p className="text-sm font-semibold">
+                      -${discount.toFixed(2)}
+                    </p>
+                  </div>
+
                   <div className="flex items-center justify-between border-b border-dashed py-3">
                     <p className="">Shipping</p>
                     <p className="text-sm font-semibold">$5.00</p>
                   </div>
-                  {/* =============================================
-                   */}
-                   {discount > 0 && (
-                    <div className="flex items-center justify-between border-b border-dashed py-3">
-                      <p>Discount</p>
-                      <p className="text-sm font-semibold">
-                        -${discount.toFixed(2)}
-                      </p>
-                    </div>
-                  )}
-                  {/* ================================================= */}
+
                   <div className="flex items-center justify-between border-dashed py-3">
                     <p className="">Total</p>
                     <p className="text-sm font-semibold">${totalPrice}</p>
