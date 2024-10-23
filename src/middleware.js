@@ -39,20 +39,27 @@ export async function middleware(request) {
       role !== "admin" &&
       role !== "publisher"
     ) {
-      return NextResponse.redirect(
-        new URL(`/login?redirect=${path}`, request.url)
-      );
+      return NextResponse.redirect(new URL(`/profile`, request.url));
     }
 
-    if (path.startsWith("/publisher") && role !== "publisher") {
-      return NextResponse.redirect(
-        new URL(`/login?redirect=${path}`, request.url)
-      );
+    if (path.startsWith("/api/private") && role !== "user") {
+      return NextResponse.json({ message: "Unauthorized" });
+    }
+
+    if (path.startsWith("/api/publisher") && role !== "publisher") {
+      return NextResponse.json({ message: "Unauthorized" });
+    }
+
+    if (path.startsWith("/api/admin") && role !== "admin") {
+      return NextResponse.json({ message: "Unauthorized" });
     }
 
     return NextResponse.next();
   } catch (error) {
     console.error("Error fetching user role:", error);
+    if (isApi) {
+      return NextResponse.json({ message: "Unauthorized" });
+    }
     return NextResponse.redirect(new URL("/login", request.url));
   }
 }
