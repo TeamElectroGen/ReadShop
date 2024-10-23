@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast"; // Import toast
 import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import ReviewSection from "./ReviewSection";
+import Link from "next/link";
 
 const ViewDetails = ({ bookid }) => {
   const pathname = usePathname();
@@ -126,7 +127,15 @@ const ViewDetails = ({ bookid }) => {
               <h1 className="text-2xl font-bold text-gray-800">
                 {detailsBook?.BookName}
               </h1>
-              <p className="mt-2 text-gray-600">by {detailsBook?.AuthorName}</p>
+              <p className="mt-2 text-gray-600">
+                by{" "}
+                <Link
+                  href={`/author/${detailsBook?.authorId}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  {detailsBook?.AuthorName}
+                </Link>
+              </p>
               <div className="mt-4 flex items-center">
                 <span className="rounded bg-yellow-400 px-2.5 py-0.5 text-sm font-semibold">
                   {detailsBook?.Rating} Stars
