@@ -5,7 +5,7 @@
 //   const db = await connectDB();
 //   const couponCollection = db.collection("couponCode");
 //   const coupon = request.nextUrl.searchParams.get("Readbook");
-  
+
 //   // const data = await couponCollection.find({}).toArray();
 //   // return NextResponse.json({ data });
 
@@ -24,8 +24,6 @@
 //   //   return NextResponse.json({ message: "No Data Found!", error });
 //   // }
 // };
-
-
 
 import { connectDB } from "@/lib/connectDB";
 import { NextResponse } from "next/server";

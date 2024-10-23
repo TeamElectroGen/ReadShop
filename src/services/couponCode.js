@@ -27,8 +27,6 @@ export const postCouponCode = async (data) => {
 //   }
 // };
 
-
-
 export const getCouponCode = async (coupon) => {
   try {
     const res = await axios.get(
@@ -40,5 +38,3 @@ export const getCouponCode = async (coupon) => {
     return {};
   }
 };
-
-
