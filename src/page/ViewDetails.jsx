@@ -111,13 +111,13 @@ const ViewDetails = ({ bookid }) => {
         <>
           <div className="flex flex-col gap-5 md:flex-row">
             {/* Left Side - Book Image */}
-            <div className="flex w-1/3 items-center bg-transparent">
+            <div className="flex items-center bg-transparent">
               <Image
                 src={detailsBook?.CoverImage}
                 alt={detailsBook?.BookName}
                 width={400}
                 height={400}
-                className="rounded-lg object-cover shadow-2xl"
+                className="rounded-lg object-cover shadow-2xl w-[70%] md:w-full mx-auto"
               />
             </div>
 
