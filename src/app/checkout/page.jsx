@@ -62,8 +62,8 @@ const Checkout = () => {
     0
   );
 
-
-  const discountedPrice = subtotalPrice - discount;
+  const discountAmount = (subtotalPrice * discount) / 100;
+  const discountedPrice = subtotalPrice - discountAmount;
   const totalPrice = (discountedPrice + shippingFee).toFixed(2);
 
   // const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
@@ -250,9 +250,9 @@ const Checkout = () => {
                     </p>
                   </div>
                   <div className="flex items-center justify-between border-dashed py-3">
-                    <p className="">Discount</p>
+                    <p className="">Discount ({discount}%)</p>
                     <p className="text-sm font-semibold">
-                      -${discount.toFixed(2)}
+                    -${discountAmount.toFixed(2)}
                     </p>
                   </div>
 
