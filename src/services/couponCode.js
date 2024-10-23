@@ -32,7 +32,7 @@ export const getCouponCode = async (coupon) => {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-coupon-data?couponCode=${coupon}`
     );
-    return res.data.coupon;
+    return res.data;
   } catch (error) {
     console.log("Error fetching coupon code:", error);
     return {};
