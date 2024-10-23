@@ -31,7 +31,20 @@ const Chat = () => {
               <CircleX
                 onClick={() => {
                   setShow(false);
-                  toast.error("Reload page to get the chatbot back!");
+                  toast.error(
+                    <div className="text-nowrap">
+                      Chatbot is hidden.{" "}
+                      <button
+                        onClick={() => {
+                          setShow(true);
+                          toast.dismiss();
+                        }}
+                        className="text-blue-500"
+                      >
+                        undo
+                      </button>
+                    </div>
+                  );
                 }}
                 className="absolute right-0 top-0 z-50 size-5 text-red-600"
               ></CircleX>
