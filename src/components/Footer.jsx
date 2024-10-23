@@ -49,7 +49,7 @@ const Footer = () => {
     queryFn: async () => {
       const { categories } = await getCategories();
       return categories;
-    },  
+    },
   });
 
   if (pathName.includes("dashboard")) {
