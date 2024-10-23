@@ -22,7 +22,12 @@ import { Button } from "@/components/ui/button";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import SiteLogo from "@/components/SiteLogo";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import UserDropdown from "@/components/UserDropdown";
 
 export const description =
@@ -45,7 +50,9 @@ const DashboardLayout = ({ children }) => {
             </SheetTrigger>
             <SheetContent side="left" className="sm:max-w-xs">
               <nav className="grid gap-6 text-lg font-medium">
-                <SiteLogo />
+                <SheetTitle>
+                  <SiteLogo />
+                </SheetTitle>
                 <Link
                   href="#"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
