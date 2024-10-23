@@ -1,19 +1,19 @@
 "use client";
 import { useCart } from "@/app/context/CartContext";
+import BookLoading from "@/components/BookLoading";
 import {
   getBookDetails,
   getReadWishStatusUser,
   patchRWList,
 } from "@/services/getBooksData";
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
-import { toast } from "react-hot-toast"; // Import toast
-import ReviewSection from "./ReviewSection";
 import { usePathname, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import BookLoading from "@/components/BookLoading";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast"; // Import toast
+import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
+import ReviewSection from "./ReviewSection";
 
 const ViewDetails = ({ bookid }) => {
   const pathname = usePathname();
@@ -25,7 +25,7 @@ const ViewDetails = ({ bookid }) => {
   const { addToCart, cart } = useCart();
   const router = useRouter();
 
-  const { data: detailsBook, isFetching } = useQuery({
+  const { data: detailsBook, isLoading } = useQuery({
     queryKey: ["bookDetails", bookid],
     queryFn: async () => {
       const { bookDetails } = await getBookDetails(bookid);
@@ -103,21 +103,21 @@ const ViewDetails = ({ bookid }) => {
 
   return (
     <div className="container rounded-lg md:my-10 lg:my-20">
-      {isFetching ? (
-        <div className="flex h-[50vh] items-center justify-center">
+      {isLoading ? (
+        <div className="flex h-screen items-center justify-center">
           <BookLoading />
         </div>
       ) : (
         <>
           <div className="flex flex-col gap-5 md:flex-row">
             {/* Left Side - Book Image */}
-            <div className="w-1/3 flex items-center bg-transparent">
+            <div className="flex w-1/3 items-center bg-transparent">
               <Image
                 src={detailsBook?.CoverImage}
                 alt={detailsBook?.BookName}
                 width={400}
                 height={400}
-                className="rounded-lg shadow-2xl object-cover"
+                className="rounded-lg object-cover shadow-2xl"
               />
             </div>
 

@@ -8,6 +8,10 @@ export const GET = async (request, { params }) => {
 
   try {
     const user = await usersCollection.findOne({ email });
+    if (!user) {
+      return NextResponse.json({ message: "No Data Found!" });
+    }
+
     return NextResponse.json({ role: user.role });
   } catch (error) {
     console.log(error);

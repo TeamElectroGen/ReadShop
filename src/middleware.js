@@ -1,25 +1,69 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { getUserRole } from "./services/getUserData";
 
-// Middleware function to handle authentication
-export const middleware = async (request) => {
-  // TODO: when deploying on Vercel add suffix: __Secure-next-auth.session-token
-  const token = cookies(request).get(process.env.SESSION_TOKEN_NAME);
-  const pathname = request.nextUrl.pathname;
+const secret = process.env.NEXT_PUBLIC_AUTH_SECRET;
 
-  // Check if the user is authenticated
+export async function middleware(request) {
+  const token = await getToken({ req: request, secret });
+  const path = request.nextUrl.pathname;
+  const isApi = path.includes("/api/");
+
+  if (path.startsWith("/api/private/get-user-role")) {
+    return NextResponse.next();
+  }
+
   if (!token) {
-    // Redirect to login page if no token is present
     return NextResponse.redirect(
-      new URL(`/login?redirect=${pathname}`, request.url)
+      new URL(`/login?redirect=${path}`, request.url)
     );
   }
 
-  // Continue to the requested page if authenticated
-  return NextResponse.next();
-};
+  try {
+    const { role } = await getUserRole(token.email);
 
-// Configuration for the middleware
+    if (
+      (path.startsWith("/profile") || path.startsWith("/checkout")) &&
+      role !== "user"
+    ) {
+      if (isApi) {
+        return NextResponse.json({ message: "Unauthorized" });
+      }
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
+    }
+
+    if (
+      path.startsWith("/dashboard") &&
+      role !== "admin" &&
+      role !== "publisher"
+    ) {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
+    }
+
+    if (path.startsWith("/publisher") && role !== "publisher") {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+}
+
 export const config = {
-  matcher: ["/api/private/:path*", "/profile/:path*", "/checkout/:path*"],
+  matcher: [
+    "/profile/:path*", // user
+    "/api/private/:path*", // user
+    "/checkout/:path*", // user
+    "/dashboard/:path*", // admin and publisher
+    "/api/admin/:path*", // admin
+    "/api/publisher/:path*", // publisher
+  ],
 };
