@@ -1,6 +1,7 @@
 "use client";
+import DashboardHeading from "@/components/DashboardHeading";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
@@ -9,9 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DashboardHeading from "@/components/DashboardHeading";
 import { getAllOrders } from "@/services/payment";
-import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
 
 const ManageOrders = () => {
   // fetch all orders history
@@ -82,8 +82,9 @@ const ManageOrders = () => {
                 ))}
               </TableBody>
             </Table>
-            <div className="text-xs px-5 py-4 text-muted-foreground">
-              Showing <strong>{orders?.length}</strong> of <strong>{orders.length}</strong> products
+            <div className="px-5 py-4 text-xs text-muted-foreground">
+              Showing <strong>{orders?.length}</strong> of{" "}
+              <strong>{orders.length}</strong> products
             </div>
           </div>
         </>

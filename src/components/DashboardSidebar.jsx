@@ -2,11 +2,11 @@
 
 import LogoutButton from "@/components/LogoutButton";
 import SiteLogo from "@/components/SiteLogo";
-import AdminMenu from "./AdminMenu";
-import PublisherMenu from "./PublisherMenu";
+import { getUserRole } from "@/services/getUserData";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { getUserRole } from "@/services/getUserData";
+import AdminMenu from "./AdminMenu";
+import PublisherMenu from "./PublisherMenu";
 
 const DashboardSidebar = () => {
   const { data: session } = useSession() || {};
@@ -16,7 +16,6 @@ const DashboardSidebar = () => {
     if (session?.user?.email) {
       const getRole = async () => {
         const { role } = await getUserRole(session?.user?.email);
-        console.log(role);
         setRole(role);
       };
       getRole();
@@ -38,7 +37,7 @@ const DashboardSidebar = () => {
           </nav>
         </div>
         {/* end */}
-        <footer className="border-t text-sm font-medium border-slate-200">
+        <footer className="border-t border-slate-200 text-sm font-medium">
           <LogoutButton />
         </footer>
       </div>
