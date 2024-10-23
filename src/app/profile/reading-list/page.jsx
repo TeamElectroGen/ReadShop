@@ -22,6 +22,7 @@ import { getReadListBooks } from "@/services/getBooksData";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const ReadingList = () => {
@@ -42,6 +43,28 @@ const ReadingList = () => {
   }, [session?.user.email]);
 
   console.log(readListBooks);
+
+  if (readListBooks.length < 1 && !isLoading) {
+    return (
+      <section
+        className="flex h-full flex-1 py-16 items-center justify-center rounded-lg border border-dashed bg-background shadow-sm"
+        x-chunk="dashboard-02-chunk-1"
+      >
+        <div className="flex flex-col items-center gap-1 text-center">
+          <Image src={"/assets/not-found.svg"} alt="not found" width={74} height={64} />
+          <h3 className="mt-4 text-lg md:text-xl font-semibold tracking-tight">
+            Your reading list is empty
+          </h3>
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            You can add books to wishlist from book details page.
+          </p>
+          <Button size="sm" asChild className="mt-4 font-semibold">
+            <Link href={"/"}>Browser books</Link>
+          </Button>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <Card>

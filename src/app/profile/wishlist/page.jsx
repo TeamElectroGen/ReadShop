@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { getWishlistBooks } from "@/services/getBooksData";
 import { useSession } from "next-auth/react";
 import CircleLoading from "@/components/CircleLoading";
+import Link from "next/link";
 
 const WishlistPage = () => {
   const [wishlistBooks, setWishlistBooks] = useState([]);
@@ -41,7 +42,32 @@ const WishlistPage = () => {
     }
   }, [session?.user?.email]);
 
-  console.log(wishlistBooks);
+  if (wishlistBooks.length === 0 && !isLoading) {
+    return (
+      <section
+        className="flex h-full flex-1 items-center justify-center rounded-lg border border-dashed bg-background py-16 shadow-sm"
+        x-chunk="dashboard-02-chunk-1"
+      >
+        <div className="flex flex-col items-center gap-1 text-center">
+          <Image
+            src={"/assets/not-found.svg"}
+            alt="not found"
+            width={74}
+            height={64}
+          />
+          <h3 className="mt-4 text-lg font-semibold tracking-tight md:text-xl">
+            Your reading list is empty
+          </h3>
+          <p className="text-xs text-muted-foreground sm:text-sm">
+            You can add books to wishlist from book details page.
+          </p>
+          <Button size="sm" asChild className="mt-4 font-semibold">
+            <Link href={"/"}>Browser books</Link>
+          </Button>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <Card>
