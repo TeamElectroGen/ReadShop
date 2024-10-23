@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import poster from "../../public/assets/poster.jpg";
 import RatingStar from "./RatingStar";
+import Card from "./Card";
+import { CardContent } from "./ui/card";
 
 const HomePageCategoryGrid = ({ books }) => {
   const sortedBooks = books?.sort((a, b) => b.Rating - a.Rating);
@@ -26,7 +28,7 @@ const HomePageCategoryGrid = ({ books }) => {
   // };
 
   return (
-    <section className="mt-10 flex grid-cols-1 flex-col rounded-sm bg-primary shadow-md lg:h-[40rem]">
+    <section className="mt-10 flex grid-cols-1 flex-col rounded-sm bg-primary shadow-md lg:h-[49rem]">
       {/* Title Section */}
       <div className="flex min-h-28 flex-col items-center justify-center bg-secondary/20">
         <h2 className="font-white text-center text-3xl font-black">
@@ -44,7 +46,7 @@ const HomePageCategoryGrid = ({ books }) => {
             Best Seller
           </h2>
           <div className="hide-scrollbar col-span-1 flex flex-col gap-2 overflow-y-scroll rounded-sm bg-primary bg-white p-2 shadow-inner shadow-black/10 lg:col-span-6">
-            <div className="h-[35rem] rounded-sm lg:h-[26rem]">
+            <div className="h-[35rem] rounded-sm lg:h-[34rem]">
               {sortedBooks?.map((book, idx) => (
                 <div key={book._id} className="flex">
                   <Link
@@ -89,17 +91,102 @@ const HomePageCategoryGrid = ({ books }) => {
         </Button> */}
         </section>
 
-        <div className="relative col-span-1 grid gap-2 rounded-sm bg-secondary p-4 py-10 lg:col-span-6 lg:grid-cols-6 lg:grid-rows-2">
-          <div className="col-span-6 max-h-52 w-full rounded-sm bg-gray-400 lg:row-span-1">
-            Above
+        <section className="relative col-span-1 rounded-sm lg:col-span-6">
+          <div className="mx-auto w-full rounded-sm rounded-b-none border-2 border-x-0 border-b-0 border-primary bg-secondary p-2 text-center font-display text-xl font-black uppercase">
+            <p className="mx-auto w-fit rounded-sm border-t-2 border-primary p-3">
+              Featured
+            </p>
           </div>
-          <div className="col-span-3 row-span-2 max-h-52 w-full rounded-sm bg-gray-400">
-            Right
+          <div className="relative col-span-1 grid gap-2 rounded-sm lg:col-span-6 lg:grid-cols-6 lg:grid-rows-2">
+            <div className="col-span-6 flex w-full justify-between gap-2 rounded-sm rounded-t-none bg-white p-4 lg:row-span-1">
+              {books
+                ?.slice(0, 3)
+                .reverse()
+                .map((book) => (
+                  <div key={book._id} className="group relative w-1/3">
+                    <div className="h-60 w-full">
+                      <Image
+                        className="h-full w-full rounded-sm object-cover"
+                        alt={book.BookName}
+                        src={book.CoverImage}
+                        height={100}
+                        width={100}
+                      ></Image>
+                    </div>
+                    <div className="absolute bottom-0 flex h-full w-full items-center justify-center bg-primary opacity-0 backdrop-blur-sm duration-500 group-hover:opacity-80">
+                      <p>{book.BookName}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+
+            <div className="col-span-3 row-span-2 max-h-72 w-full rounded-sm bg-white p-4">
+              <div className="flex items-baseline justify-between rounded-sm rounded-bl-none rounded-tr-none border-t-2 border-primary px-2 py-1">
+                <h2 className="mb-3 w-fit font-display text-lg font-black">
+                  Fiction
+                </h2>
+                <Link
+                  href={`/category/Fiction`}
+                  className="flex rounded border-primary px-1 text-xs shadow-sm"
+                >
+                  View All
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 grid-rows-2 gap-2">
+                {books
+                  ?.slice(10, 14)
+                  .reverse()
+                  .map((book) => (
+                    <div key={book._id} className="group relative">
+                      <div className="h-24 w-full">
+                        <Image
+                          className="h-full w-full rounded-sm object-cover"
+                          alt={book.BookName}
+                          src={book.CoverImage}
+                          height={100}
+                          width={100}
+                        ></Image>
+                      </div>
+                      <div className="absolute bottom-0 flex h-full w-full items-center justify-center bg-primary opacity-0 backdrop-blur-sm duration-500 group-hover:opacity-80">
+                        <p>{book.BookName}</p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+            <div className="col-span-3 row-span-2 max-h-72 w-full rounded-sm bg-white p-4">
+              <div className="flex items-baseline justify-between rounded-sm rounded-bl-none rounded-tr-none border-t-2 border-primary px-2 py-1">
+                <h2 className="mb-3 w-fit font-display text-lg font-black">
+                  Non-Fiction
+                </h2>
+                <Link
+                  href={`category/Non-Fiction`}
+                  className="flex rounded border-primary px-1 text-xs shadow-sm"
+                >
+                  View All
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 grid-rows-2 gap-2">
+                {books?.slice(11, 15).map((book) => (
+                  <div key={book._id} className="group relative">
+                    <div className="h-24 w-full">
+                      <Image
+                        className="h-full w-full rounded-sm object-cover"
+                        alt={book.BookName}
+                        src={book.CoverImage}
+                        height={100}
+                        width={100}
+                      ></Image>
+                    </div>
+                    <div className="absolute bottom-0 flex h-full w-full items-center justify-center bg-primary opacity-0 backdrop-blur-sm duration-500 group-hover:opacity-80">
+                      <p>{book.BookName}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="col-span-3 row-span-2 max-h-52 w-full rounded-sm bg-gray-400">
-            Left
-          </div>
-        </div>
+        </section>
 
         {/* Top Book Section */}
         <section className="relative col-span-1 hidden rounded-sm bg-primary/50 p-5 md:p-10 lg:col-span-6">
