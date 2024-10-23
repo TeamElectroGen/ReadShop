@@ -20,7 +20,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getWishlistBooks } from "@/services/getBooksData";
+import { deleteRWList, getWishlistBooks } from "@/services/getBooksData";
 import { useSession } from "next-auth/react";
 import CircleLoading from "@/components/CircleLoading";
 import Link from "next/link";
@@ -28,6 +28,7 @@ import Link from "next/link";
 const WishlistPage = () => {
   const [wishlistBooks, setWishlistBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const { data: session } = useSession() || {};
 
   useEffect(() => {
@@ -40,7 +41,19 @@ const WishlistPage = () => {
       };
       fetchWishlist();
     }
-  }, [session?.user?.email]);
+  }, [session?.user?.email, isUpdating]);
+
+  const handleRemoveWish = async(bookId) => {
+    if (session?.user?.email) {
+      try {
+        const res = await deleteRWList("wish", bookId, session?.user?.email);
+        console.log(res);
+        setIsUpdating(!isUpdating)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 
   if (wishlistBooks.length === 0 && !isLoading) {
     return (
@@ -128,7 +141,7 @@ const WishlistPage = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Button size="icon" variant="outline">
+                    <Button onClick={() => handleRemoveWish(book._id)} size="icon" variant="outline">
                       <Trash2 className="size-5 text-destructive" />
                     </Button>
                   </TableCell>
