@@ -30,13 +30,13 @@ import PublisherMenu from "./PublisherMenu";
 const DynamicCartButton = dynamic(() => import("./CartButton"), { ssr: false });
 
 const Navbar = () => {
-  const { data } = useSession() || {};
+  const { data, status } = useSession() || {};
   const [isCartOpen, setCartOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const scrollPosition = useScrollPosition();
   const pathName = usePathname();
 
-  const { data: role, isPending } = useQuery({
+  const { data: role } = useQuery({
     queryKey: ["userRole", data?.user?.email],
     queryFn: async () => {
       const { role } = await getUserRole(data?.user?.email);
@@ -122,7 +122,7 @@ const Navbar = () => {
             {isClient && (
               <DynamicCartButton onClick={() => setCartOpen(true)} />
             )}
-            {isPending ? (
+            {status === "loading" ? (
               <CircleLoading className="!size-7" />
             ) : data?.user ? (
               <>
