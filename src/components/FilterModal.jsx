@@ -196,7 +196,14 @@ const FilterModal = ({
                         <div className="flex flex-col">
                           <RatingStar rating={star} />
                           <span className="text-[.5rem]">
-                            {star - 1}.00 to {star}.99
+                            {star} stars and above (
+                            {
+                              booksData?.filter(
+                                (book) => Math.floor(book.Rating) >= star
+                              ).length
+                            }
+                            ){/* {star - 1}.00 to {star}.99 */}
+                            {/* {star} {star === 1 ? 'Star' : 'Stars'} {star===5?null: "& Above"}  */}
                           </span>
                         </div>
                       </div>
