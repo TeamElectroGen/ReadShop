@@ -24,11 +24,6 @@ const ProductCart = ({ isOpen, onClose }) => {
     }
   };
 
-  // const logCartProductIds = () => {
-  //   const productIds = cart.map((book) => book.id);
-  //   console.log("Cart Product IDs:", productIds);
-  // };
-
   return (
     <div>
       <Sheet open={isOpen} onOpenChange={onClose}>

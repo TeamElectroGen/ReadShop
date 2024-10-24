@@ -94,90 +94,92 @@ const FilterModal = ({
             Filter
           </Button>
         </DialogTrigger>
-        <DialogContent className="scrollable-content minimal-scrollbar max-h-[80vh] overflow-y-auto rounded-sm bg-white p-6 shadow-lg">
+        <DialogContent className="rounded-sm bg-white p-6 shadow-lg">
           <DialogHeader>
             <DialogTitle>
               <BookSectionTitle title={"Filter"} />
             </DialogTitle>
-            {/* <DialogDescription> */}
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
-                  Category/Genre
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid grid-cols-3 gap-1">
-                    {categoriesName?.map((categories, idx) => (
-                      <div className="flex gap-2 text-left" key={idx}>
-                        <Checkbox
-                          id={`category-${idx}`}
-                          checked={selectedCategories.includes(
-                            categories.Genre
-                          )}
-                          onCheckedChange={() =>
-                            handleCategoryChange(categories.Genre)
-                          }
-                        />
-                        <p>{categories.Genre}</p>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
 
-            {/* Author Section */}
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-2">
-                <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
-                  Author
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid grid-cols-3 gap-1">
-                    {AuthorData?.map((author, idx) => (
-                      <div className="flex gap-2 text-left" key={idx}>
-                        <Checkbox
-                          id={`authors-${idx}`}
-                          checked={selectedAuthors.includes(author.name)}
-                          onCheckedChange={() =>
-                            handleAuthorChange(author.name)
-                          }
-                        />
-                        <p>{author.name}</p>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <div className="max-h-[40vh] overflow-y-auto">
+              {/* <DialogDescription> */}
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
+                    Category/Genre
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid grid-cols-3 gap-1">
+                      {categoriesName?.map((categories, idx) => (
+                        <div className="flex gap-2 text-left" key={idx}>
+                          <Checkbox
+                            id={`category-${idx}`}
+                            checked={selectedCategories.includes(
+                              categories.Genre
+                            )}
+                            onCheckedChange={() =>
+                              handleCategoryChange(categories.Genre)
+                            }
+                          />
+                          <p>{categories.Genre}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
-            {/* Publisher Section */}
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-3">
-                <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
-                  Publisher
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid grid-cols-3 gap-1">
-                    {booksData?.map((book, idx) => (
-                      <div className="flex gap-2 text-left" key={idx}>
-                        <Checkbox
-                          id={`books-${idx}`}
-                          checked={selectedPublishers.includes(
-                            book.PublicationName
-                          )}
-                          onCheckedChange={() =>
-                            handlePublisherChange(book.PublicationName)
-                          }
-                        />
-                        <p>{book.PublicationName}</p>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+              {/* Author Section */}
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-2">
+                  <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
+                    Author
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid grid-cols-3 gap-1">
+                      {AuthorData?.map((author, idx) => (
+                        <div className="flex gap-2 text-left" key={idx}>
+                          <Checkbox
+                            id={`authors-${idx}`}
+                            checked={selectedAuthors.includes(author.name)}
+                            onCheckedChange={() =>
+                              handleAuthorChange(author.name)
+                            }
+                          />
+                          <p>{author.name}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
+              {/* Publisher Section */}
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-3">
+                  <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
+                    Publisher
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid grid-cols-3 gap-1">
+                      {booksData?.map((book, idx) => (
+                        <div className="flex gap-2 text-left" key={idx}>
+                          <Checkbox
+                            id={`books-${idx}`}
+                            checked={selectedPublishers.includes(
+                              book.PublicationName
+                            )}
+                            onCheckedChange={() =>
+                              handlePublisherChange(book.PublicationName)
+                            }
+                          />
+                          <p>{book.PublicationName}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
             {/* Rating and Date Range */}
             <div className="flex justify-between gap-5 p-5">
               <div>
@@ -206,7 +208,9 @@ const FilterModal = ({
                   </div>
                 </RadioGroup>
               </div>
-              <hr className="h-full border-l border-primary" />
+              <div>
+                <hr className="min-h-full border-l border-primary" />
+              </div>
               <div className="flex-1 p-2 pt-0 text-left">
                 <div className="flex w-full flex-col gap-1">
                   <h2 className="w-fit pb-3 text-sm font-bold text-primary-foreground">
@@ -245,9 +249,6 @@ const FilterModal = ({
                 </div>
               </div>
             </div>
-
-            {/* Price Range Slider */}
-            {/* </DialogDescription> */}
           </DialogHeader>
 
           <div className="mt-4 flex justify-between">
