@@ -6,20 +6,19 @@ import {
   getReadWishStatusUser,
   patchRWList,
 } from "@/services/getBooksData";
-import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "@/services/Providers";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast"; // Import toast
 import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import ReviewSection from "./ReviewSection";
-import Link from "next/link";
 
 const ViewDetails = ({ bookid }) => {
   const pathname = usePathname();
-  const [update, setUpdate] = useState(false);
-  const [rWStatus, setRWStatus] = useState({});
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { data } = useSession() || {};
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -62,16 +61,18 @@ const ViewDetails = ({ bookid }) => {
   }, [bookid]);
 
   // ... rest of the component
-  useEffect(() => {
-    const fetch = async () => {
+  const { data: rWStatus = {} } = useQuery({
+    queryKey: ["readWishStatus", bookid, data?.user?.email],
+    queryFn: async () => {
       const { readList, wishList } = await getReadWishStatusUser(
         bookid,
         data?.user?.email
       );
-      setRWStatus({ readList, wishList });
-    };
-    fetch();
-  }, [bookid, data?.user?.email, update]);
+      toast.dismiss();
+      return { readList, wishList };
+    },
+    enabled: !!bookid && !!data?.user?.email,
+  });
 
   const handleAddToCartClick = () => {
     setIsAddedToCart(true);
@@ -88,20 +89,26 @@ const ViewDetails = ({ bookid }) => {
     toast.success(`${detailsBook.BookName} added to cart!`);
   };
 
-  const handleRWList = async (param) => {
+  const { mutate: handleRWList } = useMutation({
+    mutationFn: async (param) => {
+      toast.loading("Updating...");
+      await patchRWList(param, bookid, data?.user?.email);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["readWishStatus"]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleRWListClick = (param) => {
     if (data?.user?.email) {
-      try {
-        const res = await patchRWList(param, bookid, data?.user?.email);
-        setUpdate(!update);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
+      handleRWList(param);
     } else {
       setShowLoginModal(true);
     }
   };
-
   return (
     <div className="container rounded-lg md:my-10 lg:my-20">
       {isLoading ? (
@@ -112,13 +119,13 @@ const ViewDetails = ({ bookid }) => {
         <>
           <div className="flex flex-col gap-5 md:flex-row">
             {/* Left Side - Book Image */}
-            <div className="flex w-1/3 items-center bg-transparent">
+            <div className="flex items-center bg-transparent">
               <Image
                 src={detailsBook?.CoverImage}
                 alt={detailsBook?.BookName}
                 width={400}
                 height={400}
-                className="rounded-lg object-cover shadow-2xl"
+                className="rounded-lg object-cover shadow-2xl w-[70%] md:w-full mx-auto"
               />
             </div>
 
@@ -188,7 +195,7 @@ const ViewDetails = ({ bookid }) => {
 
                 {/* Add to WishList Button */}
                 <button
-                  onClick={() => handleRWList("wish")}
+                  onClick={() => handleRWListClick("wish")}
                   className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
                 >
                   <FaRegHeart className="mr-2 size-4" />{" "}
@@ -199,11 +206,11 @@ const ViewDetails = ({ bookid }) => {
               {/* Add to Read List Button */}
               <div className="mt-4">
                 <button
-                  onClick={() => handleRWList("read")}
-                  className={`flex w-full flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:w-1/2 ${rWStatus.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+                  onClick={() => handleRWListClick("read")}
+                  className={`flex w-full flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:w-1/2 ${rWStatus?.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
                 >
                   <FaBookOpen className="mr-2 lg:size-4" />
-                  {rWStatus.readList ? "Remove from" : "Add to"} Read List
+                  {rWStatus?.readList ? "Remove from" : "Add to"} Read List
                 </button>
               </div>
             </div>
@@ -220,9 +227,11 @@ const ViewDetails = ({ bookid }) => {
             />
           )}
 
-          <div>
-            <ReviewSection bookId={bookid}></ReviewSection>
-          </div>
+          <ReviewSection
+            bookId={bookid}
+            rating={detailsBook?.Rating}
+            reviewCount={detailsBook?.ReviewCount}
+          ></ReviewSection>
         </>
       )}
     </div>

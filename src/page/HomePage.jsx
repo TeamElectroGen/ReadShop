@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import {
   getAllBooks,
   getAuthors,
-  // getBookDetails,
   getBooksByIds,
   getCategories,
   getNewlyAddedBooks,
@@ -190,10 +189,7 @@ const HomePage = () => {
         ) : error ? (
           <p className="text-center">Error loading new books</p>
         ) : (
-          <BookSectionSlider
-            items={newBooks?.slice(0, 10)}
-            viewAllLink="/all-books"
-          />
+          <BookSectionSlider items={newBooks} viewAllLink="/all-books" />
         )}
       </section>
 
@@ -237,10 +233,7 @@ const HomePage = () => {
         {isBookLoading ? (
           <CircleLoading />
         ) : (
-          <BookSectionSlider
-            items={books?.slice(0, 10)}
-            viewAllLink={"/all-books"}
-          />
+          <BookSectionSlider items={books} viewAllLink={"/all-books"} />
         )}
       </section>
 
@@ -252,7 +245,7 @@ const HomePage = () => {
         ) : (
           <BookSectionSlider
             viewAllLink={"/all-books"}
-            items={books?.slice(0, 10)} // Show 10 books
+            items={books} // Show 10 books
             renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
           />
         )}
@@ -264,7 +257,7 @@ const HomePage = () => {
         {isAuthorsLoading ? (
           <CircleLoading />
         ) : (
-          <AuthorSectionSlide items={authors?.slice(0, 10)} />
+          <AuthorSectionSlide items={authors} />
         )}
       </section>
     </div>

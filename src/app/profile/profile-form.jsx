@@ -22,13 +22,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { getUser, updateProfile } from "@/services/getUserData";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { toast, useToast } from "@/hooks/use-toast";
-import { getUser, updateProfile } from "@/services/getUserData";
 import { useState } from "react";
 
 const profileFormSchema = z.object({
@@ -50,9 +50,11 @@ const profileFormSchema = z.object({
 
 const ProfileForm = () => {
   const { data: session } = useSession() || {};
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  // eslint-disable-next-line no-unused-vars
   const { data: userData = {}, isLoading: isUserDataLoading } = useQuery({
     queryKey: ["userId", session?.user?.email],
     queryFn: async () => {
@@ -154,7 +156,7 @@ const ProfileForm = () => {
               <FormControl>
                 <Input
                   placeholder="Your number"
-                  value={userData?.phone} 
+                  value={userData?.phone}
                   {...field}
                 />
               </FormControl>

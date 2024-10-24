@@ -62,7 +62,7 @@ const AuthorSectionSlide = ({ items }) => {
         }}
       >
         {/* Render all the book items */}
-        {items?.map((author) => (
+        {items?.slice(0, 10)?.map((author) => (
           <SwiperSlide key={author._id}>
             <AuthorCard key={author._id} author={author} />
           </SwiperSlide>
