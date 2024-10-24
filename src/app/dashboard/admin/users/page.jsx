@@ -1,6 +1,8 @@
 "use client";
+import CircleLoading from "@/components/CircleLoading";
+import DashboardHeading from "@/components/DashboardHeading";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
@@ -9,11 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DashboardHeading from "@/components/DashboardHeading";
-import { Badge } from "@/components/ui/badge";
 import { getUsers } from "@/services/getUserData";
-import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
 import { CircleXIcon } from "lucide-react";
+import Image from "next/image";
 
 const Users = () => {
   // fetch all users
@@ -25,12 +26,10 @@ const Users = () => {
     },
   });
 
-  console.log(users);
-
   if (isLoading) {
     return (
-      <p className="mt-16 text-center text-lg font-medium text-mediumGray-500">
-        Loading...
+      <p className="mt-16">
+        <CircleLoading />
       </p>
     );
   }
@@ -64,7 +63,7 @@ const Users = () => {
                         width={40}
                         height={40}
                       />
-                      <p className="text-foreground h-full">{user.name}</p>
+                      <p className="h-full text-foreground">{user.name}</p>
                     </TableCell>
                     <TableCell className="">
                       <Badge
@@ -80,7 +79,7 @@ const Users = () => {
                     <TableCell>{user?.email}</TableCell>
                     <TableCell>
                       <Button size="icon" variant="ghost">
-                        <CircleXIcon className="text-destructive"/>
+                        <CircleXIcon className="text-destructive" />
                       </Button>
                     </TableCell>
                   </TableRow>

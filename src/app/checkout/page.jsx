@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/services/getUserData";
 import { postPaymentData } from "@/services/payment";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,6 +17,8 @@ import ShippingInfoForm from "./shippingInfo-form";
 import { getCouponCode } from "@/services/couponCode";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CgSpinnerTwo } from "react-icons/cg";
+import toast from "react-hot-toast";
 
 const checkoutFormSchema = z.object({
   name: z
@@ -53,8 +55,7 @@ const Checkout = () => {
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
+  // const [isLoading, setIsLoading] = useState(false);
 
   const shippingFee = 5;
   const subtotalPrice = cart.reduce(
@@ -67,7 +68,7 @@ const Checkout = () => {
   const totalPrice = (discountedPrice + shippingFee).toFixed(2);
 
   // const totalPrice = (subtotalPrice + shippingFee).toFixed(2);
-  
+
   const form = useForm({
     resolver: zodResolver(checkoutFormSchema),
     values: {
@@ -91,34 +92,35 @@ const Checkout = () => {
     enabled: !!session?.user?.email,
   });
 
-  
-
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const handleApplyCoupon = async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const couponData = await getCouponCode(coupon);
-      console.log("couponData:", couponData); 
-
+  const {
+    mutate: applyCoupon,
+    isPending,
+    data: couponDetails = {},
+  } = useMutation({
+    mutationKey: ["get-coupon", coupon],
+    mutationFn: async () => {
+      const { coupon: couponData } = await getCouponCode(coupon);
+      return couponData;
+    },
+    onSuccess: (couponData) => {
       if (couponData && couponData.couponCode === coupon) {
-        // Assume couponData has a discountAmount field
         setDiscount(couponData.discount);
+        toast.success("Coupon applied successfully!");
+        setError("");
       } else {
         setError("Invalid coupon code.");
         setDiscount(0);
       }
-    } catch (error) {
+    },
+    onError: () => {
       setError("Error applying coupon. Please try again.");
       setDiscount(0);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   const onSubmit = async (paymentIntent) => {
     const bookIds = JSON.parse(localStorage.getItem("cart"));
@@ -129,6 +131,7 @@ const Checkout = () => {
       bookIds,
       subtotalPrice: subtotalPrice.toFixed(2),
       shippingFee,
+      couponDetails,
       totalPrice,
       payTime: new Date(),
       status: "pending",
@@ -225,45 +228,60 @@ const Checkout = () => {
                     ))}
                   </ul>
                 )}
-                {/* TODO: coupon code implementation */}
 
-                <div className="mb-4 flex w-full max-w-sm items-center space-x-2">
-                  <Input 
-                  type="text" 
-                  placeholder="Coupon code"
-                  className="input-field"
-                  value={coupon}
-                  onChange={(e) => setCoupon(e.target.value)}
-                   />
-                  <Button type="submit" size="sm" onClick={handleApplyCoupon}>
-                    {isLoading ? "Applying..." : "Apply"}
-                  </Button>
-                  
-                </div>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {!discount && (
+                  <div className="flex w-full max-w-sm items-center space-x-2">
+                    <Input
+                      type="text"
+                      placeholder="Coupon code"
+                      className="input-field"
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
+                    />
+                    <Button
+                      type="submit"
+                      size="sm"
+                      onClick={() => applyCoupon()}
+                      className="w-20"
+                    >
+                      {isPending ? (
+                        <CgSpinnerTwo className="mx-2 animate-spin text-xl" />
+                      ) : (
+                        "Apply"
+                      )}
+                    </Button>
+                  </div>
+                )}
+                {error && (
+                  <p className="!mt-2 ml-2 text-sm text-red-500">{error}</p>
+                )}
 
                 <div className="">
                   <div className="flex items-center justify-between border-b border-dashed py-3">
                     <p>Subtotal</p>
                     <p className="text-sm font-semibold">
-                      ${subtotalPrice.toFixed(2)}
+                      $ {subtotalPrice.toFixed(2)}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between border-dashed py-3">
-                    <p className="">Discount ({discount}%)</p>
-                    <p className="text-sm font-semibold">
-                    -${discountAmount.toFixed(2)}
-                    </p>
-                  </div>
+                  {!!discount && (
+                    <div className="flex items-center justify-between border-b border-dashed py-3">
+                      <p className="">Discount ({discount}%)</p>
+                      <p className="text-sm font-semibold">
+                        -$ {discountAmount.toFixed(2)}
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between border-b border-dashed py-3">
                     <p className="">Shipping</p>
-                    <p className="text-sm font-semibold">$5.00</p>
+                    <p className="text-sm font-semibold">
+                      $ {shippingFee.toFixed(2)}
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between border-dashed py-3">
                     <p className="">Total</p>
-                    <p className="text-sm font-semibold">${totalPrice}</p>
+                    <p className="text-sm font-semibold">$ {totalPrice}</p>
                   </div>
                 </div>
               </CardContent>

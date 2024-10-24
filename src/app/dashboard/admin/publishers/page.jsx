@@ -1,6 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
+import DashboardHeading from "@/components/DashboardHeading";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -9,10 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DashboardHeading from "@/components/DashboardHeading";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import { CircleXIcon } from "lucide-react";
+import Image from "next/image";
 
 const Publishers = () => {
   // fetch all publishers
@@ -33,14 +33,8 @@ const Publishers = () => {
   //     );
   //   }
   const publishers = [
-    {
-      name: "Bookworm Publishing",
-      email: "bookworm@gmail.com",
-    },
-    {
-      name: "Sukun Publication",
-      email: "sukun@gmail.com",
-    },
+    { _id: 1, name: "Bookworm Publishing", email: "bookworm@gmail.com" },
+    { _id: 2, name: "Sukun Publication", email: "sukun@gmail.com" },
   ];
 
   return (

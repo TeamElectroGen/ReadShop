@@ -1,7 +1,7 @@
 "use client";
+import CircleLoading from "@/components/CircleLoading";
+import DashboardHeading from "@/components/DashboardHeading";
 import { Button } from "@/components/ui/button";
-import { getAllBooks } from "@/services/getBooksData";
-import { useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
@@ -10,9 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from "next/image";
+import { getAllBooks } from "@/services/getBooksData";
+import { useQuery } from "@tanstack/react-query";
 import { EditIcon, Trash2 } from "lucide-react";
-import DashboardHeading from "@/components/DashboardHeading";
+import Image from "next/image";
 
 const Products = () => {
   // all books
@@ -24,13 +25,11 @@ const Products = () => {
     },
   });
 
-  console.log(books);
-
   if (isLoading) {
     return (
-      <p className="mt-16 text-center text-lg font-medium text-mediumGray-500">
-        Loading...
-      </p>
+      <div className="mt-16">
+        <CircleLoading />
+      </div>
     );
   }
 
