@@ -66,7 +66,7 @@ const AllBooks = () => {
         setTotalPages(data.totalPages);
       } else {
         // Fetch all books when no filters or searchParams are applied
-        const data = await getAllBooks(itemsPerPage, page);
+        const data = await getBooksByPage(itemsPerPage, page);
         setBooks(data.books);
         setTotalPages(data.totalPages);
       }
