@@ -17,7 +17,7 @@ import { Checkbox } from "./ui/checkbox";
 import BookSectionTitle from "./BookSectionTitle";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
-const ratingStar = [1, 2, 3, 4, 5];
+const ratingStar = [5, 4, 3, 2, 1];
 
 const FilterSidebar = ({
   categoriesName,
@@ -106,13 +106,13 @@ const FilterSidebar = ({
   }
 
   return (
-    <section className="flex min-w-full flex-col border-r p-5 shadow-sm md:min-w-80 md:max-w-min">
+    <section className="relative flex h-[calc(100vh-80px)] min-w-full flex-col border-r p-5 shadow-sm md:min-w-80 md:max-w-min">
       <BookSectionTitle title={"Filter"} />
-      <div>
+      <div className="max-h-80 overflow-y-auto overflow-x-hidden">
         {/* Category/Genre Section */}
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger className="font-bold text-primary-foreground hover:scale-105 hover:no-underline">
+            <AccordionTrigger className="font-bold text-primary-foreground hover:no-underline">
               Category/Genre
             </AccordionTrigger>
             <AccordionContent>
@@ -137,7 +137,7 @@ const FilterSidebar = ({
         {/* Author Section */}
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-2">
-            <AccordionTrigger className="font-bold text-primary-foreground hover:scale-105 hover:no-underline">
+            <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
               Author
             </AccordionTrigger>
             <AccordionContent>
@@ -160,7 +160,7 @@ const FilterSidebar = ({
         {/* Publisher Section */}
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-3">
-            <AccordionTrigger className="font-bold text-primary-foreground hover:scale-105 hover:no-underline">
+            <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
               Publisher
             </AccordionTrigger>
             <AccordionContent>
@@ -179,92 +179,76 @@ const FilterSidebar = ({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+      </div>
 
-        {/* Rating Section */}
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-4">
-            <AccordionTrigger className="font-bold text-primary-foreground hover:scale-105 hover:no-underline">
-              Rating
-            </AccordionTrigger>
-            <AccordionContent>
-              <div>
-                <RadioGroup
-                  value={selectedRating}
-                  onValueChange={setSelectedRating}
-                >
-                  <div className="flex flex-col gap-1 font-semibold">
-                    {ratingStar.map((star) => (
-                      <div className="flex items-center gap-2" key={star}>
-                        <RadioGroupItem
-                          value={star.toString()}
-                          id={`rating-${star}`}
-                        />
-                        <div className="flex flex-col gap-1">
-                          <RatingStar rating={star} />
-                          <span className="text-sm font-normal">
-                            {star - 1}.00 to {star}.99
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+      <div className="mb-3 pt-5">
+        <h2 className="pb-3 text-sm font-medium text-primary-foreground hover:font-bold hover:no-underline">
+          Ratings
+        </h2>
+        <div>
+          <RadioGroup value={selectedRating} onValueChange={setSelectedRating}>
+            <div className="grid grid-cols-2 gap-1 font-semibold">
+              {ratingStar.map((star) => (
+                <div className="flex items-center gap-2" key={star}>
+                  <RadioGroupItem
+                    value={star.toString()}
+                    id={`rating-${star}`}
+                  />
+                  <div className="flex flex-col gap-1">
+                    <RatingStar rating={star} />
+                    <span className="text-sm font-normal">
+                      {star - 1}.00 - 5.00
+                    </span>
                   </div>
-                </RadioGroup>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        {/* Date Range Section */}
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-5">
-            <AccordionTrigger className="font-bold text-primary-foreground hover:no-underline">
-              Date Range:
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="flex w-full flex-col gap-1">
-                <DatePicker
-                  selectsRange
-                  startDate={dateRange[0]}
-                  endDate={dateRange[1]}
-                  onChange={(update) => setDateRange(update)}
-                  isClearable
-                  dateFormat="d MMM, yy"
-                  placeholderText="Select a range"
-                  className="min-w-full rounded-md border border-gray-300 p-2 text-sm"
-                />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        {/* Price Range Section */}
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-6">
-            <AccordionTrigger className="font-bold text-primary-foreground hover:no-underline">
-              Price Range:
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="mt-4 px-5">
-                <Slider
-                  range
-                  min={0}
-                  max={1000}
-                  value={priceRange}
-                  onChange={(range) => setPriceRange(range)}
-                />
-                <div className="flex justify-between">
-                  <span>${priceRange[0]}</span>
-                  <span>${priceRange[1]}</span>
                 </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              ))}
+            </div>
+          </RadioGroup>
+        </div>
+      </div>
+      <div className="mb-3">
+        <h2 className="pb-3 text-sm font-medium text-primary-foreground hover:font-bold hover:no-underline">
+          Date Range
+        </h2>
+
+        <div className="flex w-full flex-col gap-1">
+          <DatePicker
+            selectsRange
+            startDate={dateRange[0]}
+            endDate={dateRange[1]}
+            onChange={(update) => setDateRange(update)}
+            isClearable
+            dateFormat="d MMM, yy"
+            placeholderText="Select a range"
+            className="min-w-full rounded-md border border-gray-300 p-2 text-sm"
+          />
+        </div>
+      </div>
+
+      <div className="mb-3">
+        <h2 className="pb-3 text-sm font-medium text-primary-foreground hover:font-bold hover:no-underline">
+          Price Range:
+        </h2>
+        <div className="mt-4 px-5">
+          <Slider
+            range
+            min={0}
+            max={1000}
+            value={priceRange}
+            onChange={(range) => setPriceRange(range)}
+          />
+          <div className="flex justify-between">
+            <span>${priceRange[0]}</span>
+            <span>${priceRange[1]}</span>
+          </div>
+        </div>
       </div>
 
       {/* Apply Button */}
-      <div className="mt-4 flex justify-end">
-        <Button onClick={handleApplyFilters}>Apply</Button>
+      <div className="mt-4 flex flex-1 justify-end">
+        <Button className="w-full" onClick={handleApplyFilters}>
+          Apply
+        </Button>
       </div>
     </section>
   );

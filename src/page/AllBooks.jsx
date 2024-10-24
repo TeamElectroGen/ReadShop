@@ -199,6 +199,12 @@ const AllBooks = () => {
     );
   }
 
+  if (publicationError) {
+    return (
+      <div className="text-red-500">Error: {publicationError.message}</div>
+    );
+  }
+
   return (
     <div className="container mx-auto flex flex-col-reverse items-center justify-between gap-3 md:flex-row md:items-start">
       <FilterSidebar
@@ -226,11 +232,11 @@ const AllBooks = () => {
         selectedRating={selectedRating}
       />
       <section className="flex-1">
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex items-center justify-between gap-4">
           <h1 className="text-2xl font-bold">All Books</h1>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button>{itemsPerPage} items per page</Button>
+              <Button>{itemsPerPage} items/page</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {[4, 8, 12, 40].map((size) => (
@@ -250,7 +256,7 @@ const AllBooks = () => {
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {books.length > 0 ? (
               books.map((book) => (
                 <Link
@@ -288,11 +294,12 @@ const AllBooks = () => {
         <Pagination>
           <PaginationContent>
             <PaginationPrevious
+              className="hover:cursor-pointer"
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
             />
             {Array.from({ length: totalPages }).map((_, index) => (
-              <PaginationItem key={index}>
+              <PaginationItem key={index} className="hover:cursor-pointer">
                 <PaginationLink
                   active={page === index + 1}
                   onClick={() => handlePageChange(index + 1)}
@@ -302,6 +309,7 @@ const AllBooks = () => {
               </PaginationItem>
             ))}
             <PaginationNext
+              className="hover:cursor-pointer"
               onClick={() => handlePageChange(page + 1)}
               disabled={page === totalPages}
             />

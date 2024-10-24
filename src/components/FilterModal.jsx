@@ -18,7 +18,6 @@ import { Checkbox } from "./ui/checkbox";
 import {
   Dialog,
   DialogContent,
-  // DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -81,6 +80,15 @@ const FilterModal = ({
     );
   };
 
+  const resetFilters = () => {
+    setSelectedCategories([]);
+    setSelectedAuthors([]);
+    setSelectedPublishers([]);
+    setDateRange([null, null]);
+    setPriceRange([0, 1000]);
+    setSelectedRating(null);
+  };
+
   return (
     <section>
       <Dialog>
@@ -101,26 +109,26 @@ const FilterModal = ({
             </DialogTitle>
 
             <div className="max-h-[40vh] overflow-y-auto">
-              {/* <DialogDescription> */}
               <Accordion type="single" collapsible className="w-full">
+                {/* Categories Section */}
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
                     Category/Genre
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="grid grid-cols-3 gap-1">
-                      {categoriesName?.map((categories, idx) => (
+                      {categoriesName?.map((category, idx) => (
                         <div className="flex gap-2 text-left" key={idx}>
                           <Checkbox
                             id={`category-${idx}`}
                             checked={selectedCategories.includes(
-                              categories.Genre
+                              category.Genre
                             )}
                             onCheckedChange={() =>
-                              handleCategoryChange(categories.Genre)
+                              handleCategoryChange(category.Genre)
                             }
                           />
-                          <p>{categories.Genre}</p>
+                          <p>{category.Genre}</p>
                         </div>
                       ))}
                     </div>
@@ -180,7 +188,8 @@ const FilterModal = ({
                 </AccordionItem>
               </Accordion>
             </div>
-            {/* Rating and Date Range */}
+
+            {/* Rating and Date/Price Range */}
             <div className="flex justify-between gap-5 p-5">
               <div>
                 <h2 className="w-fit pb-3 text-sm font-bold text-primary-foreground">
@@ -239,7 +248,6 @@ const FilterModal = ({
                       step={1}
                       value={priceRange}
                       onChange={(value) => setPriceRange(value)}
-                      className=""
                     />
                     <div className="flex justify-between">
                       <span>${priceRange[0]}</span>
@@ -251,6 +259,7 @@ const FilterModal = ({
             </div>
           </DialogHeader>
 
+          {/* Buttons for Applying or Resetting Filters */}
           <div className="mt-4 flex justify-between">
             <Button
               variant="primary"
@@ -261,14 +270,7 @@ const FilterModal = ({
             </Button>
             <Button
               className="bg-gray-300 hover:bg-primary-foreground hover:text-white"
-              onClick={() => {
-                setSelectedCategories([]);
-                setSelectedAuthors([]);
-                setSelectedPublishers([]);
-                setDateRange([null, null]);
-                setPriceRange([0, 1000]);
-                setSelectedRating(null);
-              }}
+              onClick={resetFilters}
             >
               Reset Filter
             </Button>
