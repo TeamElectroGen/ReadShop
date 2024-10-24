@@ -75,7 +75,7 @@ const CategorySection = ({ categoriesName, books: allBooks }) => {
                 height={220}
                 className="h-52 min-w-32 rounded-sm object-cover"
               />
-              <div className="absolute bottom-0 z-10 flex h-14 w-full flex-col rounded-b-sm bg-primary pb-3 shadow-sm">
+              <div className="absolute bottom-0 z-10 flex h-14 w-full flex-col rounded-b-sm bg-primary pb-3 text-center shadow-sm">
                 <h2 className="flex-1 truncate px-2 pt-2 text-sm font-bold">
                   {book.BookName}
                 </h2>
