@@ -3,94 +3,60 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export const GET = async (request) => {
-  const db = await connectDB();
-  const booksCollection = db.collection("books");
-
-  const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get("page")) || 1;
-  const limit = parseInt(searchParams.get("limit")) || 10;
-  const skip = (page - 1) * limit;
-
-  // Extracting filter parameters
-  const search = searchParams.get("search") || "";
-  const categories = searchParams.get("categories");
-  const authors = searchParams.get("authors");
-  const publishers = searchParams.get("publishers");
-  const startDate = new Date(searchParams.get("startDate"));
-  const endDate = new Date(searchParams.get("endDate"));
-  const priceMin = parseFloat(searchParams.get("priceMin"));
-  const priceMax = parseFloat(searchParams.get("priceMax"));
-  const rating = parseFloat(searchParams.get("rating"));
-  const sortBy = searchParams.get("sortBy") || "";
-
+export const GET = async (req) => {
   try {
-    // Constructing the query object
-    const query = {
-      ...(search && { Title: { $regex: search, $options: "i" } }),
-      ...(categories && {
-        Genre: {
-          $in: categories.split(",").map((cat) => new RegExp(cat.trim(), "i")),
-        },
-      }),
-      ...(authors && {
-        AuthorName: {
-          $in: authors
-            .split(",")
-            .map((author) => new RegExp(author.trim(), "i")),
-        },
-      }),
-      ...(publishers && {
-        PublicationName: {
-          $in: publishers.split(",").map((pub) => new RegExp(pub.trim(), "i")),
-        },
-      }),
-      ...(startDate &&
-        !isNaN(startDate.getTime()) &&
-        endDate &&
-        !isNaN(endDate.getTime()) && {
-          PublishDate: { $gte: startDate, $lte: endDate },
-        }),
-      ...(priceMin !== undefined &&
-        priceMax !== undefined && {
-          Price: { $gte: priceMin, $lte: priceMax },
-        }),
-      ...(priceMin !== undefined && !priceMax && { Price: { $gte: priceMin } }),
-      ...(!priceMin && priceMax !== undefined && { Price: { $lte: priceMax } }),
-      ...(rating !== undefined && { Rating: { $gte: rating } }),
-    };
+    const db = await connectDB();
+    const booksCollection = await db.collection("books");
 
-    // Sorting options
-    let sortOptions = {};
-    if (sortBy === "priceAsc") {
-      sortOptions = { Price: 1 };
-    } else if (sortBy === "priceDesc") {
-      sortOptions = { Price: -1 };
-    } else if (sortBy === "dateAsc") {
-      sortOptions = { PublishDate: 1 };
-    } else if (sortBy === "dateDesc") {
-      sortOptions = { PublishDate: -1 };
+    const { searchParams } = new URL(req.url);
+    const categories = searchParams.get("categories")?.split(",") || [];
+    const authors = searchParams.get("authors")?.split(",") || [];
+    const publishers = searchParams.get("publishers")?.split(",") || [];
+    const rating = parseInt(searchParams.get("rating")) || null;
+    const minPrice = parseFloat(searchParams.get("priceMin")) || 0; // Use priceMin
+    const maxPrice = parseFloat(searchParams.get("priceMax")) || 1000; // Use priceMax
+    const startDate = searchParams.get("startDate") || null;
+    const endDate = searchParams.get("endDate") || null;
+    const itemsPerPage = parseInt(searchParams.get("itemsPerPage")) || 8;
+    const page = parseInt(searchParams.get("page")) || 1;
+
+    const filters = {};
+
+    // Apply filters
+    if (categories.length) filters.Genre = { $in: categories };
+    if (authors.length) filters.AuthorName = { $in: authors };
+    if (publishers.length) filters.Publisher = { $in: publishers };
+
+    // Adjust rating filter to include higher ratings
+    if (rating) filters.Rating = { $gte: rating }; // Books with rating >= specified rating
+
+    // Price range filter
+    filters.Price = { $gte: minPrice, $lte: maxPrice }; // Combine price filters
+
+    // Date range filter
+    if (startDate && endDate) {
+      filters.publishDate = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
     }
 
-    // Fetching filtered books with pagination and sorting
-    const books = await booksCollection
-      .find(query)
-      .sort(sortOptions)
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+    // Log the filters for debugging
+    console.log("Applied Filters:", filters);
 
-    const totalBooks = await booksCollection.countDocuments(query);
-    const totalPages = Math.ceil(totalBooks / limit);
+    const totalBooks = await booksCollection.countDocuments(filters);
+    const books = await booksCollection
+      .find(filters)
+      .skip((page - 1) * itemsPerPage)
+      .limit(itemsPerPage)
+      .toArray();
 
     return NextResponse.json({
       books,
-      page,
-      totalPages,
-      totalBooks,
+      totalPages: Math.ceil(totalBooks / itemsPerPage),
     });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: "Error fetching books!", error });
+    console.error("Error fetching data:", error);
+    return NextResponse.json({ message: "Error fetching data", error });
   }
 };
