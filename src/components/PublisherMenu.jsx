@@ -1,11 +1,11 @@
 "use client"
-import { BarChart, Book, Package, PlusSquare, User } from "lucide-react";
+import { BarChart, Book, PlusSquare, User } from "lucide-react";
 import MenuItem from "./MenuItem";
 
 const publisherMenuItems = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/dashboard/publisher",
     icon: BarChart,
   },
   {
@@ -22,11 +22,6 @@ const publisherMenuItems = [
     title: "Publisher Profile",
     href: "/dashboard/publisher/profile",
     icon: User,
-  },
-  {
-    title: "Orders",
-    href: "/dashboard/publisher/orders",
-    icon: Package,
   },
 ];
 

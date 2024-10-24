@@ -6,29 +6,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Home,
-  LineChart,
-  MenuIcon,
-  Package,
-  Search,
-  ShoppingCart,
-  Users2,
-} from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
-
-import { Button } from "@/components/ui/button";
-
 import DashboardSidebar from "@/components/DashboardSidebar";
-import SiteLogo from "@/components/SiteLogo";
 import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import UserDropdown from "@/components/UserDropdown";
+import DashboardDrawer from "@/components/DashboardDrawer";
 
 export const description =
   "A products dashboard with a sidebar navigation and a main content area. The dashboard has a header with a search input and a user menu. The sidebar has a logo, navigation links, and a card with a call to action. The main content area shows an empty state with a call to action.";
@@ -41,56 +24,8 @@ const DashboardLayout = ({ children }) => {
       <div className="flex flex-col bg-primary/5 sm:gap-4 sm:py-4 md:pl-5">
         {/* Header */}
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent lg:px-12">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="md:hidden">
-                <MenuIcon className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="sm:max-w-xs">
-              <nav className="grid gap-6 text-lg font-medium">
-                <SheetTitle>
-                  <SiteLogo />
-                </SheetTitle>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Orders
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  Products
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Users2 className="h-5 w-5" />
-                  Customers
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Settings
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
+          {/* Mobile drawer menu */}
+          <DashboardDrawer />
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
