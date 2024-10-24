@@ -269,7 +269,7 @@ const AllBooks = () => {
                       src={book?.CoverImage}
                       width={70}
                       height={100}
-                      className="h-full min-w-16 object-cover"
+                      className="h-full min-w-16 rounded-sm object-cover"
                       alt={book?.BookName}
                     />
                   </div>
