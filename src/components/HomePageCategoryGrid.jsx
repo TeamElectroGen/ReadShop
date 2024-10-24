@@ -30,21 +30,23 @@ const HomePageCategoryGrid = ({ books }) => {
   // };
 
   return (
-    <section className="mt-10 flex grid-cols-1 flex-col rounded-sm bg-primary shadow-md lg:h-[49rem]">
+    <section className="mt-10 flex grid-cols-1 flex-col rounded-sm bg-primary shadow-md lg:h-[50rem]">
       {/* Title Section */}
       <div className="flex min-h-28 flex-col items-center justify-center bg-secondary/20">
-        <h2 className="font-white text-center text-3xl font-black">
-          Explore In the hive
+        <h2 className="font-white mb-2 mt-10 text-center text-xl font-black md:text-3xl">
+          Discover Your Next Read
         </h2>
-        <p className="text-center text-mediumGray-500">
-          Lorem, ipsum dolor sit emit consectetur adapt lit. Very tais, fugit.
+        <p className="px-5 text-center text-xs text-secondary-foreground md:px-20 md:text-base">
+          Browse top picks, featured books, and explore genres like fiction and
+          non-fiction. Find your next great read from best-sellers to hidden
+          gems.
         </p>
       </div>
 
       <div className="flex grid-cols-1 flex-col gap-2 p-4 lg:grid lg:h-[40rem] lg:grid-cols-12">
         {/* Top Book Section */}
         <section className="relative col-span-1 rounded-sm bg-secondary pt-2 lg:col-span-6">
-          <h2 className="mx-auto w-fit rounded-sm rounded-b-none border-2 border-x-0 border-b-0 border-primary p-3 text-center font-display text-xl font-bold uppercase">
+          <h2 className="mx-auto w-fit rounded-sm rounded-b-none border-2 border-x-0 border-b-0 border-primary p-3 text-center text-xl font-bold uppercase">
             Best Seller
           </h2>
           <div className="hide-scrollbar col-span-1 flex flex-col gap-2 overflow-y-scroll rounded-sm bg-primary bg-white p-2 shadow-inner shadow-black/10 lg:col-span-6">
@@ -94,7 +96,7 @@ const HomePageCategoryGrid = ({ books }) => {
         </section>
 
         <section className="relative col-span-1 rounded-sm lg:col-span-6">
-          <div className="mx-auto w-full rounded-sm rounded-b-none border-2 border-x-0 border-b-0 border-primary bg-secondary p-2 text-center font-display text-xl font-black uppercase">
+          <div className="mx-auto w-full rounded-sm rounded-b-none border-2 border-x-0 border-b-0 border-primary bg-secondary p-2 text-center text-xl font-bold uppercase">
             <p className="mx-auto w-fit rounded-sm border-t-2 border-primary p-3">
               Featured
             </p>
@@ -132,13 +134,11 @@ const HomePageCategoryGrid = ({ books }) => {
             </div>
 
             <div className="col-span-3 row-span-2 max-h-72 w-full rounded-sm bg-white p-4">
-              <div className="flex items-baseline justify-between rounded-sm rounded-bl-none rounded-tr-none border-t-2 border-primary px-2 py-1">
-                <h2 className="mb-3 w-fit font-display text-lg font-black">
-                  Fiction
-                </h2>
+              <div className="flex flex-col items-center justify-center rounded-sm rounded-bl-none rounded-tr-none border-t-2 border-primary px-2 py-1.5 pb-3 md:flex-row md:items-baseline md:justify-between md:py-1">
+                <h2 className="w-fit text-sm font-bold md:text-lg">Fiction</h2>
                 <Link
                   href={`/category/Fiction`}
-                  className="flex rounded border-primary px-1 text-xs shadow-sm"
+                  className="flex rounded border border-primary px-1 text-xs shadow-sm"
                 >
                   View All
                 </Link>
@@ -175,13 +175,13 @@ const HomePageCategoryGrid = ({ books }) => {
               </div>
             </div>
             <div className="col-span-3 row-span-2 max-h-72 w-full rounded-sm bg-white p-4">
-              <div className="flex items-baseline justify-between rounded-sm rounded-bl-none rounded-tr-none border-t-2 border-primary px-2 py-1">
-                <h2 className="mb-3 w-fit font-display text-lg font-black">
+              <div className="flex flex-col items-center justify-center rounded-sm rounded-bl-none rounded-tr-none border-t-2 border-primary px-2 py-1.5 pb-3 md:flex-row md:items-baseline md:justify-between md:py-1">
+                <h2 className="w-fit text-sm font-bold md:text-lg">
                   Non-Fiction
                 </h2>
                 <Link
                   href={`category/Non-Fiction`}
-                  className="flex rounded border-primary px-1 text-xs shadow-sm"
+                  className="flex rounded border border-primary px-1 text-xs shadow-sm"
                 >
                   View All
                 </Link>
