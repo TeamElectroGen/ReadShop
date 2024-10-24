@@ -158,6 +158,11 @@
   );
 }
 
+.scrollable-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
 @media screen and (max-width: 640px) {
   .main {
     padding: 0;

@@ -94,7 +94,7 @@ const FilterModal = ({
             Filter
           </Button>
         </DialogTrigger>
-        <DialogContent className="rounded-sm">
+        <DialogContent className="scrollable-content minimal-scrollbar max-h-[80vh] overflow-y-auto rounded-sm bg-white p-6 shadow-lg">
           <DialogHeader>
             <DialogTitle>
               <BookSectionTitle title={"Filter"} />
