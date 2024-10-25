@@ -61,7 +61,7 @@ const BookSectionSlider = ({ items, viewAllLink, specialClass }) => {
         }}
       >
         {/* Render all the book items */}
-        {items?.map((item) => (
+        {items?.slice(0, 10)?.map((item) => (
           <SwiperSlide key={item._id}>
             <div className="mx-auto w-fit">
               <Card key={item._id} book={item} />

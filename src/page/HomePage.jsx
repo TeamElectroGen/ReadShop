@@ -4,6 +4,7 @@ import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 import BookSectionSlider from "@/components/BookSectionSlider";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import Card from "@/components/Card";
+import CircleLoading from "@/components/CircleLoading";
 import CategorySection from "@/components/CategorySection";
 import FilterModal from "@/components/FilterModal";
 import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
@@ -13,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import {
   getAllBooks,
   getAuthors,
-  // getBookDetails,
   getBooksByIds,
   getCategories,
   getNewlyAddedBooks,
@@ -46,7 +46,7 @@ const HomePage = () => {
   });
 
   // all books
-  const { data: books } = useQuery({
+  const { data: books, isLoading: isBookLoading } = useQuery({
     queryKey: ["books"],
     queryFn: async () => {
       const { books } = await getAllBooks();
@@ -56,7 +56,7 @@ const HomePage = () => {
 
   const {
     data: newBooks,
-    isFetching: newBookLoading,
+    isLoading: newBookLoading,
     error,
   } = useQuery({
     queryKey: ["newBooks"],
@@ -67,7 +67,7 @@ const HomePage = () => {
   });
 
   //fetch  all authors
-  const { data: authors } = useQuery({
+  const { data: authors, isLoading: isAuthorsLoading } = useQuery({
     queryKey: ["authors"],
     queryFn: async () => {
       const { authors } = await getAuthors();
@@ -76,7 +76,7 @@ const HomePage = () => {
   });
 
   // search books
-  const { data: searchItems, isFetching: isSearchItemsFetching } = useQuery({
+  const { data: searchItems, isLoading: isSearchItemsFetching } = useQuery({
     queryKey: ["searchBooks", search],
     queryFn: async () => {
       if (search) {
@@ -101,7 +101,7 @@ const HomePage = () => {
     };
   }, [dropdownRef]);
 
-  const { data: categoriesName } = useQuery({
+  const { data: categoriesName, isLoading: isCategoryLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
       const { categories } = await getCategories();
@@ -186,16 +186,11 @@ const HomePage = () => {
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
         {newBookLoading ? (
-          <div className="my-10 flex justify-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
-          </div>
+          <CircleLoading />
         ) : error ? (
           <p className="text-center">Error loading new books</p>
         ) : (
-          <BookSectionSlider
-            items={newBooks?.slice(0, 10)}
-            viewAllLink="/all-books"
-          />
+          <BookSectionSlider items={newBooks} viewAllLink="/all-books" />
         )}
       </section>
 
@@ -222,26 +217,35 @@ const HomePage = () => {
       {/* New Best Sellers Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Best Sellers"} />
-        <BookSectionSlider
-          items={books?.slice(0, 10)}
-          viewAllLink={"/all-books"}
-        />
+        {isBookLoading ? (
+          <CircleLoading />
+        ) : (
+          <BookSectionSlider items={books} viewAllLink={"/all-books"} />
+        )}
       </section>
 
       {/* Top of the month Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
-        <BookSectionSlider
-          viewAllLink={"/all-books"}
-          items={books?.slice(0, 10)} // Show 10 books
-          renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
-        />
+        {isBookLoading ? (
+          <CircleLoading />
+        ) : (
+          <BookSectionSlider
+            viewAllLink={"/all-books"}
+            items={books} // Show 10 books
+            renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
+          />
+        )}
       </section>
 
       {/* Author section */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-        <AuthorSectionTitle title={"Author"} />
-        <AuthorSectionSlide items={authors?.slice(0, 10)} />
+        <AuthorSectionTitle title={"Authors"} />
+        {isAuthorsLoading ? (
+          <CircleLoading />
+        ) : (
+          <AuthorSectionSlide items={authors} />
+        )}
       </section>
     </div>
   );

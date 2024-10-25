@@ -1,25 +1,27 @@
 "use client";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import defaultImage from "../../public/assets/profile.png";
-import React, { useState } from "react";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
+import CircleLoading from "@/components/CircleLoading";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ReactLoading from "react-loading";
-import toast from "react-hot-toast";
+import useRole from "@/hooks/useRole";
+import { queryClient } from "@/services/Providers";
 import {
   getBookReviewAndRating,
-  postReviewAndRating,
-  patchUpdateReviewAndRating,
   getUserReviewAndRating,
+  patchUpdateReviewAndRating,
+  postReviewAndRating,
 } from "@/services/reviewAndRating";
-import { queryClient } from "@/services/Providers";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import InfiniteScroll from "react-infinite-scroll-component";
+import TextareaAutosize from "react-textarea-autosize";
+import defaultImage from "../../public/assets/profile.png";
 
-const ReviewSection = ({ bookId }) => {
+const ReviewSection = ({ bookId, rating, reviewCount }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession() || {};
@@ -28,8 +30,9 @@ const ReviewSection = ({ bookId }) => {
   const [newReviewText, setNewReviewText] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
   const [ratingError, setRatingError] = useState("");
+  const role = useRole();
 
-  const { data: reviewData = [] } = useQuery({
+  const { data: reviewData = [], isLoading: isReviewDataLoading } = useQuery({
     queryKey: ["reviews", bookId],
     queryFn: async () => {
       const { reviewAndRatingData } = await getBookReviewAndRating(bookId);
@@ -50,22 +53,15 @@ const ReviewSection = ({ bookId }) => {
     enabled: !!session?.user?.email && !!bookId,
   });
 
-  const totalRating = reviewData.length;
-  const totalReviews = reviewData.length;
-  const totalRatingCount = reviewData.reduce(
-    (acc, review) => acc + review.rating,
-    0
-  );
-
   const { mutate } = useMutation({
     mutationFn: (newReview) =>
-      userReview
+      userReview?._id
         ? patchUpdateReviewAndRating(session?.user?.email, bookId, newReview)
         : postReviewAndRating(session?.user?.email, bookId, newReview),
     onSuccess: () => {
       queryClient.invalidateQueries(["reviews"]);
       toast.success(
-        userReview
+        userReview?._id
           ? "Review updated successfully!"
           : "Review submitted successfully!"
       );
@@ -100,10 +96,6 @@ const ReviewSection = ({ bookId }) => {
       reviewText: newReviewText,
       bookId: bookId,
       createdAt: new Date(),
-      user: {
-        name: session?.user?.name,
-        avatar: session?.user?.image,
-      },
     };
 
     mutate(newReview);
@@ -124,8 +116,7 @@ const ReviewSection = ({ bookId }) => {
         <div className="text-center">
           <div className="mb-2 flex justify-center">
             {[...Array(5)].map((_, i) => {
-              const ratingValue = totalRatingCount / totalRating;
-              const roundedValue = ratingValue - i;
+              const roundedValue = rating - i;
               if (roundedValue >= 1) {
                 return (
                   <FaStar key={i} className="text-yellow-400 md:text-3xl" />
@@ -142,30 +133,26 @@ const ReviewSection = ({ bookId }) => {
               }
             })}
           </div>
-          <p className="text-2xl font-semibold text-gray-800">
-            {!isNaN((totalRatingCount / totalRating)?.toFixed(1))
-              ? (totalRatingCount / totalRating)?.toFixed(1)
-              : 0}
-          </p>
+          <p className="text-2xl font-semibold text-gray-800">{rating}</p>
           <p className="text-sm text-gray-500">Average Rating</p>
         </div>
         <div className="text-center">
           <p className="text-gray-600">Total Reviews</p>
-          <p className="text-xl font-bold text-blue-600">{totalReviews}</p>
+          <p className="text-xl font-bold text-blue-600">{reviewCount}</p>
         </div>
       </div>
 
       <div className="flex justify-center">
-        {session?.user?.email ? (
+        {role === "user" ? (
           <button
             onClick={() => {
               setShowReviewForm(!showReviewForm);
-              setNewReviewText(userReview?.reviewText || "");
-              setSelectedRating(userReview?.rating || 0);
+              // setNewReviewText(userReview?.reviewText || "");
+              // setSelectedRating(userReview?.rating || 0);
             }}
             className="rounded-full bg-blue-600 px-6 py-2 text-white shadow-lg hover:bg-blue-500 focus:outline-none"
           >
-            {userReview ? "Update Review" : "Write a Review"}
+            {userReview?._id ? "Update Review" : "Write a Review"}
           </button>
         ) : (
           <div className="font-semibold md:text-xl">
@@ -192,7 +179,7 @@ const ReviewSection = ({ bookId }) => {
               >
                 Your Review
               </label>
-              <textarea
+              <TextareaAutosize
                 id="reviewText"
                 rows="4"
                 className="mt-1 w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -200,7 +187,7 @@ const ReviewSection = ({ bookId }) => {
                 required
                 value={newReviewText}
                 onChange={(e) => setNewReviewText(e.target.value)}
-              ></textarea>
+              />
             </div>
 
             <div className="mb-4">
@@ -238,51 +225,60 @@ const ReviewSection = ({ bookId }) => {
           hasMore={hasMore}
           loader={
             <div className="mt-10 flex justify-center">
-              <ReactLoading type="bars" color="blue" height={100} width={50} />
+              <CircleLoading />
             </div>
           }
         >
-          {reviewData?.slice(0, reviewText)?.map((review, index) => (
-            <div
-              key={index}
-              className="mb-4 max-w-full rounded-lg bg-white p-4 md:shadow-md"
-            >
-              <div className="mb-4 items-center justify-between md:flex">
-                <div className="items-center justify-center md:flex">
-                  <Image
-                    src={
-                      review?.user?.avatar || review.user.image || defaultImage
-                    }
-                    alt="Profile Avatar"
-                    className="rounded-full"
-                    width={50}
-                    height={50}
-                  />
-                  <div className="md:ml-3">
-                    <p className="font-semibold text-gray-800">
-                      {review.user.name}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(review.createdAt).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
+          {isReviewDataLoading ? (
+            <CircleLoading />
+          ) : (
+            reviewData?.slice(0, reviewText)?.map((review, index) => (
+              <div
+                key={index}
+                className="mb-4 max-w-full rounded-lg bg-white p-4 md:shadow-md"
+              >
+                <div className="mb-4 items-center justify-between md:flex">
+                  <div className="items-center justify-center md:flex">
+                    <Image
+                      src={
+                        review?.user?.avatar ||
+                        review.user.image ||
+                        defaultImage
+                      }
+                      alt="Profile Avatar"
+                      className="rounded-full"
+                      width={50}
+                      height={50}
+                    />
+                    <div className="md:ml-3">
+                      <p className="font-semibold text-gray-800">
+                        {review.user.name}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(review.createdAt).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          }
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    {[...Array(review.rating)].map((_, i) => (
+                      <FaStar key={i} className="text-lg text-yellow-400" />
+                    ))}
+                    {[...Array(5 - review.rating)].map((_, i) => (
+                      <FaStar key={i} className="text-lg text-gray-300" />
+                    ))}
                   </div>
                 </div>
-                <div className="flex">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-lg text-yellow-400" />
-                  ))}
-                  {[...Array(5 - review.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-lg text-gray-300" />
-                  ))}
-                </div>
+                <p className="text-gray-700">{review.reviewText}</p>
               </div>
-              <p className="text-gray-700">{review.reviewText}</p>
-            </div>
-          ))}
+            ))
+          )}
         </InfiniteScroll>
       </div>
     </div>

@@ -68,17 +68,16 @@ export const patchRWList = async (which, bookId, email) => {
   }
 };
 
-// Fetches all books by an array of IDs
-export const getBooksByIds = async (ids) => {
+// Delete single read/wish book
+export const deleteRWList = async (which, bookId, email) => {
   try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/books-by-ids`,
-      { ids }
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/wish-read/remove-single-${which}?bookId=${bookId}&email=${email}`
     );
-    return res.data;
+    return res;
   } catch (error) {
     console.log(error);
-    return [];
+    return error;
   }
 };
 
@@ -157,6 +156,20 @@ export const getCategoryCount = async (category) => {
   } catch (error) {
     console.log(error);
     return {};
+  }
+};
+
+// Fetches all books by an array of IDs
+export const getBooksByIds = async (ids) => {
+  try {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-books-by-ids`,
+      { ids }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 };
 
