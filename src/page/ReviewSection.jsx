@@ -201,7 +201,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
                 className="mt-1 w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Describe your experience"
                 required
-                value={newReviewText}
+                value={userReview?.reviewText || newReviewText}
                 onChange={(e) => setNewReviewText(e.target.value)}
               />
             </div>
