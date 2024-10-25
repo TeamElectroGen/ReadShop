@@ -57,3 +57,16 @@ export const patchUpdateReviewAndRating = async (
     return { message: "Failed to update review and rating", error };
   }
 };
+
+// patch api for deleting review and rating
+export const deleteUserReviewAndRating = async (email, bookId) => {
+  try {
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/delete-user-rr/${email}?bookId=${bookId}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error deleting review and rating:", error);
+    return { message: "Failed to delete review and rating", error };
+  }
+};
