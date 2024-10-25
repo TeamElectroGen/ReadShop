@@ -43,7 +43,7 @@ const FilterSidebar = ({
   selectedRating,
   priceRange,
   dateRange,
-  setFilteredBooks,
+  // setFilteredBooks,
 }) => {
   useEffect(() => {
     const categories = searchParams.get("categories");

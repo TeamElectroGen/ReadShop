@@ -124,7 +124,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
   };
 
   return (
-    <div className="reviews-container container mt-8 rounded-lg p-6 md:mx-auto">
+    <div className="reviews-container container mt-12 rounded-lg md:mx-auto">
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>

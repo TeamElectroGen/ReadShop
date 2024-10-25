@@ -2,6 +2,8 @@
 
 import { useCart } from "@/app/context/CartContext";
 import BookLoading from "@/components/BookLoading";
+import BookSectionTitle from "@/components/BookSectionTitle";
+import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
 import {
   getBookDetails,
   getBooksByIds,
@@ -18,8 +20,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast"; // Import toast
 import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import ReviewSection from "./ReviewSection";
-import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
-import BookSectionTitle from "@/components/BookSectionTitle";
 
 const ViewDetails = ({ bookid }) => {
   const pathname = usePathname();
@@ -112,7 +112,7 @@ const ViewDetails = ({ bookid }) => {
     }
   };
   return (
-    <div className="container rounded-lg md:my-10 lg:my-20">
+    <div className="container my-5 rounded-lg md:my-10 lg:my-20">
       {isLoading ? (
         <div className="flex h-screen items-center justify-center">
           <BookLoading />
@@ -121,13 +121,13 @@ const ViewDetails = ({ bookid }) => {
         <>
           <div className="flex flex-col gap-5 md:flex-row">
             {/* Left Side - Book Image */}
-            <div className="flex items-center bg-transparent">
+            <div className="mx-auto flex w-1/2 items-center bg-transparent lg:w-1/3">
               <Image
                 src={detailsBook?.CoverImage}
                 alt={detailsBook?.BookName}
                 width={400}
                 height={400}
-                className="rounded-lg object-cover shadow-2xl w-[70%] md:w-full mx-auto"
+                className="rounded-lg object-cover shadow-2xl"
               />
             </div>
 
@@ -221,7 +221,7 @@ const ViewDetails = ({ bookid }) => {
             bookId={bookid}
             rating={detailsBook?.Rating}
             reviewCount={detailsBook?.ReviewCount}
-           />
+          />
 
           {recentViewedBook?.length > 0 && (
             <section className="mt-10 rounded-md bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5 sm:rounded-xl">

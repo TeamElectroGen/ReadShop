@@ -8,10 +8,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 // import { Button } from "./ui/button";
-import { IoMdMenu } from "react-icons/io";
-import SiteLogo from "./SiteLogo";
-import MenuItem from "./MenuItem";
 import { HomeIcon, PhoneIcon, StoreIcon } from "lucide-react";
+import { IoMdMenu } from "react-icons/io";
+import MenuItem from "./MenuItem";
+import SiteLogo from "./SiteLogo";
 
 const HamburgerMenu = () => {
   return (
@@ -29,7 +29,7 @@ const HamburgerMenu = () => {
               <SiteLogo />
             </SheetTitle>
           </SheetHeader>
-          <div className="grid gap-4 py-4 mt-3 text-sm">
+          <div className="mt-3 grid gap-4 py-4 text-sm">
             <MenuItem href="/" title="Home" icon={HomeIcon} />
             <MenuItem href="/about" title="About" icon={StoreIcon} />
             <MenuItem href="/contact-us" title="Contact Us" icon={PhoneIcon} />

@@ -1,11 +1,9 @@
-import { getAllBooks, getCategories } from "@/services/getBooksData"; // Service to get books and categories
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
 
-const CategorySection = ({ categoriesName, books: allBooks }) => {
+const CategorySection = ({ books: allBooks }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const filteredBooks =
@@ -35,9 +33,7 @@ const CategorySection = ({ categoriesName, books: allBooks }) => {
         <Button
           onClick={() => handleCategorySelect("all")}
           className={`rounded-sm border border-primary py-1 text-xs ${
-            selectedCategory === "all"
-              ? "bg-primary text-white"
-              : "bg-secondary"
+            selectedCategory === "all" ? "bg-primary" : "bg-secondary"
           } hover:bg-primary hover:duration-300 hover:ease-linear`}
         >
           All Books
@@ -49,9 +45,7 @@ const CategorySection = ({ categoriesName, books: allBooks }) => {
             key={idx}
             onClick={() => handleCategorySelect(category)}
             className={`rounded-sm border border-primary py-1 text-xs ${
-              selectedCategory === category
-                ? "bg-primary text-white"
-                : "bg-secondary"
+              selectedCategory === category ? "bg-primary" : "bg-secondary"
             } hover:bg-primary hover:duration-300 hover:ease-linear`}
           >
             {category}
@@ -93,7 +87,7 @@ const CategorySection = ({ categoriesName, books: allBooks }) => {
               ? `/all-books`
               : `/category/${selectedCategory}`
           }
-          className="w-full rounded-sm border border-primary py-2 text-center font-bold hover:shadow-sm"
+          className="w-full rounded-sm border border-primary py-2 text-center font-bold transition-all duration-300 hover:bg-yellow-400 hover:shadow-sm"
         >
           View All From{" "}
           {selectedCategory === "all" ? "All Books" : selectedCategory}

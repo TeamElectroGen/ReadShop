@@ -1,5 +1,8 @@
 "use client";
+import useRole from "@/hooks/useRole";
+import { CircleX } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
@@ -9,13 +12,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { CircleX } from "lucide-react";
-import toast from "react-hot-toast";
 
 const Chat = () => {
+  const role = useRole();
   const [show, setShow] = useState(true);
 
   if (!show) {
+    return;
+  }
+  if (role === "admin") {
     return;
   }
   return (

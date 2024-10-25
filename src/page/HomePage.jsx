@@ -4,8 +4,8 @@ import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 import BookSectionSlider from "@/components/BookSectionSlider";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import Card from "@/components/Card";
-import CircleLoading from "@/components/CircleLoading";
 import CategorySection from "@/components/CategorySection";
+import CircleLoading from "@/components/CircleLoading";
 import FilterModal from "@/components/FilterModal";
 import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
 import RatingStar from "@/components/RatingStar";
@@ -101,7 +101,7 @@ const HomePage = () => {
     };
   }, [dropdownRef]);
 
-  const { data: categoriesName, isLoading: isCategoryLoading } = useQuery({
+  const { data: categoriesName } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
       const { categories } = await getCategories();
