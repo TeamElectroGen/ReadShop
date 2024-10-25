@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/services/AuthProvider";
 import { CartProvider } from "./context/CartContext";
 import Providers from "@/services/Providers";
+import Chat from "@/components/Chat";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
             <body
               className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
+              <Chat />
               <div className="main">
                 <div className="gradient" />
               </div>

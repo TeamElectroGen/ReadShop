@@ -1,21 +1,21 @@
 "use client";
-import Image from "next/image";
+import AuthorBookCard from "@/components/AuthorBookCard";
+import CircleLoading from "@/components/CircleLoading";
 import { Button } from "@/components/ui/button";
-import { getAuthorById } from "@/services/getBooksData";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import BookLoading from "@/components/BookLoading";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   authorToggleFollow,
   followStatusForUser,
   getAuthorBooks,
 } from "@/services/authorsCRUD";
+import { getAuthorById } from "@/services/getBooksData";
 import { getUser } from "@/services/getUserData";
-import { useSession } from "next-auth/react";
 import { queryClient } from "@/services/Providers";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { Separator } from "@/components/ui/separator";
-import AuthorBookCard from "@/components/AuthorBookCard";
 
 const AuthorDetails = ({ authorId }) => {
   const { data: session } = useSession() || {};
@@ -39,7 +39,7 @@ const AuthorDetails = ({ authorId }) => {
       // isFeatured,
       // authorQuotes,
     } = {},
-    isFetching: l1,
+    isLoading: l1,
   } = useQuery({
     queryKey: ["author", authorId],
     queryFn: async () => {
@@ -90,8 +90,8 @@ const AuthorDetails = ({ authorId }) => {
 
   if (l1) {
     return (
-      <div className="flex h-[50vh] items-center justify-center">
-        <BookLoading />
+      <div className="flex h-screen items-center justify-center">
+        <CircleLoading />
       </div>
     );
   }

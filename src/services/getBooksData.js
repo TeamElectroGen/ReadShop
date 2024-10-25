@@ -68,17 +68,16 @@ export const patchRWList = async (which, bookId, email) => {
   }
 };
 
-// Fetches all books by an array of IDs
-export const getBooksByIds = async (ids) => {
+// Delete single read/wish book
+export const deleteRWList = async (which, bookId, email) => {
   try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/books-by-ids`,
-      { ids }
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/private/wish-read/remove-single-${which}?bookId=${bookId}&email=${email}`
     );
-    return res.data;
+    return res;
   } catch (error) {
     console.log(error);
-    return [];
+    return error;
   }
 };
 
@@ -160,6 +159,20 @@ export const getCategoryCount = async (category) => {
   }
 };
 
+// Fetches all books by an array of IDs
+export const getBooksByIds = async (ids) => {
+  try {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-books-by-ids`,
+      { ids }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 //Get All Books with pagination
 export const getBooksByPage = async (size, page) => {
   try {
@@ -201,5 +214,45 @@ export const getAuthorById = async (id) => {
   } catch (error) {
     console.log(error);
     return {};
+  }
+};
+
+//Publication Name
+//==================================
+
+export const getPublicationName = async () => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/all-books/get-publication-name`
+    );
+    console.log(res.data.PublicationName);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getFilteredBooks = async (filters) => {
+  try {
+    const { genre, author, minPrice, maxPrice, startDate, endDate } = filters;
+    const queryParams = new URLSearchParams();
+
+    if (genre) queryParams.append("genre", genre);
+    if (author) queryParams.append("author", author);
+    if (minPrice) queryParams.append("minPrice", minPrice);
+    if (maxPrice) queryParams.append("maxPrice", maxPrice);
+    if (startDate) queryParams.append("startDate", startDate);
+    if (endDate) queryParams.append("endDate", endDate);
+
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/all-books/filter?${queryParams.toString()}`
+    );
+
+    console.log(res.data.books);
+    return res.data.books;
+  } catch (error) {
+    console.error("Error fetching filtered books:", error);
+    return [];
   }
 };

@@ -5,27 +5,27 @@ import MenuItem from "./MenuItem";
 const adminMenuItems = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/dashboard/admin",
     icon: Home,
   },
   {
     title: "Inventory",
-    href: "/dashboard/products",
+    href: "/dashboard/admin/products",
     icon: BookOpen,
   },
   {
     title: "Manage Orders",
-    href: "/dashboard/manage-orders",
+    href: "/dashboard/admin/manage-orders",
     icon: ShoppingCart,
   },
   {
     title: "Manage User",
-    href: "/dashboard/users",
+    href: "/dashboard/admin/users",
     icon: Users,
   },
   {
     title: "Manage Publishers",
-    href: "/dashboard/publishers",
+    href: "/dashboard/admin/publishers",
     icon: FileText,
   },
 ];
