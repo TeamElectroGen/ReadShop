@@ -1,5 +1,17 @@
 import axios from "axios";
 
+// get authors name
+export const authorName = async (authorId, userId) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/authors/get-author-name`,
+      { userId }
+    );
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+};
 // toggle follow author
 export const authorToggleFollow = async (authorId, userId) => {
   try {

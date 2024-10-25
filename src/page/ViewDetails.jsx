@@ -1,8 +1,10 @@
 "use client";
+
 import { useCart } from "@/app/context/CartContext";
 import BookLoading from "@/components/BookLoading";
 import {
   getBookDetails,
+  getBooksByIds,
   getReadWishStatusUser,
   patchRWList,
 } from "@/services/getBooksData";
@@ -16,15 +18,30 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast"; // Import toast
 import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import ReviewSection from "./ReviewSection";
+import RecentlyViewBookSlider from "@/components/RecentlyViewBookSlider";
+import BookSectionTitle from "@/components/BookSectionTitle";
 
 const ViewDetails = ({ bookid }) => {
   const pathname = usePathname();
   const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const { data } = useSession() || {};
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { data: sessionData } = useSession() || {};
   const { addToCart, cart } = useCart();
   const router = useRouter();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
+  // Fetch recent viewed books
+  const { data: recentViewedBook } = useQuery({
+    queryKey: ["recentViewedBook"],
+    queryFn: async () => {
+      const storedBooks =
+        JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
+      const res = await getBooksByIds(storedBooks);
+      return res.books;
+    },
+    onError: (error) => console.error(error),
+  });
+
+  // Fetch book details
   const { data: detailsBook, isLoading } = useQuery({
     queryKey: ["bookDetails", bookid],
     queryFn: async () => {
@@ -36,42 +53,28 @@ const ViewDetails = ({ bookid }) => {
 
   useEffect(() => {
     if (bookid) {
-      let recentVisitedBooks;
-      try {
-        recentVisitedBooks =
-          JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
-        if (!Array.isArray(recentVisitedBooks)) {
-          recentVisitedBooks = [];
-        }
-      } catch (error) {
-        recentVisitedBooks = [];
-      }
-      // Remove the book ID if it already exists
-      recentVisitedBooks = recentVisitedBooks.filter((id) => id !== bookid);
-      // Add the book ID to the beginning of the array
-      recentVisitedBooks.unshift(bookid);
-      // Limit the array to a maximum of 10 items
-      recentVisitedBooks = recentVisitedBooks.slice(0, 10);
-      // Save the updated array to local storage
-      localStorage.setItem(
-        "recentVisitedBooks",
-        JSON.stringify(recentVisitedBooks)
-      );
+      const recentVisitedBooks =
+        JSON.parse(localStorage.getItem("recentVisitedBooks")) || [];
+      const updatedBooks = [
+        bookid,
+        ...recentVisitedBooks.filter((id) => id !== bookid),
+      ].slice(0, 10);
+      localStorage.setItem("recentVisitedBooks", JSON.stringify(updatedBooks));
     }
   }, [bookid]);
 
   // ... rest of the component
   const { data: rWStatus = {} } = useQuery({
-    queryKey: ["readWishStatus", bookid, data?.user?.email],
+    queryKey: ["readWishStatus", bookid, sessionData?.user?.email],
     queryFn: async () => {
       const { readList, wishList } = await getReadWishStatusUser(
         bookid,
-        data?.user?.email
+        sessionData?.user?.email
       );
       toast.dismiss();
       return { readList, wishList };
     },
-    enabled: !!bookid && !!data?.user?.email,
+    enabled: !!bookid && !!sessionData?.user?.email,
   });
 
   const handleAddToCartClick = () => {
@@ -85,14 +88,13 @@ const ViewDetails = ({ bookid }) => {
       quantity: 1,
     };
     addToCart(productToAdd);
-    // Display success toast
     toast.success(`${detailsBook.BookName} added to cart!`);
   };
 
   const { mutate: handleRWList } = useMutation({
     mutationFn: async (param) => {
       toast.loading("Updating...");
-      await patchRWList(param, bookid, data?.user?.email);
+      await patchRWList(param, bookid, sessionData?.user?.email);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["readWishStatus"]);
@@ -103,7 +105,7 @@ const ViewDetails = ({ bookid }) => {
   });
 
   const handleRWListClick = (param) => {
-    if (data?.user?.email) {
+    if (sessionData?.user?.email) {
       handleRWList(param);
     } else {
       setShowLoginModal(true);
@@ -129,7 +131,6 @@ const ViewDetails = ({ bookid }) => {
               />
             </div>
 
-            {/* Right Side - Book Details */}
             <div className="flex-1 rounded-lg bg-white p-6 shadow-md">
               <h1 className="text-2xl font-bold text-gray-800">
                 {detailsBook?.BookName}
@@ -152,10 +153,8 @@ const ViewDetails = ({ bookid }) => {
                 </span>
               </div>
 
-              {/* Book Description */}
               <p className="mt-4 text-gray-600">{detailsBook?.Description}</p>
 
-              {/* Additional Details */}
               <div className="mt-4">
                 <p className="text-sm text-gray-500">
                   <span className="font-semibold">Published by:</span>{" "}
@@ -167,7 +166,6 @@ const ViewDetails = ({ bookid }) => {
                 </p>
               </div>
 
-              {/* Price & Add to Cart Buttons */}
               <div className="mt-6 flex items-center justify-between">
                 <span className="text-2xl font-bold text-green-700">
                   $ {detailsBook?.Price}
@@ -175,35 +173,28 @@ const ViewDetails = ({ bookid }) => {
               </div>
 
               <div className="mt-4 flex flex-col gap-4 md:flex-row">
-                {/* Add to Cart Button */}
                 <button
                   className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white duration-300 focus:outline-none focus:ring-4 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
                   onClick={handleAddToCartClick}
                 >
                   {isAddedToCart ? (
-                    <>
-                      {cart.find((item) => item.id === detailsBook._id)
-                        ?.quantity || 1}{" "}
-                      in Cart
-                    </>
+                    `${cart.find((item) => item.id === detailsBook._id)?.quantity || 1} in Cart`
                   ) : (
                     <>
-                      <FaCartShopping className="mr-2 size-4" /> Add to Cart
+                      <FaCartShopping className="mr-2" /> Add to Cart
                     </>
                   )}
                 </button>
 
-                {/* Add to WishList Button */}
                 <button
                   onClick={() => handleRWListClick("wish")}
                   className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
                 >
-                  <FaRegHeart className="mr-2 size-4" />{" "}
+                  <FaRegHeart className="mr-2" />{" "}
                   {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
                 </button>
               </div>
 
-              {/* Add to Read List Button */}
               <div className="mt-4">
                 <button
                   onClick={() => handleRWListClick("read")}
@@ -216,7 +207,6 @@ const ViewDetails = ({ bookid }) => {
             </div>
           </div>
 
-          {/* Login Modal */}
           {showLoginModal && (
             <LoginModal
               onCancel={() => setShowLoginModal(false)}
@@ -231,36 +221,41 @@ const ViewDetails = ({ bookid }) => {
             bookId={bookid}
             rating={detailsBook?.Rating}
             reviewCount={detailsBook?.ReviewCount}
-          ></ReviewSection>
+           />
+
+          {recentViewedBook?.length > 0 && (
+            <section className="mt-10 rounded-md bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5 sm:rounded-xl">
+              <BookSectionTitle title={"Recently Viewed"} />
+              <RecentlyViewBookSlider items={recentViewedBook} />
+            </section>
+          )}
         </>
       )}
     </div>
   );
 };
 
-const LoginModal = ({ onCancel, onLogin }) => {
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-      <div className="rounded-lg bg-white p-6 shadow-lg">
-        <h2 className="text-xl font-semibold text-gray-800">Please Login</h2>
-        <p className="mt-2 text-gray-600">You need to login to continue.</p>
-        <div className="mt-4 flex justify-end space-x-4">
-          <button
-            className="rounded-lg bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-            onClick={onLogin}
-          >
-            Login
-          </button>
-        </div>
+const LoginModal = ({ onCancel, onLogin }) => (
+  <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+    <div className="rounded-lg bg-white p-6 shadow-lg">
+      <h2 className="text-xl font-semibold text-gray-800">Please Login</h2>
+      <p className="mt-2 text-gray-600">You need to login to continue.</p>
+      <div className="mt-4 flex justify-end space-x-4">
+        <button
+          className="rounded-lg bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <button
+          className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          onClick={onLogin}
+        >
+          Login
+        </button>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default ViewDetails;
