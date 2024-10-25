@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import useRole from "@/hooks/useRole";
 import { queryClient } from "@/services/Providers";
 import {
+  deleteUserReviewAndRating,
   getBookReviewAndRating,
   getUserReviewAndRating,
   patchUpdateReviewAndRating,
@@ -16,7 +17,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt, FaTrashAlt } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import TextareaAutosize from "react-textarea-autosize";
 import defaultImage from "../../public/assets/profile.png";
@@ -69,6 +70,21 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
     },
     onError: () => {
       toast.error("Failed to submit review. Please try again.");
+    },
+  });
+
+  // Mutation for deleting the review
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteUserReviewAndRating(session?.user?.email, bookId),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["reviews"]);
+      toast.success("Review deleted successfully!");
+      setNewReviewText("");
+      setSelectedRating(0);
+      setShowReviewForm(false);
+    },
+    onError: () => {
+      toast.error("Failed to delete review. Please try again.");
     },
   });
 
@@ -214,6 +230,17 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
             >
               {userReview ? "Update Review" : "Submit Review"}
             </Button>
+            {/* Delete button */}
+            {userReview?._id && (
+              <Button
+                type="button"
+                onClick={() => deleteMutation.mutate()}
+                className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-white shadow hover:bg-red-500 md:ml-2"
+              >
+                <FaTrashAlt className="mr-2" />
+                Delete Review
+              </Button>
+            )}
           </form>
         </div>
       )}
