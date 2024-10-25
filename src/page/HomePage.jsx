@@ -5,6 +5,7 @@ import BookSectionSlider from "@/components/BookSectionSlider";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import Card from "@/components/Card";
 import CircleLoading from "@/components/CircleLoading";
+import CategorySection from "@/components/CategorySection";
 import FilterModal from "@/components/FilterModal";
 import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
 import RatingStar from "@/components/RatingStar";
@@ -200,7 +201,7 @@ const HomePage = () => {
 
       {/* Recently Viewed Section */}
       {recentViewedBooks?.length > 0 && (
-        <section className="z-10 mt-10 rounded-md bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5 sm:rounded-xl">
+        <section className="z-10 mt-10 rounded-md bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:rounded-xl">
           <BookSectionTitle title={"Recently Viewed"} />
           <RecentlyViewBookSlider
             items={recentViewedBooks} // Pass the recently viewed books
@@ -208,23 +209,9 @@ const HomePage = () => {
         </section>
       )}
 
-      <section className="mt-10 flex flex-col p-8 text-center">
+      <section className="z-10 mt-10 rounded-xl p-8">
         <BookSectionTitle title={"All Category"} />
-        <div className="flex flex-wrap justify-center gap-3 text-center">
-          {isCategoryLoading ? (
-            <CircleLoading />
-          ) : (
-            categoriesName?.map((categories, idx) => (
-              <Link
-                href={`/category/${categories.Genre}`}
-                className="rounded-sm border border-primary bg-secondary px-10 py-4 hover:bg-primary hover:duration-300 hover:ease-linear"
-                key={idx}
-              >
-                {categories.Genre}
-              </Link>
-            ))
-          )}
-        </div>
+        <CategorySection books={books} categoriesName={categoriesName} />
       </section>
 
       {/* New Best Sellers Books Slider */}
@@ -238,7 +225,7 @@ const HomePage = () => {
       </section>
 
       {/* Top of the month Books Slider */}
-      <section className="z-10 mb-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         {isBookLoading ? (
           <CircleLoading />
