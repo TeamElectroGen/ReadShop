@@ -1,13 +1,13 @@
-import CircleLoading from "@/components/CircleLoading";
 import DashboardHeading from "@/components/DashboardHeading";
+import { Button } from "@/components/ui/button";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const books = [
   {
@@ -15,23 +15,23 @@ const books = [
     BookName: "Atomic habits",
     AuthorName: "Moris jane",
     Price: 7,
-    rating: 4.8
+    rating: 4.8,
   },
   {
     id: 2,
     BookName: "Dopamine Detox",
     AuthorName: "Hatrik dopa",
     Price: 7,
-    rating: 4.5
+    rating: 4.5,
   },
   {
     id: 3,
     BookName: "The Alchemist",
     AuthorName: "Aboltabol cha",
     Price: 9,
-    rating: 4.7
+    rating: 4.7,
   },
-]
+];
 
 const Books = () => {
   // if (isLoading) {
@@ -76,7 +76,9 @@ const Books = () => {
                     <TableCell className="font-xs font-semibold text-red-600">
                       ${book.Price}
                     </TableCell>
-                    <TableCell className="text-xs sm:text-sm">{book.rating}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">
+                      {book.rating}
+                    </TableCell>
                     {/* TODO: make the delete and edit functional */}
                     {/* <TableCell>
                       <div className="flex gap-3">

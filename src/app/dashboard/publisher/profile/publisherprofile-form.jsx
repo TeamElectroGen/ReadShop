@@ -11,15 +11,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
-import { useSession } from "next-auth/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { getUser, updateProfile } from "@/services/getUserData";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const profileFormSchema = z.object({
   name: z
@@ -40,9 +40,11 @@ const profileFormSchema = z.object({
 const PublisherProfileForm = () => {
   const { data: session } = useSession() || {};
   console.log(session);
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  // eslint-disable-next-line no-unused-vars
   const { data: userData = {}, isLoading: isUserDataLoading } = useQuery({
     queryKey: ["userId", session?.user?.email],
     queryFn: async () => {
@@ -173,7 +175,7 @@ const PublisherProfileForm = () => {
           )}
         />
         <div className="flex justify-end">
-        <Button type="submit">Update profile</Button>
+          <Button type="submit">Update profile</Button>
         </div>
       </form>
     </Form>
