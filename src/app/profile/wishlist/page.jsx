@@ -62,10 +62,7 @@ const WishlistPage = () => {
     <Card>
       <CardHeader>
         <CardTitle>Wishlist</CardTitle>
-        <CardDescription>
-          Manage your wishlist. You can add books to cart. Also can remove from
-          the list.
-        </CardDescription>
+        <CardDescription>Manage your wishlist.</CardDescription>
       </CardHeader>
       {isPending || isLoading ? (
         <CircleLoading />
