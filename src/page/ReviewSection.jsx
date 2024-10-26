@@ -49,6 +49,8 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
         session?.user?.email,
         bookId
       );
+      setNewReviewText(reviewAndRatingData?.review);
+      setSelectedRating(reviewAndRatingData?.rating);
       return reviewAndRatingData;
     },
     enabled: !!session?.user?.email && !!bookId,
@@ -201,7 +203,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
                 className="mt-1 w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Describe your experience"
                 required
-                value={userReview?.reviewText || newReviewText}
+                value={newReviewText}
                 onChange={(e) => setNewReviewText(e.target.value)}
               />
             </div>
