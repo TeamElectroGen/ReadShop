@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,53 +17,46 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getReadListBooks } from "@/services/getBooksData";
+import { deleteRWList, getReadListBooks } from "@/services/getBooksData";
+import { queryClient } from "@/services/Providers";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const ReadingList = () => {
-  const [readListBooks, setReadListBooks] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession() || {};
 
-  useEffect(() => {
-    if (session?.user.email) {
-      const fetchReadList = async () => {
-        setIsLoading(true);
-        const res = await getReadListBooks(session?.user.email);
-        setReadListBooks(res.books);
-        setIsLoading(false);
-      };
-      fetchReadList();
-    }
-  }, [session?.user.email]);
+  const {
+    data: readListBooks = [],
+    isPending,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["readingList", session?.user?.email],
+    queryFn: () =>
+      getReadListBooks(session?.user?.email).then((res) => res.books),
+    enabled: !!session?.user?.email,
+  });
 
-  console.log(readListBooks);
-
-  if (readListBooks.length < 1 && !isLoading) {
-    return (
-      <section
-        className="flex h-full flex-1 py-16 items-center justify-center rounded-lg border border-dashed bg-background shadow-sm"
-        x-chunk="dashboard-02-chunk-1"
-      >
-        <div className="flex flex-col items-center gap-1 text-center">
-          <Image src={"/assets/not-found.svg"} alt="not found" width={74} height={64} />
-          <h3 className="mt-4 text-lg md:text-xl font-semibold tracking-tight">
-            Your reading list is empty
-          </h3>
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            You can add books to wishlist from book details page.
-          </p>
-          <Button size="sm" asChild className="mt-4 font-semibold">
-            <Link href={"/"}>Browser books</Link>
-          </Button>
-        </div>
-      </section>
-    );
-  }
+  const { mutate: handleRemoveRead, isPending: loading } = useMutation({
+    mutationFn: (bookId) => {
+      toast.loading("Removing from reading list...");
+      return deleteRWList("read", bookId, session?.user?.email);
+    },
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("Removed from reading list");
+      queryClient.invalidateQueries(["readingList", session?.user?.email]);
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error("Failed to remove from reading list");
+      console.log(error);
+    },
+  });
 
   return (
     <Card>
@@ -72,9 +64,9 @@ const ReadingList = () => {
         <CardTitle>Reading List</CardTitle>
         <CardDescription>Manage your reading list.</CardDescription>
       </CardHeader>
-      {isLoading ? (
+      {isPending || isLoading ? (
         <CircleLoading />
-      ) : (
+      ) : readListBooks?.length > 0 ? (
         <CardContent className="mx-6 mb-6 rounded-lg border p-0">
           <Table>
             <TableHeader>
@@ -90,6 +82,7 @@ const ReadingList = () => {
                 </TableHead>
               </TableRow>
             </TableHeader>
+            {/* Table content */}
             <TableBody>
               {readListBooks?.map((book, idx) => (
                 <TableRow key={book._id}>
@@ -105,13 +98,18 @@ const ReadingList = () => {
                       width="64"
                     />
                     <div className="space-y-1">
-                      <p className="font-medium text-foreground">
+                      <Link
+                        href={`/view-details/${book?._id}`}
+                        className="text-foreground hover:underline"
+                      >
                         {book.BookName}
-                      </p>
+                      </Link>
                       <p className="text-xs text-gray-500">{book.AuthorName}</p>
                     </div>
                   </TableCell>
-                  <TableCell>${book.Price}</TableCell>
+                  <TableCell className="font-semibold text-red-600">
+                    ${book.Price}
+                  </TableCell>
                   <TableCell>
                     <Badge
                       variant="outline"
@@ -121,7 +119,12 @@ const ReadingList = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Button size="icon" variant="outline">
+                    <Button
+                      disabled={isFetching || loading}
+                      onClick={() => handleRemoveRead(book._id)}
+                      size="icon"
+                      variant="outline"
+                    >
                       <Trash2 className="size-5 text-destructive" />
                     </Button>
                   </TableCell>
@@ -130,12 +133,37 @@ const ReadingList = () => {
             </TableBody>
           </Table>
         </CardContent>
+      ) : (
+        <>
+          <section
+            className="flex h-full flex-1 items-center justify-center rounded-lg border border-dashed bg-background py-16 shadow-sm"
+            x-chunk="dashboard-02-chunk-1"
+          >
+            <div className="flex flex-col items-center gap-1 text-center">
+              <Image
+                src={"/assets/not-found.svg"}
+                alt="not found"
+                width={74}
+                height={64}
+              />
+              <h3 className="mt-4 text-lg font-semibold tracking-tight md:text-xl">
+                Your reading list is empty
+              </h3>
+              <p className="text-xs text-muted-foreground sm:text-sm">
+                You can add books to wishlist from book details page.
+              </p>
+              <Button size="sm" asChild className="mt-4 font-semibold">
+                <Link href={"/all-books"}>Browse books</Link>
+              </Button>
+            </div>
+          </section>
+        </>
       )}
-      <CardFooter>
+      {/* <CardFooter>
         <div className="text-xs text-muted-foreground">
           Showing <strong>1-10</strong> of <strong>32</strong> products
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };
