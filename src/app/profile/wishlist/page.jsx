@@ -33,6 +33,7 @@ const WishlistPage = () => {
     data: wishlistBooks = [],
     isPending,
     isLoading,
+    isFetching,
   } = useQuery({
     queryKey: ["wishlist", session?.user?.email],
     queryFn: () =>
@@ -40,7 +41,7 @@ const WishlistPage = () => {
     enabled: !!session?.user?.email,
   });
 
-  const { mutate: handleRemoveWish } = useMutation({
+  const { mutate: handleRemoveWish, isPending: loading } = useMutation({
     mutationFn: (bookId) => {
       toast.loading("Removing from wishlist...");
       return deleteRWList("wish", bookId, session?.user?.email);
@@ -100,7 +101,12 @@ const WishlistPage = () => {
                       width="64"
                     />
                     <div className="space-y-1">
-                      <p className="text-foreground">{book.BookName}</p>
+                      <Link
+                        href={`/view-details/${book?._id}`}
+                        className="text-foreground hover:underline"
+                      >
+                        {book.BookName}
+                      </Link>
                       <p className="text-xs text-gray-500">{book.AuthorName}</p>
                     </div>
                   </TableCell>
@@ -117,6 +123,7 @@ const WishlistPage = () => {
                   </TableCell>
                   <TableCell>
                     <Button
+                      disabled={isFetching || loading}
                       onClick={() => handleRemoveWish(book._id)}
                       size="icon"
                       variant="outline"
