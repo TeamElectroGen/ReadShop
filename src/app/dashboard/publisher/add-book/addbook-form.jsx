@@ -1,8 +1,5 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,9 +10,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 // import { toast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const addBookFormSchema = z.object({
   BookName: z
@@ -51,11 +52,24 @@ const AddBookForm = () => {
       CoverImage: "",
       Genre: "",
       Price: "",
+      PublicationName: "",
+      PublicationEmail: "",
+    },
+    // mode: "onChange",
+  });
+
+  useEffect(() => {
+    form.reset({
+      BookName: "",
+      AuthorName: "",
+      Description: "",
+      CoverImage: "",
+      Genre: "",
+      Price: "",
       PublicationName: session?.user?.name,
       PublicationEmail: session?.user?.email,
-    },
-    mode: "onChange",
-  });
+    });
+  }, [form, session?.user?.email, session?.user?.name]);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -156,7 +170,7 @@ const AddBookForm = () => {
           )}
         />
         {/* Publication name */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name="PublicationName"
           render={({ field }) => (
@@ -168,9 +182,9 @@ const AddBookForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         {/* Publication email */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name="PublicationEmail"
           render={({ field }) => (
@@ -182,8 +196,8 @@ const AddBookForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
-        <div className="col-span-full flex justify-end">
+        /> */}
+        <div className="col-span-4 flex md:items-end md:justify-end">
           <Button type="submit" className="">
             Send publish request
           </Button>
