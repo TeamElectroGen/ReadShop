@@ -49,6 +49,8 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
         session?.user?.email,
         bookId
       );
+      setNewReviewText(reviewAndRatingData?.review);
+      setSelectedRating(reviewAndRatingData?.rating);
       return reviewAndRatingData;
     },
     enabled: !!session?.user?.email && !!bookId,
