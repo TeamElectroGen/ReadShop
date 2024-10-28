@@ -1,8 +1,12 @@
 import ViewDetails from "@/page/ViewDetails";
-export const generateMetadata = ({ params }) => {
+import { getBookDetails } from "@/services/getBooksData";
+export const generateMetadata = async ({ params }) => {
+  const { bookDetails } = await getBookDetails(params.bookid);
+
   return {
-    title: `Book Details | readShop - ${params?.bookid}`,
-    description: `Explore in-depth details of the selected book (ID: ${params.bookid}) at readShop. Find information about the author, publication, reviews, and related books to enhance your reading journey.`,
+    title: `${bookDetails?.BookName}`,
+    description: `${bookDetails?.Description}`,
+    keywords: [bookDetails?.Description?.split(" ")],
   };
 };
 const Page = ({ params }) => {
