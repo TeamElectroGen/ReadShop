@@ -14,7 +14,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 // import { toast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { authorName } from "@/services/authorsCRUD";
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
@@ -27,9 +36,11 @@ const addBookFormSchema = z.object({
     .max(50, {
       message: "Name must not be longer than 30 characters.",
     }),
-  AuthorName: z.string({
-    required_error: "Please give an author name.",
-  }),
+  AuthorName: z
+    .string({
+      required_error: "Please select an author name.",
+    })
+    .min(1, "Please select an author name."),
   Description: z.string().min(11, { message: "Write more Description" }),
   CoverImage: z.string(),
   Genre: z.string(),
@@ -42,6 +53,14 @@ const addBookFormSchema = z.object({
 
 const AddBookForm = () => {
   const { data: session } = useSession() || {};
+
+  const { data: authors } = useQuery({
+    queryKey: ["authors"],
+    queryFn: async () => {
+      const res = await authorName();
+      return res.authorNames;
+    },
+  });
 
   const form = useForm({
     resolver: zodResolver(addBookFormSchema),
@@ -103,12 +122,27 @@ const AddBookForm = () => {
             <FormItem className="col-span-full sm:col-span-3">
               <FormLabel>Author Name</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Author Name" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {authors?.map((author) => (
+                      <SelectItem key={author._id} value={author._id}>
+                        {author?.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         {/* Description field */}
         <FormField
           control={form.control}
