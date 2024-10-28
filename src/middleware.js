@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 import { getUserRole } from "./services/getUserData";
 
 const secret = process.env.NEXT_PUBLIC_AUTH_SECRET;
@@ -21,6 +21,13 @@ export async function middleware(request) {
 
   try {
     const { role } = await getUserRole(token.email);
+
+    if (
+      path.startsWith("/api/private/user") &&
+      (role === "user" || role === "admin" || role === "publisher")
+    ) {
+      return NextResponse.next();
+    }
 
     if (
       (path.startsWith("/profile") || path.startsWith("/checkout")) &&
