@@ -6,7 +6,7 @@ import MenuItem from "./MenuItem";
 const userMenuItems = [
   {
     title: "My Profile",
-    href: "/profile/my-profile",
+    href: "/profile",
     icon: User,
   },
   {

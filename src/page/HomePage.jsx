@@ -4,6 +4,8 @@ import AuthorSectionTitle from "@/components/AuthorSectionTitle";
 import BookSectionSlider from "@/components/BookSectionSlider";
 import BookSectionTitle from "@/components/BookSectionTitle";
 import Card from "@/components/Card";
+import CategorySection from "@/components/CategorySection";
+import CircleLoading from "@/components/CircleLoading";
 import FilterModal from "@/components/FilterModal";
 import HomePageCategoryGrid from "@/components/HomePageCategoryGrid";
 import RatingStar from "@/components/RatingStar";
@@ -12,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import {
   getAllBooks,
   getAuthors,
-  // getBookDetails,
   getBooksByIds,
   getCategories,
   getNewlyAddedBooks,
@@ -45,7 +46,7 @@ const HomePage = () => {
   });
 
   // all books
-  const { data: books } = useQuery({
+  const { data: books, isLoading: isBookLoading } = useQuery({
     queryKey: ["books"],
     queryFn: async () => {
       const { books } = await getAllBooks();
@@ -55,7 +56,7 @@ const HomePage = () => {
 
   const {
     data: newBooks,
-    isFetching: newBookLoading,
+    isLoading: newBookLoading,
     error,
   } = useQuery({
     queryKey: ["newBooks"],
@@ -66,7 +67,7 @@ const HomePage = () => {
   });
 
   //fetch  all authors
-  const { data: authors } = useQuery({
+  const { data: authors, isLoading: isAuthorsLoading } = useQuery({
     queryKey: ["authors"],
     queryFn: async () => {
       const { authors } = await getAuthors();
@@ -75,7 +76,7 @@ const HomePage = () => {
   });
 
   // search books
-  const { data: searchItems, isFetching: isSearchItemsFetching } = useQuery({
+  const { data: searchItems, isLoading: isSearchItemsFetching } = useQuery({
     queryKey: ["searchBooks", search],
     queryFn: async () => {
       if (search) {
@@ -185,16 +186,11 @@ const HomePage = () => {
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
         {newBookLoading ? (
-          <div className="my-10 flex justify-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
-          </div>
+          <CircleLoading />
         ) : error ? (
           <p className="text-center">Error loading new books</p>
         ) : (
-          <BookSectionSlider
-            items={newBooks?.slice(0, 10)}
-            viewAllLink="/all-books"
-          />
+          <BookSectionSlider items={newBooks} viewAllLink="/all-books" />
         )}
       </section>
 
@@ -205,7 +201,7 @@ const HomePage = () => {
 
       {/* Recently Viewed Section */}
       {recentViewedBooks?.length > 0 && (
-        <section className="z-10 mt-10 rounded-md bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:mx-5 sm:rounded-xl">
+        <section className="z-10 mt-10 rounded-md bg-gradient-to-r from-purple-400 to-teal-400 p-8 shadow-md sm:rounded-xl">
           <BookSectionTitle title={"Recently Viewed"} />
           <RecentlyViewBookSlider
             items={recentViewedBooks} // Pass the recently viewed books
@@ -213,44 +209,43 @@ const HomePage = () => {
         </section>
       )}
 
-      <section className="mt-10 flex flex-col p-8 text-center">
+      <section className="z-10 mt-10 rounded-xl p-8">
         <BookSectionTitle title={"All Category"} />
-        <div className="flex flex-wrap justify-center gap-3 text-center">
-          {categoriesName?.map((categories, idx) => (
-            <Link
-              href={`/category/${categories.Genre}`}
-              className="rounded-sm border border-primary bg-secondary px-10 py-4 hover:bg-primary hover:duration-300 hover:ease-linear"
-              key={idx}
-            >
-              {categories.Genre}
-            </Link>
-          ))}
-        </div>
+        <CategorySection books={books} categoriesName={categoriesName} />
       </section>
 
       {/* New Best Sellers Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Best Sellers"} />
-        <BookSectionSlider
-          items={books?.slice(0, 10)}
-          viewAllLink={"/all-books"}
-        />
+        {isBookLoading ? (
+          <CircleLoading />
+        ) : (
+          <BookSectionSlider items={books} viewAllLink={"/all-books"} />
+        )}
       </section>
 
       {/* Top of the month Books Slider */}
-      <section className="z-10 mb-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+      <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
-        <BookSectionSlider
-          viewAllLink={"/all-books"}
-          items={books?.slice(0, 10)} // Show 10 books
-          renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
-        />
+        {isBookLoading ? (
+          <CircleLoading />
+        ) : (
+          <BookSectionSlider
+            viewAllLink={"/all-books"}
+            items={books} // Show 10 books
+            renderCard={(book) => <Card book={book} />} // Pass how you want to render the card
+          />
+        )}
       </section>
 
       {/* Author section */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-8 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-        <AuthorSectionTitle title={"Author"} />
-        <AuthorSectionSlide items={authors?.slice(0, 10)} />
+        <AuthorSectionTitle title={"Authors"} />
+        {isAuthorsLoading ? (
+          <CircleLoading />
+        ) : (
+          <AuthorSectionSlide items={authors} />
+        )}
       </section>
     </div>
   );

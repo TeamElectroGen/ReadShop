@@ -20,7 +20,7 @@ export const bookData = `
 <desc>Explore books from a specific category. Replace {categoryName} with the desired category, like 'Adventure', 'Fantasy', etc.</desc>
 </url>
 <url>
-<loc>https://readshop.vercel.app/all-books?categories=Adventure%2CFantasy%2CHumor%2CNon-Fiction&authors=Ashley+Wall%2CBill+Sugrue%2CLexi+Rees&publishers=&startDate=2022-06-21T18%3A00%3A00.000Z&endDate=2024-03-28T18%3A00%3A00.000Z&priceMin=4&priceMax=1000&rating=3</loc>
+<loc>https://readshop.vercel.app/all-books?categories={categoryName}%2C{categoryName}%2C{categoryName}%2C{categoryName}&authors={authorName}%2C{authorName}%2C{authorName}&publishers={publisherName}%2C{publisherName}&startDate={startDate}&endDate={endDate}&priceMin={priceMinimum}&priceMax={priceMaximum}&rating={ratingStar}</loc>
 <desc>Filter and find books by categories, authors, price, rating, and more</desc>
 </url>
 <url>

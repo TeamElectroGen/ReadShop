@@ -7,7 +7,7 @@ const ChatHeader = () => {
         <p className="text-xs">Chat with</p>
         <div className="flex items-center gap-1.5">
           <p className="size-2 rounded-full bg-green-500" />
-          <p className="font-medium">ReadShop Support</p>
+          <p className="font-medium text-start">ReadShop Support</p>
         </div>
       </div>
     </div>
