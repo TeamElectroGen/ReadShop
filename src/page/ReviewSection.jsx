@@ -49,7 +49,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
         session?.user?.email,
         bookId
       );
-      setNewReviewText(reviewAndRatingData?.review);
+      setNewReviewText(reviewAndRatingData?.reviewText);
       setSelectedRating(reviewAndRatingData?.rating);
       return reviewAndRatingData;
     },
@@ -68,7 +68,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
           ? "Review updated successfully!"
           : "Review submitted successfully!"
       );
-      
+
       setShowReviewForm(false);
     },
     onError: () => {
@@ -82,8 +82,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
     onSuccess: () => {
       queryClient.invalidateQueries(["reviews"]);
       toast.success("Review deleted successfully!");
-      setNewReviewText("");
-      setSelectedRating(0);
+
       setShowReviewForm(false);
     },
     onError: () => {
@@ -152,12 +151,12 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
               }
             })}
           </div>
-          <p className="text-2xl font-semibold text-gray-800">{rating}</p>
-          <p className="text-sm text-gray-500">Average Rating</p>
+          <p className="text-2xl font-bold text-gray-800">{rating}</p>
+          <p className="text-gray-600">Average Rating</p>
         </div>
         <div className="text-center">
+          <p className="text-2xl font-bold text-blue-600">{reviewCount}</p>
           <p className="text-gray-600">Total Reviews</p>
-          <p className="text-xl font-bold text-blue-600">{reviewCount}</p>
         </div>
       </div>
 
