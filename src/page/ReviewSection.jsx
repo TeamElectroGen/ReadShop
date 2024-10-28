@@ -66,6 +66,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
           ? "Review updated successfully!"
           : "Review submitted successfully!"
       );
+      
       setShowReviewForm(false);
     },
     onError: () => {
