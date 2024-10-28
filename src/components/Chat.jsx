@@ -1,6 +1,7 @@
 "use client";
 import useRole from "@/hooks/useRole";
 import { CircleX } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import ChatHeader from "./ChatHeader";
@@ -15,12 +16,13 @@ import {
 
 const Chat = () => {
   const role = useRole();
+  const path = usePathname();
   const [show, setShow] = useState(true);
 
   if (!show) {
     return;
   }
-  if (role === "admin") {
+  if (role === "admin" || path.includes("/dashboard")) {
     return;
   }
   return (
