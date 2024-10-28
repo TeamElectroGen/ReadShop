@@ -100,23 +100,17 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 h-28 w-full border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}
+        className={`sticky top-0 z-50 h-16 w-full border-border/40 ${scrollPosition > 0 && "bg-background/80 backdrop-blur supports-[backdrop-blur]:bg-background/60"}`}
       >
         <div className="container z-50 flex h-full items-center justify-between">
           <Link
             href={"/"}
             className="flex items-center gap-2 font-sans text-2xl font-bold"
           >
-            <Image
-              src={"/assets/logo.png"}
-              alt=""
-              width={200}
-              height={80}
-              className="rounded-sm p-1.5 text-foreground"
-            />
-            {/* <span className="font-serif text-xl font-semibold tracking-wide">
+            <FaBookOpenReader className="size-7 rounded-sm bg-primary p-1.5 text-foreground" />
+            <span className="font-serif text-xl font-semibold tracking-wide">
               Read Shop
-            </span> */}
+            </span>
           </Link>
 
           <nav>
