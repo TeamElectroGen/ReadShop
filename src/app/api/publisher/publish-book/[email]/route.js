@@ -28,6 +28,7 @@ export const POST = async (request, { params }) => {
       ...bookData,
       AuthorName,
       PublicationId,
+      isApproved: false,
       Price: parseFloat(bookData.Price),
       PublishDate: new Date(),
       Rating: 0,
