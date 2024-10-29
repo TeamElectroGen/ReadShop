@@ -45,7 +45,15 @@ const addBookFormSchema = z.object({
     .min(1, "Please select an author name."),
   Description: z.string().min(11, { message: "Write more Description" }),
   CoverImage: z.string().url({ message: "Please enter a valid image URL" }),
-  Genre: z.string(),
+  Genre: z.string().refine(
+    (value) => {
+      if (value.includes(" ")) {
+        return value.includes(",");
+      }
+      return true;
+    },
+    { message: "Multiple genres must be separated by commas" }
+  ),
   Price: z.string(),
   PublicationName: z.string(),
   wishList: z.array(),
