@@ -6,7 +6,7 @@ import poster from "../../public/assets/poster.jpg";
 import RatingStar from "./RatingStar";
 
 const HomePageCategoryGrid = ({ books }) => {
-  const sortedBooks = books?.sort((a, b) => b.Rating - a.Rating);
+  const sortedBooks = books?.sort((a, b) => b?.Rating - a?.Rating);
   // const bestSellerRef = useRef(null);
 
   // const scrollToEnd = () => {
@@ -72,7 +72,7 @@ const HomePageCategoryGrid = ({ books }) => {
                         <div className="flex-1">
                           <p className="font-semibold">{book.BookName}</p>
                           <p className="text-xs">{book.AuthorName}</p>
-                          <RatingStar rating={book.Rating} />
+                          <RatingStar rating={book.Rating || 0} />
                         </div>
                         <div>
                           <p className="text-md flex w-full min-w-20 items-end text-right font-bold text-green-600">
@@ -236,7 +236,7 @@ const HomePageCategoryGrid = ({ books }) => {
                       <div className="flex-1">
                         <p className="font-semibold">{book.BookName}</p>
                         <p className="text-xs">{book.AuthorName}</p>
-                        <RatingStar rating={book.Rating} />
+                        <RatingStar rating={book.Rating || 0} />
                       </div>
                       <p className="text-md flex w-full min-w-20 items-end text-right font-bold text-green-600">
                         $ {book.Price}
