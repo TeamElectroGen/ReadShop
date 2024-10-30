@@ -191,6 +191,19 @@ export const getBooksByPage = async (size, page) => {
   }
 };
 
+// get lower price books
+export const getLowerPriceBooks = async () => {
+  try {
+    const res = await axios(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-lower-price-books`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 // ============================= Author ================================
 
 // Fetch All Authors

@@ -16,6 +16,7 @@ import {
   getAuthors,
   getBooksByIds,
   getCategories,
+  getLowerPriceBooks,
   getNewlyAddedBooks,
   getSearchBooks,
 } from "@/services/getBooksData";
@@ -53,6 +54,15 @@ const HomePage = () => {
       return books;
     },
   });
+
+  const { data: lowerPriceBooks = [], isLoading: isLowerPriceLoading } =
+    useQuery({
+      queryKey: ["lower-books"],
+      queryFn: async () => {
+        const { books } = await getLowerPriceBooks();
+        return books;
+      },
+    });
 
   const {
     data: newBooks,
@@ -214,13 +224,16 @@ const HomePage = () => {
         <CategorySection books={books} categoriesName={categoriesName} />
       </section>
 
-      {/* New Best Sellers Books Slider */}
+      {/* New Lower Price Books Slider */}
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-4 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-        <BookSectionTitle title={"Best Sellers"} />
-        {isBookLoading ? (
+        <BookSectionTitle title={"Lower Price"} />
+        {isLowerPriceLoading ? (
           <CircleLoading />
         ) : (
-          <BookSectionSlider items={books} viewAllLink={"/all-books"} />
+          <BookSectionSlider
+            items={lowerPriceBooks}
+            viewAllLink={"/all-books"}
+          />
         )}
       </section>
 
