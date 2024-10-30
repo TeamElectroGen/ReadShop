@@ -42,12 +42,16 @@ export async function middleware(request) {
       );
     }
 
-    if (
-      path.startsWith("/dashboard") &&
-      role !== "admin" &&
-      role !== "publisher"
-    ) {
-      return NextResponse.redirect(new URL(`/profile`, request.url));
+    if (path.startsWith("/dashboard/admin") && role !== "admin") {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
+    }
+
+    if (path.startsWith("/dashboard/publisher") && role !== "publisher") {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
     }
 
     if (path.startsWith("/api/private") && role !== "user") {
@@ -77,7 +81,8 @@ export const config = {
     "/profile/:path*", // user
     "/api/private/:path*", // user
     "/checkout/:path*", // user
-    "/dashboard/:path*", // admin and publisher
+    "/dashboard/admin/:path*", // admin
+    "/dashboard/publisher/:path*", //  publisher
     "/api/admin/:path*", // admin
     "/api/publisher/:path*", // publisher
   ],
