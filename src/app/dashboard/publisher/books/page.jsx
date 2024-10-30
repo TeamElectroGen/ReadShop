@@ -1,3 +1,5 @@
+"use client";
+import CircleLoading from "@/components/CircleLoading";
 import DashboardHeading from "@/components/DashboardHeading";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,44 +10,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const books = [
-  {
-    id: 1,
-    BookName: "Atomic habits",
-    AuthorName: "Moris jane",
-    Price: 7,
-    rating: 4.8,
-  },
-  {
-    id: 2,
-    BookName: "Dopamine Detox",
-    AuthorName: "Hatrik dopa",
-    Price: 7,
-    rating: 4.5,
-  },
-  {
-    id: 3,
-    BookName: "The Alchemist",
-    AuthorName: "Aboltabol cha",
-    Price: 9,
-    rating: 4.7,
-  },
-];
+import { getPublisherBooks } from "@/services/publisherRelated";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 const Books = () => {
-  // if (isLoading) {
-  //   return (
-  //     <div className="mt-16">
-  //       <CircleLoading />
-  //     </div>
-  //   );
-  // }
+  const { data: session } = useSession();
+
+  const {
+    data: books,
+    isLoading,
+    isPending,
+  } = useQuery({
+    queryKey: ["publisher-books"],
+    queryFn: async () => {
+      const { books } = await getPublisherBooks(session?.user?.email);
+      return books;
+    },
+    enabled: !!session?.user?.email,
+  });
 
   return (
     <section className="flex h-full flex-1 flex-col gap-4 lg:gap-6">
       <DashboardHeading heading="Published books" />
-      {books ? (
+      {isLoading || isPending ? (
+        <CircleLoading />
+      ) : books ? (
         <>
           <div className="w-full self-start rounded-lg border bg-background shadow-sm md:flex-1">
             <Table>
@@ -77,7 +67,7 @@ const Books = () => {
                       ${book.Price}
                     </TableCell>
                     <TableCell className="text-xs sm:text-sm">
-                      {book.rating}
+                      {book.rating || 0}
                     </TableCell>
                     {/* TODO: make the delete and edit functional */}
                     {/* <TableCell>
