@@ -23,7 +23,8 @@ export async function middleware(request) {
     const { role } = await getUserRole(token.email);
 
     if (
-      path.startsWith("/api/private/user") &&
+      (path.startsWith("/api/private/user") ||
+        path.startsWith("/api/private/my-profile-update")) &&
       (role === "user" || role === "admin" || role === "publisher")
     ) {
       return NextResponse.next();

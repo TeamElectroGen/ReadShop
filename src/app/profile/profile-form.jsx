@@ -27,9 +27,10 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { CgSpinnerTwo } from "react-icons/cg";
 import { z } from "zod";
 
 const profileFormSchema = z.object({
@@ -51,7 +52,6 @@ const profileFormSchema = z.object({
 
 const ProfileForm = () => {
   const { data: session } = useSession() || {};
-  const [loading, setLoading] = useState(false);
 
   const {
     data: userData = {},
@@ -66,7 +66,7 @@ const ProfileForm = () => {
     enabled: !!session?.user?.email,
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async (profileData) => {
       const res = await updateProfile(userData?._id, profileData);
       return res;
@@ -101,14 +101,11 @@ const ProfileForm = () => {
   }, [userData, form]);
 
   const onSubmit = async (data) => {
-    setLoading(true);
     try {
       await mutateAsync(data);
     } catch (err) {
       console.log(err);
       toast.error(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -226,10 +223,15 @@ const ProfileForm = () => {
           )}
         />
         <Button
-          disabled={isFetching || loading || !form.formState.isDirty}
+          className="w-full md:w-1/4"
+          disabled={isFetching || isPending || !form.formState.isDirty}
           type="submit"
         >
-          Update profile
+          {isPending ? (
+            <CgSpinnerTwo className="animate-spin text-2xl" />
+          ) : (
+            <p>Update profile</p>
+          )}
         </Button>
       </form>
     </Form>

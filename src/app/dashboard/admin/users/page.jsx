@@ -27,11 +27,7 @@ const Users = () => {
   });
 
   if (isLoading) {
-    return (
-      <p className="mt-16">
-        <CircleLoading />
-      </p>
-    );
+    return <CircleLoading />;
   }
 
   return (
