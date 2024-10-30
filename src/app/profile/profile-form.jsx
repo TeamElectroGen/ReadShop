@@ -1,6 +1,8 @@
 "use client";
 
+import CircleLoading from "@/components/CircleLoading";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -11,25 +13,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-// import { toast } from "@/hooks/use-toast";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { getUser, updateProfile } from "@/services/getUserData";
+import { queryClient } from "@/services/Providers";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { CgSpinnerTwo } from "react-icons/cg";
+import { z } from "zod";
 
 const profileFormSchema = z.object({
   name: z
@@ -50,12 +52,12 @@ const profileFormSchema = z.object({
 
 const ProfileForm = () => {
   const { data: session } = useSession() || {};
-  // eslint-disable-next-line no-unused-vars
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
 
-  // eslint-disable-next-line no-unused-vars
-  const { data: userData = {}, isLoading: isUserDataLoading } = useQuery({
+  const {
+    data: userData = {},
+    isPending: isUserDataLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["userId", session?.user?.email],
     queryFn: async () => {
       const { user } = await getUser(session?.user?.email);
@@ -64,47 +66,52 @@ const ProfileForm = () => {
     enabled: !!session?.user?.email,
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async (profileData) => {
-      console.log(profileData);
-      const { data } = await updateProfile(userData?._id, profileData);
-      console.log(data);
-      return data;
+      const res = await updateProfile(userData?._id, profileData);
+      return res;
     },
     onSuccess: () => {
-      console.log("Profile updated");
-      toast({
-        title: "Profile Updated Successfully",
-      });
+      toast.success("Profile Updated Successfully");
+      queryClient.invalidateQueries(["userId", session?.user?.email]);
     },
   });
-
-  console.log(userData);
 
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: userData ? userData?.name : "",
-      phone: userData ? userData?.phone : "",
-      address: userData ? userData?.address : "",
-      dob: userData ? userData?.dob : "",
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      dob: new Date(),
     },
-    mode: "onChange",
   });
 
+  useEffect(() => {
+    if (userData && Object.keys(userData).length > 0) {
+      form.reset({
+        name: userData.name || "",
+        email: userData.email || "",
+        phone: userData.phone || "",
+        address: userData.address || "",
+        dob: new Date(userData.dob) || new Date(),
+      });
+    }
+  }, [userData, form]);
+
   const onSubmit = async (data) => {
-    setIsLoading(true);
-    console.log(data);
     try {
-      console.log(data);
       await mutateAsync(data);
     } catch (err) {
       console.log(err);
-      toast(err.message);
-    } finally {
-      setIsLoading(false);
+      toast.error(err.message);
     }
   };
+
+  if (isUserDataLoading) {
+    return <CircleLoading />;
+  }
 
   return (
     <Form {...form}>
@@ -117,11 +124,7 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Your name"
-                  {...field}
-                  value={userData?.name}
-                />
+                <Input placeholder="Your name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -135,12 +138,7 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="name@gmail.com"
-                  {...field}
-                  value={userData?.email}
-                  disabled
-                />
+                <Input placeholder="name@gmail.com" {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -154,11 +152,7 @@ const ProfileForm = () => {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Your number"
-                  value={userData?.phone}
-                  {...field}
-                />
+                <Input placeholder="Your number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -175,7 +169,6 @@ const ProfileForm = () => {
                 <Textarea
                   placeholder="Your specific address"
                   className="resize-none"
-                  value={userData?.address}
                   {...field}
                 />
               </FormControl>
@@ -229,7 +222,17 @@ const ProfileForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Update profile</Button>
+        <Button
+          className="w-full md:w-1/4"
+          disabled={isFetching || isPending || !form.formState.isDirty}
+          type="submit"
+        >
+          {isPending ? (
+            <CgSpinnerTwo className="animate-spin text-2xl" />
+          ) : (
+            <p>Update profile</p>
+          )}
+        </Button>
       </form>
     </Form>
   );

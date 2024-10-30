@@ -1,8 +1,5 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,9 +10,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 // import { toast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { authorName } from "@/services/authorsCRUD";
+import { postBookData } from "@/services/publisherRelated";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const addBookFormSchema = z.object({
   BookName: z
@@ -26,39 +38,86 @@ const addBookFormSchema = z.object({
     .max(50, {
       message: "Name must not be longer than 30 characters.",
     }),
-  AuthorName: z.string({
-    required_error: "Please give an author name.",
-  }),
+  authorId: z
+    .string({
+      required_error: "Please select an author name.",
+    })
+    .min(1, "Please select an author name."),
   Description: z.string().min(11, { message: "Write more Description" }),
-  CoverImage: z.string(),
-  Genre: z.string(),
+  CoverImage: z.string().url({ message: "Please enter a valid image URL" }),
+  Genre: z.string().refine(
+    (value) => {
+      if (value.includes(" ")) {
+        return value.includes(",");
+      }
+      return true;
+    },
+    { message: "Multiple genres must be separated by commas" }
+  ),
   Price: z.string(),
   PublicationName: z.string(),
-  PublicationEmail: z.string(),
+  wishList: z.array(),
+  readList: z.array(),
 });
-
-// This can come from your database or API.
 
 const AddBookForm = () => {
   const { data: session } = useSession() || {};
+
+  const { data: authors } = useQuery({
+    queryKey: ["authors"],
+    queryFn: async () => {
+      const res = await authorName();
+      return res.authorNames;
+    },
+  });
 
   const form = useForm({
     resolver: zodResolver(addBookFormSchema),
     defaultValues: {
       BookName: "",
-      AuthorName: "",
-      Description: "",
+      authorId: "",
       CoverImage: "",
+      Description: "",
+      PublicationName: "",
       Genre: "",
       Price: "",
-      PublicationName: session?.user?.name,
-      PublicationEmail: session?.user?.email,
+      wishList: [],
+      readList: [],
     },
-    mode: "onChange",
+    // mode: "onChange",
+  });
+
+  useEffect(() => {
+    form.reset({
+      BookName: "",
+      authorId: "",
+      CoverImage: "",
+      Description: "",
+      PublicationName: session?.user?.name,
+      Genre: "",
+      Price: "",
+      wishList: [],
+      readList: [],
+    });
+  }, [form, session?.user?.email, session?.user?.name]);
+
+  const { mutate, isPending } = useMutation({
+    queryKey: ["add-book"],
+    mutationFn: async (bookData) => {
+      const res = await postBookData(session?.user?.email, bookData);
+      return res;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        form.reset();
+        toast.success("Book published successfully");
+      }
+      console.log(data);
+    },
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    mutate(data);
   };
 
   return (
@@ -84,17 +143,32 @@ const AddBookForm = () => {
         {/* Author name field */}
         <FormField
           control={form.control}
-          name="AuthorName"
+          name="authorId"
           render={({ field }) => (
             <FormItem className="col-span-full sm:col-span-3">
               <FormLabel>Author Name</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Author Name" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {authors?.map((author) => (
+                      <SelectItem key={author._id} value={author._id}>
+                        {author?.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         {/* Description field */}
         <FormField
           control={form.control}
@@ -156,7 +230,7 @@ const AddBookForm = () => {
           )}
         />
         {/* Publication name */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name="PublicationName"
           render={({ field }) => (
@@ -168,9 +242,9 @@ const AddBookForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         {/* Publication email */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name="PublicationEmail"
           render={({ field }) => (
@@ -182,9 +256,9 @@ const AddBookForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
-        <div className="col-span-full flex justify-end">
-          <Button type="submit" className="">
+        /> */}
+        <div className="col-span-4 flex md:items-end md:justify-end">
+          <Button disabled={isPending} type="submit" className="">
             Send publish request
           </Button>
         </div>

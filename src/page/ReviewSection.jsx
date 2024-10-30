@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import useRole from "@/hooks/useRole";
 import { queryClient } from "@/services/Providers";
 import {
+  deleteUserReviewAndRating,
   getBookReviewAndRating,
   getUserReviewAndRating,
   patchUpdateReviewAndRating,
@@ -16,7 +17,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt, FaTrashAlt } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import TextareaAutosize from "react-textarea-autosize";
 import defaultImage from "../../public/assets/profile.png";
@@ -48,6 +49,8 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
         session?.user?.email,
         bookId
       );
+      setNewReviewText(reviewAndRatingData?.reviewText);
+      setSelectedRating(reviewAndRatingData?.rating);
       return reviewAndRatingData;
     },
     enabled: !!session?.user?.email && !!bookId,
@@ -65,10 +68,25 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
           ? "Review updated successfully!"
           : "Review submitted successfully!"
       );
+
       setShowReviewForm(false);
     },
     onError: () => {
       toast.error("Failed to submit review. Please try again.");
+    },
+  });
+
+  // Mutation for deleting the review
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteUserReviewAndRating(session?.user?.email, bookId),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["reviews"]);
+      toast.success("Review deleted successfully!");
+
+      setShowReviewForm(false);
+    },
+    onError: () => {
+      toast.error("Failed to delete review. Please try again.");
     },
   });
 
@@ -108,7 +126,7 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
   };
 
   return (
-    <div className="reviews-container container mt-8 rounded-lg p-6 md:mx-auto">
+    <div className="reviews-container container mt-12 rounded-lg md:mx-auto">
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         Reviews and Ratings
       </h2>
@@ -133,12 +151,12 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
               }
             })}
           </div>
-          <p className="text-2xl font-semibold text-gray-800">{rating}</p>
-          <p className="text-sm text-gray-500">Average Rating</p>
+          <p className="text-2xl font-bold text-gray-800">{rating}</p>
+          <p className="text-gray-600">Average Rating</p>
         </div>
         <div className="text-center">
+          <p className="text-2xl font-bold text-blue-600">{reviewCount}</p>
           <p className="text-gray-600">Total Reviews</p>
-          <p className="text-xl font-bold text-blue-600">{reviewCount}</p>
         </div>
       </div>
 
@@ -214,6 +232,17 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
             >
               {userReview ? "Update Review" : "Submit Review"}
             </Button>
+            {/* Delete button */}
+            {userReview?._id && (
+              <Button
+                type="button"
+                onClick={() => deleteMutation.mutate()}
+                className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-white shadow hover:bg-red-500 md:ml-2"
+              >
+                <FaTrashAlt className="mr-2" />
+                Delete Review
+              </Button>
+            )}
           </form>
         </div>
       )}

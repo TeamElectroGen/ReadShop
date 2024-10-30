@@ -14,9 +14,9 @@ const MenuItem = ({ href="", title="", icon: Icon, handleClick }) => {
       onClick={handleClick}
       className={cn(
         pathname === href
-          ? "bg-muted text-foreground hover:text-foreground"
+          ? "bg-primary/10 border-l-4 border-primary text-primary-foreground hover:text-foreground"
           : "text-muted-foreground hover:text-foreground",
-        "flex items-center gap-3 rounded-lg px-3 py-2 transition-all"
+        "flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition-all"
       )}
     >
       {Icon && <Icon className="h-4 w-4" />}

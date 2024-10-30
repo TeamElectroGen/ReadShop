@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/pagination";
 import { authorName } from "@/services/authorsCRUD";
 import {
-  getAllBooks,
+  // getAllBooks,
   getBooksByPage,
   getCategories,
   getPublicationName,
@@ -42,6 +42,7 @@ const AllBooks = () => {
   const [selectedPublishers, setSelectedPublishers] = useState([]);
   const [selectedAuthors, setSelectedAuthors] = useState([]);
   const searchParams = useSearchParams();
+  // eslint-disable-next-line no-unused-vars
   const [filteredBooks, setFilteredBooks] = useState([]);
 
   //For Data Fetching

@@ -1,19 +1,11 @@
 import { useCart } from "@/app/context/CartContext";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { CircleXIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaCircle, FaCircleArrowRight } from "react-icons/fa6";
-import { MdDelete } from "react-icons/md";
 import { Button } from "./ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
-import { CircleXIcon } from "lucide-react";
+import { Table, TableBody, TableCell, TableRow } from "./ui/table";
 
 const ProductCart = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity } = useCart();

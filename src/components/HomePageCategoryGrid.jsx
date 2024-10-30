@@ -1,15 +1,12 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { FaUser } from "react-icons/fa6";
 import poster from "../../public/assets/poster.jpg";
 import RatingStar from "./RatingStar";
-import Card from "./Card";
-import { CardContent } from "./ui/card";
-import { IoPeople } from "react-icons/io5";
-import { FaUser } from "react-icons/fa6";
 
 const HomePageCategoryGrid = ({ books }) => {
-  const sortedBooks = books?.sort((a, b) => b.Rating - a.Rating);
+  const sortedBooks = books?.sort((a, b) => b?.Rating - a?.Rating);
   // const bestSellerRef = useRef(null);
 
   // const scrollToEnd = () => {
@@ -75,7 +72,7 @@ const HomePageCategoryGrid = ({ books }) => {
                         <div className="flex-1">
                           <p className="font-semibold">{book.BookName}</p>
                           <p className="text-xs">{book.AuthorName}</p>
-                          <RatingStar rating={book.Rating} />
+                          <RatingStar rating={book.Rating || 0} />
                         </div>
                         <div>
                           <p className="text-md flex w-full min-w-20 items-end text-right font-bold text-green-600">
@@ -119,10 +116,10 @@ const HomePageCategoryGrid = ({ books }) => {
                       href={`/view-details/${book._id}`}
                       className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500 group-hover:opacity-90"
                     >
-                      <p className="p-5 text-center text-xl font-bold text-black">
+                      <p className="p-5 text-center text-xs font-bold text-black md:text-xl">
                         {book.BookName}
                       </p>
-                      <p className="text-md flex items-baseline gap-1 text-center text-darkGray-800">
+                      <p className="flex flex-col items-center gap-1 text-center text-xs text-darkGray-800 md:flex-row md:text-base">
                         <FaUser className="rounded-full border text-sm" />
                         {book.AuthorName}
                       </p>
@@ -157,15 +154,16 @@ const HomePageCategoryGrid = ({ books }) => {
                       </div>
                       <Link
                         href={`/view-details/${book._id}`}
-                        className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500 group-hover:opacity-90"
+                        className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500"
                       >
-                        <p className="p-1 text-center text-sm font-bold text-black">
+                        View Details
+                        {/* <p className="p-1 text-center text-sm font-bold text-black">
                           {book.BookName}
                         </p>
                         <p className="flex items-baseline gap-1 text-center text-xs text-darkGray-800">
                           <FaUser className="rounded-full border text-sm" />
                           {book.AuthorName}
-                        </p>
+                        </p> */}
                       </Link>
                     </div>
                   ))}
@@ -194,15 +192,16 @@ const HomePageCategoryGrid = ({ books }) => {
                     </div>
                     <Link
                       href={`/view-details/${book._id}`}
-                      className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500 group-hover:opacity-90"
+                      className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-sm bg-primary opacity-0 duration-500"
                     >
-                      <p className="p-1 text-center text-sm font-bold text-black">
+                      View Details
+                      {/* <p className="p-1 text-center text-sm font-bold text-black">
                         {book.BookName}
                       </p>
                       <p className="flex items-baseline gap-1 text-center text-xs text-darkGray-800">
                         <FaUser className="rounded-full border text-sm" />
                         {book.AuthorName}
-                      </p>
+                      </p> */}
                     </Link>
                   </div>
                 ))}
@@ -237,7 +236,7 @@ const HomePageCategoryGrid = ({ books }) => {
                       <div className="flex-1">
                         <p className="font-semibold">{book.BookName}</p>
                         <p className="text-xs">{book.AuthorName}</p>
-                        <RatingStar rating={book.Rating} />
+                        <RatingStar rating={book.Rating || 0} />
                       </div>
                       <p className="text-md flex w-full min-w-20 items-end text-right font-bold text-green-600">
                         $ {book.Price}

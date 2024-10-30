@@ -165,7 +165,7 @@ const Navbar = () => {
                 </Button>
               </Link>
             )}
-            <HamburgerMenu navLinks={navLinks} />
+            <HamburgerMenu />
           </div>
         </div>
       </header>

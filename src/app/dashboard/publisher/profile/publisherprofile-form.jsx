@@ -1,5 +1,6 @@
 "use client";
 
+import CircleLoading from "@/components/CircleLoading";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,15 +12,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
-import { useSession } from "next-auth/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
 import { getUser, updateProfile } from "@/services/getUserData";
-import { useState } from "react";
+import { queryClient } from "@/services/Providers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { CgSpinnerTwo } from "react-icons/cg";
+import { z } from "zod";
 
 const profileFormSchema = z.object({
   name: z
@@ -39,60 +42,66 @@ const profileFormSchema = z.object({
 
 const PublisherProfileForm = () => {
   const { data: session } = useSession() || {};
-  console.log(session);
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
 
-  const { data: userData = {}, isLoading: isUserDataLoading } = useQuery({
+  const {
+    data: userData = {},
+    isLoading: isUserDataLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["userId", session?.user?.email],
     queryFn: async () => {
-      const { user } = await getUser(session?.user?.email);
-      return user;
+      const res = await getUser(session?.user?.email);
+      return res.user;
     },
     enabled: !!session?.user?.email,
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async (profileData) => {
-      console.log(profileData);
-      const { data } = await updateProfile(userData?._id, profileData);
-      console.log(data);
+      const data = await updateProfile(userData?._id, profileData);
       return data;
     },
     onSuccess: () => {
       console.log("Profile updated");
-      toast({
-        title: "Profile Updated Successfully",
-      });
+      toast.success("Profile Updated Successfully");
+      queryClient.invalidateQueries(["userId", session?.user?.email]);
     },
   });
-
-  console.log(userData);
 
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: userData ? userData?.name : "",
-      phone: userData ? userData?.phone : "",
-      address: userData ? userData?.address : "",
-      dob: userData ? userData?.dob : "",
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
     },
-    mode: "onChange",
+    // mode: "onChange",
   });
 
+  useEffect(() => {
+    if (userData && Object.keys(userData).length > 0) {
+      form.reset({
+        name: userData?.name || "",
+        email: userData?.email || "",
+        phone: userData?.phone || "",
+        address: userData?.address || "",
+      });
+    }
+  }, [userData, form]);
+
   const onSubmit = async (data) => {
-    setIsLoading(true);
-    console.log(data);
     try {
-      console.log(data);
       await mutateAsync(data);
     } catch (err) {
       console.log(err);
-      toast(err.message);
-    } finally {
-      setIsLoading(false);
+      toast.error(err.message);
     }
   };
+
+  if (isUserDataLoading) {
+    return <CircleLoading />;
+  }
 
   return (
     <Form {...form}>
@@ -105,11 +114,7 @@ const PublisherProfileForm = () => {
             <FormItem>
               <FormLabel>Publication Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Your name"
-                  {...field}
-                  value={userData?.name}
-                />
+                <Input placeholder="Your name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -123,12 +128,7 @@ const PublisherProfileForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="name@gmail.com"
-                  {...field}
-                  value={userData?.email}
-                  disabled
-                />
+                <Input placeholder="name@gmail.com" {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -142,11 +142,7 @@ const PublisherProfileForm = () => {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Your number"
-                  value={userData?.phone}
-                  {...field}
-                />
+                <Input placeholder="Your number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -163,7 +159,6 @@ const PublisherProfileForm = () => {
                 <Textarea
                   placeholder="Your specific address"
                   className="resize-none"
-                  value={userData?.address}
                   {...field}
                 />
               </FormControl>
@@ -173,7 +168,17 @@ const PublisherProfileForm = () => {
           )}
         />
         <div className="flex justify-end">
-        <Button type="submit">Update profile</Button>
+          <Button
+            className="w-full md:w-2/6 lg:w-1/4"
+            disabled={isFetching || isPending || !form.formState.isDirty}
+            type="submit"
+          >
+            {isPending ? (
+              <CgSpinnerTwo className="animate-spin text-2xl" />
+            ) : (
+              <p>Update profile</p>
+            )}
+          </Button>
         </div>
       </form>
     </Form>
