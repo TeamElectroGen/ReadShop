@@ -79,8 +79,6 @@ const ProfileForm = () => {
     },
   });
 
-  console.log(userData);
-
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
