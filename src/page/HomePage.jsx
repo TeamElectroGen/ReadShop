@@ -196,7 +196,7 @@ const HomePage = () => {
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-4 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"New Arrival"} />
         {newBookLoading ? (
-          <CircleLoading />
+          <CircleLoading className={"my-[165px]"} />
         ) : error ? (
           <p className="text-center">Error loading new books</p>
         ) : (
@@ -228,7 +228,7 @@ const HomePage = () => {
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-4 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Lower Price"} />
         {isLowerPriceLoading ? (
-          <CircleLoading />
+          <CircleLoading className={"my-[165px]"} />
         ) : (
           <BookSectionSlider
             items={lowerPriceBooks}
@@ -241,7 +241,7 @@ const HomePage = () => {
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-4 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <BookSectionTitle title={"Top of Month"} />
         {isBookLoading ? (
-          <CircleLoading />
+          <CircleLoading className={"my-[165px]"} />
         ) : (
           <BookSectionSlider
             viewAllLink={"/all-books"}
@@ -255,7 +255,7 @@ const HomePage = () => {
       <section className="z-10 mt-10 rounded-xl border-b-4 border-primary bg-white/20 p-4 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
         <AuthorSectionTitle title={"Authors"} />
         {isAuthorsLoading ? (
-          <CircleLoading />
+          <CircleLoading className={"my-[78.5px]"} />
         ) : (
           <AuthorSectionSlide items={authors} />
         )}
