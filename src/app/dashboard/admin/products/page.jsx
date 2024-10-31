@@ -80,16 +80,16 @@ const Products = () => {
                     <TableCell className="hidden sm:sm:table-cell">
                       {book.PublicationName}
                     </TableCell>
-                    <TableCell className="text-xs sm:text-sm">4.6</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{book.Rating}</TableCell>
                     {/* TODO: make the delete and edit functional */}
                     <TableCell>
                       <div className="flex gap-3">
                         <Button size="icon" variant="outline">
                           <Trash2 className="size-4 text-destructive" />
                         </Button>
-                        <Button size="icon" variant="outline">
+                        {/* <Button size="icon" variant="outline">
                           <EditIcon className="size-4" />
-                        </Button>
+                        </Button> */}
                       </div>
                     </TableCell>
                   </TableRow>

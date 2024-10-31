@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/table";
 import { CircleXIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { FaCircleArrowRight } from "react-icons/fa6";
 import { useCart } from "../context/CartContext";
 
 const Cart = () => {
@@ -160,6 +162,13 @@ const Cart = () => {
                   <p className="">Total</p>
                   <p className="text-sm font-semibold">${totalPrice}</p>
                 </div>
+
+                <Button asChild className="mt-4 flex w-full gap-2 font-semibold bg-primary">
+                  <Link href={"/checkout"}>
+                    Checkout
+                    <FaCircleArrowRight />
+                  </Link>
+                </Button>
               </div>
             </CardContent>
           </Card>
