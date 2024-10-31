@@ -4,7 +4,7 @@ export const generateMetadata = () => {
   return {
     title: "About Us",
     description:
-      "Learn more about readShop, your trusted destination for discovering, reading, and purchasing your favorite books. Explore our mission, vision, and values.",
+      "Learn more about ReadShop, your trusted destination for discovering, reading, and purchasing your favorite books. Explore our mission, vision, and values.",
   };
 };
 
