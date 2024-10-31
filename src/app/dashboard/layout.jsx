@@ -13,8 +13,13 @@ import DashboardSidebar from "@/components/DashboardSidebar";
 import { Input } from "@/components/ui/input";
 import UserDropdown from "@/components/UserDropdown";
 
-export const description =
-  "A products dashboard with a sidebar navigation and a main content area. The dashboard has a header with a search input and a user menu. The sidebar has a logo, navigation links, and a card with a call to action. The main content area shows an empty state with a call to action.";
+export const generateMetadata = async () => {
+  return {
+    title: `Dashboard`,
+    description: `Manage orders from the ReadShop admin panel. Track and update order statuses for a seamless customer experience.`,
+    keywords: ["admin", "dashboard", "orders", "manage orders", "order status"],
+  };
+};
 
 const DashboardLayout = ({ children }) => {
   return (
