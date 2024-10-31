@@ -3,7 +3,7 @@ export const generateMetadata = () => {
   return {
     title: "All Books",
     description:
-      "Browse through the extensive collection of books available at readShop. Find books across various genres, authors, and categories to satisfy your reading cravings.",
+      "Browse through the extensive collection of books available at ReadShop. Find books across various genres, authors, and categories to satisfy your reading cravings.",
   };
 };
 
