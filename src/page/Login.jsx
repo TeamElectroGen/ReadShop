@@ -1,10 +1,11 @@
 "use client";
-import React, { Suspense } from "react";
-import Link from "next/link";
-import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
 import SocialLogin from "@/components/SocialLogin";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import toast from "react-hot-toast";
+import { CgSpinnerTwo } from "react-icons/cg";
 
 const Login = () => {
   return (
@@ -16,9 +17,11 @@ const Login = () => {
 
 const LoginContent = () => {
   const path = useSearchParams().get("redirect");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const form = e.target;
     const emailOrPhone = form.emailOrPhone.value;
     const password = form.password.value;
@@ -31,12 +34,15 @@ const LoginContent = () => {
       if (res?.error) {
         console.log(res.error);
         toast.error("Invalid credentials");
+        setIsLoading(false);
       } else {
         window.location.href = path || "/";
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong!");
+      setIsLoading(false);
     }
   };
 
@@ -97,10 +103,15 @@ const LoginContent = () => {
 
             <div>
               <button
+                disabled={isLoading}
                 className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                 type="submit"
               >
-                Sign in
+                {isLoading ? (
+                  <CgSpinnerTwo className="animate-spin text-2xl" />
+                ) : (
+                  "Sign in"
+                )}
               </button>
             </div>
           </div>
