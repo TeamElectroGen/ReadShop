@@ -13,6 +13,10 @@ export const GET = async (request, { params }) => {
       _id: new ObjectId(id),
     });
 
+    const authorDetails = await db.collection("authors").findOne({
+      _id: new ObjectId(bookDetails.authorId),
+    });
+
     // Get review count
     const ReviewCount = await reviewAndRatingCollection.countDocuments({
       bookId: id,
@@ -40,6 +44,7 @@ export const GET = async (request, { params }) => {
     // Add reviewCount and rating to bookDetails
     const modifiedBookDetails = {
       ...bookDetails,
+      AuthorName: authorDetails.name,
       ReviewCount,
       Rating: parseFloat(averageRating.toFixed(1)),
     };

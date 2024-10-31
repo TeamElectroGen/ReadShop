@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Card from "./Card";
 import { Button } from "./ui/button";
@@ -13,13 +13,19 @@ const BookSectionSlider = ({ items, viewAllLink, specialClass }) => {
 
   const handlePrev = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slidePrev();
+      const swiper = swiperRef.current.swiper;
+      const slidesToMove = swiper.params.slidesPerView;
+      swiper.slideTo(Math.max(swiper.activeIndex - slidesToMove, 0));
     }
   };
 
   const handleNext = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideNext();
+      const swiper = swiperRef.current.swiper;
+      const slidesToMove = swiper.params.slidesPerView;
+      swiper.slideTo(
+        Math.min(swiper.activeIndex + slidesToMove, swiper.slides.length - 1)
+      );
     }
   };
 
@@ -48,16 +54,16 @@ const BookSectionSlider = ({ items, viewAllLink, specialClass }) => {
       {/* Swiper Slider */}
       <Swiper
         ref={swiperRef}
-        spaceBetween={20}
+        spaceBetween={16}
         slidesPerView={1}
         navigation={false}
-        modules={[Navigation]}
+        modules={[Navigation, Autoplay]}
         breakpoints={{
-          320: { slidesPerView: 1, spaceBetween: 10 },
-          425: { slidesPerView: 2, spaceBetween: 10 },
-          768: { slidesPerView: 3, spaceBetween: 20 },
-          1024: { slidesPerView: 4, spaceBetween: 30 },
-          1280: { slidesPerView: 5, spaceBetween: 20 },
+          320: { slidesPerView: 1, spaceBetween: 16 },
+          400: { slidesPerView: 2, spaceBetween: 16 },
+          768: { slidesPerView: 3, spaceBetween: 16 },
+          1024: { slidesPerView: 4, spaceBetween: 16 },
+          1280: { slidesPerView: 5, spaceBetween: 16 },
         }}
       >
         {/* Render all the book items */}
