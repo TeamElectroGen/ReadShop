@@ -67,6 +67,20 @@ const Navbar = () => {
 
       <li>
         <Link
+          href={"/all-books"}
+          className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/all-books"
+              ? "border-b-2 border-yellow-300 pb-2 font-bold text-primary"
+              : "text-foreground/60"
+          )}
+        >
+          All Books
+        </Link>
+      </li>
+
+      <li>
+        <Link
           href={"/contact-us"}
           className={cn(
             "transition-all hover:text-primary/80",
@@ -78,6 +92,7 @@ const Navbar = () => {
           Contact Us
         </Link>
       </li>
+
       <li>
         <Link
           href={"/about"}
