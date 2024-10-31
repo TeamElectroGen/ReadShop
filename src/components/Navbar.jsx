@@ -114,7 +114,7 @@ const Navbar = () => {
           </Link>
 
           <nav>
-            <ul className="text-md hidden gap-4 md:flex md:items-center md:justify-center lg:gap-6">
+            <ul className="text-md hidden gap-4 font-semibold md:flex md:items-center md:justify-center lg:gap-6">
               {navLinks}
             </ul>
           </nav>
