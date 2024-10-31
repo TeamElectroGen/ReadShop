@@ -1,17 +1,17 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+// import {
+//   Breadcrumb,
+//   BreadcrumbItem,
+//   BreadcrumbLink,
+//   BreadcrumbList,
+//   BreadcrumbPage,
+//   BreadcrumbSeparator,
+// } from "@/components/ui/breadcrumb";
 import { Search } from "lucide-react";
-import Link from "next/link";
+// import Link from "next/link";
+import DashboardDrawer from "@/components/DashboardDrawer";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import { Input } from "@/components/ui/input";
 import UserDropdown from "@/components/UserDropdown";
-import DashboardDrawer from "@/components/DashboardDrawer";
 
 export const description =
   "A products dashboard with a sidebar navigation and a main content area. The dashboard has a header with a search input and a user menu. The sidebar has a logo, navigation links, and a card with a call to action. The main content area shows an empty state with a call to action.";
@@ -26,7 +26,7 @@ const DashboardLayout = ({ children }) => {
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent lg:px-12">
           {/* Mobile drawer menu */}
           <DashboardDrawer />
-          <Breadcrumb className="hidden md:flex">
+          {/* <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
@@ -44,7 +44,7 @@ const DashboardLayout = ({ children }) => {
                 <BreadcrumbPage>Recent Orders</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </Breadcrumb>
+          </Breadcrumb> */}
           <div className="relative ml-auto flex-1 md:grow-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
