@@ -64,19 +64,21 @@ const Navbar = () => {
           Home
         </Link>
       </li>
+
       <li>
         <Link
-          href={"/about"}
+          href={"/all-books"}
           className={cn(
             "transition-all hover:text-primary/80",
-            pathName === "/about"
-              ? "border-b-2 border-yellow-300 pb-1 font-bold text-primary"
+            pathName === "/all-books"
+              ? "border-b-2 border-yellow-300 pb-2 font-bold text-primary"
               : "text-foreground/60"
           )}
         >
-          About
+          All Books
         </Link>
       </li>
+
       <li>
         <Link
           href={"/contact-us"}
@@ -88,6 +90,20 @@ const Navbar = () => {
           )}
         >
           Contact Us
+        </Link>
+      </li>
+
+      <li>
+        <Link
+          href={"/about"}
+          className={cn(
+            "transition-all hover:text-primary/80",
+            pathName === "/about"
+              ? "border-b-2 border-yellow-300 pb-1 font-bold text-primary"
+              : "text-foreground/60"
+          )}
+        >
+          About
         </Link>
       </li>
     </>
@@ -114,7 +130,7 @@ const Navbar = () => {
           </Link>
 
           <nav>
-            <ul className="text-md hidden gap-4 md:flex md:items-center md:justify-center lg:gap-6">
+            <ul className="text-md hidden gap-4 font-semibold md:flex md:items-center md:justify-center lg:gap-6">
               {navLinks}
             </ul>
           </nav>

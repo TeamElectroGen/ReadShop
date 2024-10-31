@@ -1,11 +1,13 @@
-import React from 'react';
+import React from "react";
 
 const BookSectionTitle = ({ title }) => {
-    return (
-        <div className="border-b border-primary mb-5">
-            <h2 className="md:text-2xl font-bold md:uppercase bg-primary w-fit px-2 md:px-4 py-1 rounded-t-sm">{title}</h2>
-        </div>
-    );
+  return (
+    <div className="mb-5 border-b border-primary">
+      <h2 className="w-fit rounded-t-sm bg-primary px-2 py-1 font-bold md:px-4 md:text-2xl md:uppercase">
+        {title}
+      </h2>
+    </div>
+  );
 };
 
 export default BookSectionTitle;

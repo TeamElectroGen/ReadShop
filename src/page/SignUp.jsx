@@ -1,9 +1,10 @@
 "use client";
-import React, { Suspense } from "react";
-import Link from "next/link";
-import toast from "react-hot-toast";
-import axios from "axios";
 import SocialLogin from "@/components/SocialLogin";
+import axios from "axios";
+import Link from "next/link";
+import { Suspense, useState } from "react";
+import toast from "react-hot-toast";
+import { CgSpinnerTwo } from "react-icons/cg";
 
 const SignUp = () => {
   return (
@@ -14,6 +15,8 @@ const SignUp = () => {
 };
 
 const SignupContent = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -25,23 +28,26 @@ const SignupContent = () => {
     if (password !== confirmPassword)
       return toast.error("Password does't match!");
     const userData = { name, email, phone, password };
+    setIsLoading(true);
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/signup/api`,
         userData
       );
-      console.log(res);
       if (res.status === 200) {
         form.reset();
         if (res.data.status === 200) {
+          setIsLoading(false);
           return toast.success(res.data.message);
         }
         if (res.data.status === 304) {
+          setIsLoading(false);
           return toast.error(res.data.message);
         }
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       toast.error("Something went wrong!");
     }
   };
@@ -144,7 +150,11 @@ const SignupContent = () => {
                   className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                   type="submit"
                 >
-                  Get started
+                  {isLoading ? (
+                    <CgSpinnerTwo className="animate-spin text-2xl" />
+                  ) : (
+                    "Get started"
+                  )}
                 </button>
               </div>
             </div>
