@@ -9,7 +9,7 @@ const UserInfoCard = () => {
   return (
     <>
       <Avatar className="size-16">
-        <AvatarImage src={session?.user?.image} />
+        <AvatarImage src={session?.user.image} alt="user" />
         <AvatarFallback>{session?.user?.name.slice(0, 2)}</AvatarFallback>
       </Avatar>
       <h1 className="text-xl font-bold text-primary">{session?.user?.name}</h1>

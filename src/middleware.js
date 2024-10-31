@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 import { getUserRole } from "./services/getUserData";
 
 const secret = process.env.NEXT_PUBLIC_AUTH_SECRET;
@@ -23,6 +23,14 @@ export async function middleware(request) {
     const { role } = await getUserRole(token.email);
 
     if (
+      (path.startsWith("/api/private/user") ||
+        path.startsWith("/api/private/my-profile-update")) &&
+      (role === "user" || role === "admin" || role === "publisher")
+    ) {
+      return NextResponse.next();
+    }
+
+    if (
       (path.startsWith("/profile") || path.startsWith("/checkout")) &&
       role !== "user"
     ) {
@@ -34,12 +42,16 @@ export async function middleware(request) {
       );
     }
 
-    if (
-      path.startsWith("/dashboard") &&
-      role !== "admin" &&
-      role !== "publisher"
-    ) {
-      return NextResponse.redirect(new URL(`/profile`, request.url));
+    if (path.startsWith("/dashboard/admin") && role !== "admin") {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
+    }
+
+    if (path.startsWith("/dashboard/publisher") && role !== "publisher") {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${path}`, request.url)
+      );
     }
 
     if (path.startsWith("/api/private") && role !== "user") {
@@ -69,7 +81,8 @@ export const config = {
     "/profile/:path*", // user
     "/api/private/:path*", // user
     "/checkout/:path*", // user
-    "/dashboard/:path*", // admin and publisher
+    "/dashboard/admin/:path*", // admin
+    "/dashboard/publisher/:path*", //  publisher
     "/api/admin/:path*", // admin
     "/api/publisher/:path*", // publisher
   ],
