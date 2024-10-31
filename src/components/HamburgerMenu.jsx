@@ -31,8 +31,8 @@ const HamburgerMenu = () => {
           </SheetHeader>
           <div className="mt-3 grid gap-4 py-4 text-sm">
             <MenuItem href="/" title="Home" icon={HomeIcon} />
-            <MenuItem href="/about" title="About" icon={StoreIcon} />
             <MenuItem href="/contact-us" title="Contact Us" icon={PhoneIcon} />
+            <MenuItem href="/about" title="About" icon={StoreIcon} />
           </div>
         </SheetContent>
       </Sheet>
