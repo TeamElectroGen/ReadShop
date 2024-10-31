@@ -1,4 +1,5 @@
 "use client";
+import CircleLoading from "@/components/CircleLoading";
 import FilterSidebar from "@/components/FilterSidebar";
 import RatingStar from "@/components/RatingStar";
 import { Button } from "@/components/ui/button";
@@ -45,39 +46,6 @@ const AllBooks = () => {
   // eslint-disable-next-line no-unused-vars
   const [filteredBooks, setFilteredBooks] = useState([]);
 
-  //For Data Fetching
-  const fetchBooks = async () => {
-    setLoading(true);
-    try {
-      // Check if there are any search parameters or filters applied
-      if (
-        searchParams.toString() ||
-        selectedCategories.length ||
-        selectedAuthors.length ||
-        selectedPublishers.length ||
-        selectedRating ||
-        dateRange[0] ||
-        dateRange[1] ||
-        priceRange[0] !== 0 ||
-        priceRange[1] !== 1000
-      ) {
-        // Fetch filtered books when there are filters or searchParams
-        const data = await getBooksByPage(itemsPerPage, page, searchParams);
-        setBooks(data.books);
-        setTotalPages(data.totalPages);
-      } else {
-        // Fetch all books when no filters or searchParams are applied
-        const data = await getBooksByPage(itemsPerPage, page);
-        setBooks(data.books);
-        setTotalPages(data.totalPages);
-      }
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   //For Apply Filter From Filter Sidebar
   const handleApplyFilters = () => {
     const filteredBooks = books?.filter((book) => {
@@ -115,24 +83,50 @@ const AllBooks = () => {
   };
 
   useEffect(() => {
+    const fetchBooks = async () => {
+      setLoading(true);
+      try {
+        // Check if there are any search parameters or filters applied
+        if (
+          searchParams.toString() ||
+          selectedCategories.length ||
+          selectedAuthors.length ||
+          selectedPublishers.length ||
+          selectedRating ||
+          dateRange[0] ||
+          dateRange[1] ||
+          priceRange[0] !== 0 ||
+          priceRange[1] !== 1000
+        ) {
+          // Fetch filtered books when there are filters or searchParams
+          const data = await getBooksByPage(itemsPerPage, page, searchParams);
+          setBooks(data.books);
+          setTotalPages(data.totalPages);
+        } else {
+          // Fetch all books when no filters or searchParams are applied
+          const data = await getBooksByPage(itemsPerPage, page);
+          setBooks(data.books);
+          setTotalPages(data.totalPages);
+        }
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchBooks();
   }, [
-    page,
-    itemsPerPage,
-    searchParams,
-    selectedCategories,
-    selectedAuthors,
-    selectedPublishers,
-    selectedRating,
     dateRange,
+    itemsPerPage,
+    page,
     priceRange,
+    searchParams,
+    selectedAuthors.length,
+    selectedCategories.length,
+    selectedPublishers.length,
+    selectedRating,
+    setBooks,
   ]);
-
-  //For Pagination
-  const handleItemsPerPageChange = (size) => {
-    setItemsPerPage(size);
-    setPage(1);
-  };
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -243,7 +237,10 @@ const AllBooks = () => {
               {[4, 8, 12, 40].map((size) => (
                 <DropdownMenuItem
                   key={size}
-                  onClick={() => handleItemsPerPageChange(size)}
+                  onClick={() => {
+                    setItemsPerPage(size);
+                    setPage(1);
+                  }}
                 >
                   {size} items per page
                 </DropdownMenuItem>
@@ -253,9 +250,7 @@ const AllBooks = () => {
         </div>
 
         {loading ? (
-          <div className="my-10 flex justify-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
-          </div>
+          <CircleLoading className={"my-20"} />
         ) : (
           <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {books.length > 0 ? (
@@ -295,14 +290,18 @@ const AllBooks = () => {
         <Pagination>
           <PaginationContent>
             <PaginationPrevious
-              className="hover:cursor-pointer"
-              onClick={() => handlePageChange(page - 1)}
-              disabled={page === 1}
+              className={`hover:cursor-pointer ${page === 1 && "text-gray-500"}`}
+              onClick={() => {
+                if (page !== 1) {
+                  handlePageChange(page - 1);
+                }
+              }}
             />
             {Array.from({ length: totalPages }).map((_, index) => (
               <PaginationItem key={index} className="hover:cursor-pointer">
                 <PaginationLink
-                  active={page === index + 1}
+                  // active={true}
+                  className={`${page === index + 1 && "bg-yellow-300"}`}
                   onClick={() => handlePageChange(index + 1)}
                 >
                   {index + 1}
@@ -310,9 +309,12 @@ const AllBooks = () => {
               </PaginationItem>
             ))}
             <PaginationNext
-              className="hover:cursor-pointer"
-              onClick={() => handlePageChange(page + 1)}
-              disabled={page === totalPages}
+              className={`hover:cursor-pointer ${page === totalPages && "text-gray-500"}`}
+              onClick={() => {
+                if (page !== totalPages) {
+                  handlePageChange(page + 1);
+                }
+              }}
             />
           </PaginationContent>
         </Pagination>

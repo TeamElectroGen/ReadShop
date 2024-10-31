@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { getAllBooks } from "@/services/getBooksData";
 import { useQuery } from "@tanstack/react-query";
+// eslint-disable-next-line no-unused-vars
 import { EditIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
 
