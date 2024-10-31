@@ -8,9 +8,9 @@ export const generateMetadata = () => {
     keywords: [
       "about us",
       "about ReadShop",
-      "ReadShop mission",
-      "ReadShop vision",
-      "ReadShop values",
+      "book discovery",
+      "trusted bookstore",
+      "online bookstore",
     ],
   };
 };
