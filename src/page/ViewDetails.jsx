@@ -12,13 +12,14 @@ import {
 } from "@/services/getBooksData";
 import { queryClient } from "@/services/Providers";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { BookOpenCheck } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast"; // Import toast
-import { FaBookOpen, FaCartShopping, FaRegHeart } from "react-icons/fa6";
+import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import ReviewSection from "./ReviewSection";
 
 const ViewDetails = ({ bookid }) => {
@@ -121,7 +122,7 @@ const ViewDetails = ({ bookid }) => {
         <>
           <div className="flex flex-col gap-5 md:flex-row">
             {/* Left Side - Book Image */}
-            <div className="mx-auto flex w-1/2 items-center bg-transparent lg:w-1/3">
+            <div className="mx-auto flex w-1/2 items-center justify-center bg-transparent md:w-1/4 lg:w-1/5">
               <Image
                 src={detailsBook?.CoverImage}
                 alt={detailsBook?.BookName}
@@ -146,7 +147,7 @@ const ViewDetails = ({ bookid }) => {
               </p>
               <div className="mt-4 flex items-center">
                 <span className="rounded bg-yellow-400 px-2.5 py-0.5 text-sm font-semibold">
-                  {detailsBook?.Rating} Stars
+                  {detailsBook?.Rating} Rating
                 </span>
                 <span className="ml-2 font-bold text-gray-500">
                   | {detailsBook?.ReviewCount} Reviews
@@ -172,7 +173,7 @@ const ViewDetails = ({ bookid }) => {
                 </span>
               </div>
 
-              <div className="mt-4 flex flex-col gap-4 md:flex-row">
+              <div className="mt-4 flex flex-col gap-4 lg:flex-row">
                 <button
                   className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white duration-300 focus:outline-none focus:ring-4 ${isAddedToCart ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
                   onClick={handleAddToCartClick}
@@ -190,7 +191,7 @@ const ViewDetails = ({ bookid }) => {
                   onClick={() => handleRWListClick("wish")}
                   className={`flex flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 ${rWStatus.wishList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300"}`}
                 >
-                  <FaRegHeart className="mr-2" />{" "}
+                  <FaRegHeart className="mr-1 md:mr-2" />{" "}
                   {rWStatus.wishList ? "Remove from" : "Add to"} Wishlist
                 </button>
               </div>
@@ -198,9 +199,9 @@ const ViewDetails = ({ bookid }) => {
               <div className="mt-4">
                 <button
                   onClick={() => handleRWListClick("read")}
-                  className={`flex w-full flex-1 items-center justify-center rounded-lg px-5 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:w-1/2 ${rWStatus?.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
+                  className={`flex w-full flex-1 items-center justify-center rounded-lg px-1 py-2.5 text-center font-medium text-white focus:outline-none focus:ring-4 md:px-5 lg:w-1/2 ${rWStatus?.readList ? "bg-red-600 hover:bg-red-700 focus:ring-red-300" : "bg-green-600 hover:bg-green-700 focus:ring-green-300"}`}
                 >
-                  <FaBookOpen className="mr-2 lg:size-4" />
+                  <BookOpenCheck className="mr-1 size-5 md:mr-2" />
                   {rWStatus?.readList ? "Remove from" : "Add to"} Read List
                 </button>
               </div>

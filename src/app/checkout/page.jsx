@@ -1,7 +1,10 @@
 "use client";
 import BookLoading from "@/components/BookLoading";
 import EmptyCart from "@/components/EmptyCart";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { getCouponCode } from "@/services/couponCode";
 import { getUser } from "@/services/getUserData";
 import { postPaymentData } from "@/services/payment";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,14 +14,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { CgSpinnerTwo } from "react-icons/cg";
 import { z } from "zod";
 import { useCart } from "../context/CartContext";
 import ShippingInfoForm from "./shippingInfo-form";
-import { getCouponCode } from "@/services/couponCode";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { CgSpinnerTwo } from "react-icons/cg";
-import toast from "react-hot-toast";
 
 const checkoutFormSchema = z.object({
   name: z

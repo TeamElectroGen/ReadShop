@@ -1,13 +1,13 @@
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 // import { Toaster } from "@/components/ui/toaster";
-import { Toaster } from "react-hot-toast";
-import AuthProvider from "@/services/AuthProvider";
-import { CartProvider } from "./context/CartContext";
-import Providers from "@/services/Providers";
 import Chat from "@/components/Chat";
+import AuthProvider from "@/services/AuthProvider";
+import Providers from "@/services/Providers";
+import { Toaster } from "react-hot-toast";
+import { CartProvider } from "./context/CartContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,7 +21,10 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "ReadShop",
+  title: {
+    default: "ReadShop",
+    template: "%s | ReadShop",
+  },
   description:
     "Discover a world of knowledge and entertainment at ReadShop, where we offer a vast collection of books, audiobooks, and eBooks. From timeless classics to the latest bestsellers, we have something for every reader. Whether you prefer a printed book, the convenience of an eBook, or the immersive experience of an audiobook, ReadShop is here to cater to all your reading needs.",
 };
