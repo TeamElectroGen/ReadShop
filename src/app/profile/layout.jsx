@@ -3,9 +3,11 @@ import { Separator } from "@/components/ui/separator";
 import UserInfoCard from "@/components/UserInfoCard";
 import UserMenu from "@/components/UserMenu";
 
-export const metadata = {
-  title: "Profile | User name here..",
-  description: "This is profile page of user",
+export const generateMetadata = () => {
+  return {
+    title: "Profile",
+    description: `Explore profile details, preferences, and recent activities on ReadShop.`,
+  };
 };
 
 const ProfileLayout = ({ children }) => {

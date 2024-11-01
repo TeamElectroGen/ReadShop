@@ -34,12 +34,13 @@ const DashboardSidebar = () => {
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             {role === "admin" && <AdminMenu />}
             {role === "publisher" && <PublisherMenu />}
+            <LogoutButton />
           </nav>
         </div>
         {/* end */}
-        <footer className="border-t border-slate-200 text-sm font-medium">
+        {/* <footer className="border-t border-slate-200 text-sm font-medium">
           <LogoutButton />
-        </footer>
+        </footer> */}
       </div>
     </aside>
   );

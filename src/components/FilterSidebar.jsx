@@ -106,9 +106,9 @@ const FilterSidebar = ({
   }
 
   return (
-    <section className="relative flex h-[calc(100vh-80px)] min-w-full flex-col border-r p-5 shadow-sm md:min-w-80 md:max-w-min">
+    <section className="relative flex min-w-full flex-col border-r p-5 shadow-sm md:min-w-80 md:max-w-min">
       <BookSectionTitle title={"Filter"} />
-      <div className="max-h-80 overflow-y-auto overflow-x-hidden">
+      <div className="overflow-y-auto overflow-x-hidden">
         {/* Category/Genre Section */}
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
@@ -142,14 +142,14 @@ const FilterSidebar = ({
             </AccordionTrigger>
             <AccordionContent>
               <div className="grid grid-cols-2 gap-3">
-                {AuthorData?.map((author, idx) => (
-                  <div className="flex gap-2 text-left" key={idx}>
+                {AuthorData?.map((author) => (
+                  <div className="flex gap-2 text-left" key={author._id}>
                     <Checkbox
-                      id={`authors-${idx}`}
+                      id={`authors-${author._id}`}
                       checked={selectedAuthors.includes(author)}
                       onCheckedChange={() => handleAuthorChange(author)}
                     />
-                    <p>{author}</p>
+                    <p>{author.name}</p>
                   </div>
                 ))}
               </div>
