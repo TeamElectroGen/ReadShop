@@ -10,10 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllBooks } from "@/services/getBooksData";
-import { useQuery } from "@tanstack/react-query";
-import { EditIcon, Trash2 } from "lucide-react";
+import { deleteBook, getAllBooks } from "@/services/getBooksData";
+import { queryClient } from "@/services/Providers";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Trash2 } from "lucide-react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 const Products = () => {
   // all books
@@ -22,6 +24,25 @@ const Products = () => {
     queryFn: async () => {
       const { books } = await getAllBooks();
       return books;
+    },
+  });
+
+  const { mutate: handleDeleteBook, isPending: loading } = useMutation({
+    mutationFn: (bookId) => {
+      console.log(bookId);
+      toast.loading("Deleting book...", bookId);
+      return deleteBook(bookId);
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      toast.dismiss();
+      toast.success("Book deleted");
+      queryClient.invalidateQueries(["books"]);
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error("Failed to delete book from inventory");
+      console.log(error);
     },
   });
 
@@ -84,7 +105,7 @@ const Products = () => {
                     {/* TODO: make the delete and edit functional */}
                     <TableCell>
                       <div className="flex gap-3">
-                        <Button size="icon" variant="outline">
+                        <Button onClick={() => handleDeleteBook(book._id)} size="icon" variant="outline">
                           <Trash2 className="size-4 text-destructive" />
                         </Button>
                         {/* <Button size="icon" variant="outline">
