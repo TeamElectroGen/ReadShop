@@ -53,9 +53,8 @@ Make book shopping easy, enjoyable, and accessible for all users while supportin
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/readshop.git
-   cd readshop
-
+   git clone https://github.com/TeamElectroGen/ReadShop.git
+   cd ReadShop
    ```
 
 2. Install Dependencies
