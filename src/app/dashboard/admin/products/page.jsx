@@ -101,11 +101,18 @@ const Products = () => {
                     <TableCell className="hidden sm:sm:table-cell">
                       {book.PublicationName}
                     </TableCell>
-                    <TableCell className="text-xs sm:text-sm">{book.Rating}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">
+                      {book.Rating}
+                    </TableCell>
                     {/* TODO: make the delete and edit functional */}
                     <TableCell>
                       <div className="flex gap-3">
-                        <Button onClick={() => handleDeleteBook(book._id)} size="icon" variant="outline">
+                        <Button
+                          disabled={loading}
+                          onClick={() => handleDeleteBook(book._id)}
+                          size="icon"
+                          variant="outline"
+                        >
                           <Trash2 className="size-4 text-destructive" />
                         </Button>
                         {/* <Button size="icon" variant="outline">
