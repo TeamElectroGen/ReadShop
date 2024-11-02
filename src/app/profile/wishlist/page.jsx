@@ -147,7 +147,7 @@ const WishlistPage = () => {
                 height={64}
               />
               <h3 className="mt-4 text-lg font-semibold tracking-tight md:text-xl">
-                Your reading list is empty
+                Your wishlist is empty
               </h3>
               <p className="text-xs text-muted-foreground sm:text-sm">
                 You can add books to wishlist from book details page.
