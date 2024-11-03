@@ -1,6 +1,5 @@
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -26,7 +25,6 @@ const FilterSidebar = ({
   categoryError,
   authorError,
   handleAuthorChange,
-  searchParams,
   handlePublisherChange,
   handleApplyFilters,
   handleCategoryChange,
@@ -44,50 +42,58 @@ const FilterSidebar = ({
   dateRange,
   // setFilteredBooks,
 }) => {
-  useEffect(() => {
-    const categories = searchParams.get("categories");
-    const authors = searchParams.get("authors");
-    const publishers = searchParams.get("publishers");
-    const startDate = searchParams.get("startDate");
-    const endDate = searchParams.get("endDate");
-    const priceMin = searchParams.get("priceMin");
-    const priceMax = searchParams.get("priceMax");
-    const rating = searchParams.get("rating");
+  const resetFilters = () => {
+    setSelectedCategories([]);
+    setSelectedAuthors([]);
+    setSelectedPublishers([]);
+    setDateRange([null, null]);
+    setPriceRange([0, 1000]);
+    setSelectedRating(null);
+  };
+  // useEffect(() => {
+  //   const categories = searchParams.get("categories");
+  //   const authors = searchParams.get("authors");
+  //   const publishers = searchParams.get("publishers");
+  //   const startDate = searchParams.get("startDate");
+  //   const endDate = searchParams.get("endDate");
+  //   const priceMin = searchParams.get("priceMin");
+  //   const priceMax = searchParams.get("priceMax");
+  //   const rating = searchParams.get("rating");
 
-    if (searchParams) {
-      setSelectedCategories(categories ? categories.split(",") : []);
-      setSelectedAuthors(authors ? authors.split(",") : []);
-      setSelectedPublishers(publishers ? publishers.split(",") : []);
-      setDateRange([
-        startDate ? new Date(startDate) : null,
-        endDate ? new Date(endDate) : null,
-      ]);
-      setPriceRange([
-        priceMin ? parseFloat(priceMin) : 0,
-        priceMax ? parseFloat(priceMax) : 1000,
-      ]);
-      setSelectedRating(rating);
-    }
+  //   if (searchParams) {
+  //     setSelectedCategories(categories ? categories.split(",") : []);
+  //     setSelectedAuthors(authors ? authors.split(",") : []);
+  //     setSelectedPublishers(publishers ? publishers.split(",") : []);
+  //     setDateRange([
+  //       startDate ? new Date(startDate) : null,
+  //       endDate ? new Date(endDate) : null,
+  //     ]);
+  //     setPriceRange([
+  //       priceMin ? parseFloat(priceMin) : 0,
+  //       priceMax ? parseFloat(priceMax) : 1000,
+  //     ]);
+  //     setSelectedRating(rating);
+  //   }
 
-    console.log({
-      categories,
-      authors,
-      publishers,
-      startDate,
-      endDate,
-      priceMin,
-      priceMax,
-      rating,
-    });
-  }, [
-    searchParams,
-    setSelectedCategories,
-    setSelectedAuthors,
-    setSelectedPublishers,
-    setDateRange,
-    setPriceRange,
-    setSelectedRating,
-  ]);
+  //   console.log({
+  //     categories,
+  //     authors,
+  //     publishers,
+  //     startDate,
+  //     endDate,
+  //     priceMin,
+  //     priceMax,
+  //     rating,
+  //   });
+  // }, [
+  //   searchParams,
+  //   setSelectedCategories,
+  //   setSelectedAuthors,
+  //   setSelectedPublishers,
+  //   setDateRange,
+  //   setPriceRange,
+  //   setSelectedRating,
+  // ]);
 
   if (authorError) {
     return (
@@ -253,7 +259,13 @@ const FilterSidebar = ({
       </div>
 
       {/* Apply Button */}
-      <div className="mt-4 flex flex-1 items-end">
+      <div className="mt-4 flex flex-1 items-end gap-2">
+        <Button
+          className="bg-gray-300 hover:bg-primary-foreground hover:text-white"
+          onClick={resetFilters}
+        >
+          Reset Filter
+        </Button>
         <Button className="w-full" onClick={handleApplyFilters}>
           Apply
         </Button>

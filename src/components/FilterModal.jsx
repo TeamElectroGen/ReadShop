@@ -1,7 +1,8 @@
+import { FilterContext } from "@/services/FilterProvider";
 import { useRouter } from "next/navigation";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { useState } from "react";
+import { useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoFilter } from "react-icons/io5";
@@ -33,28 +34,37 @@ const FilterModal = ({
   AuthorData,
 }) => {
   const router = useRouter();
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [selectedRating, setSelectedRating] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedAuthors, setSelectedAuthors] = useState([]);
-  const [selectedPublishers, setSelectedPublishers] = useState([]);
 
-  const query = {
-    categories: selectedCategories.join(","),
-    authors: selectedAuthors.join(","),
-    publishers: selectedPublishers.join(","),
-    startDate: dateRange[0] ? dateRange[0].toISOString() : "",
-    endDate: dateRange[1] ? dateRange[1].toISOString() : "",
-    priceMin: priceRange[0],
-    priceMax: priceRange[1],
-    rating: selectedRating,
-  };
+  const {
+    dateRange,
+    setDateRange,
+    priceRange,
+    setPriceRange,
+    selectedRating,
+    setSelectedRating,
+    selectedCategories,
+    setSelectedCategories,
+    selectedAuthors,
+    setSelectedAuthors,
+    selectedPublishers,
+    setSelectedPublishers,
+  } = useContext(FilterContext);
+
+  // const query = {
+  //   categories: selectedCategories.join(","),
+  //   authors: selectedAuthors.join(","),
+  //   publishers: selectedPublishers.join(","),
+  //   startDate: dateRange[0] ? dateRange[0].toISOString() : "",
+  //   endDate: dateRange[1] ? dateRange[1].toISOString() : "",
+  //   priceMin: priceRange[0],
+  //   priceMax: priceRange[1],
+  //   rating: selectedRating,
+  // };
 
   const handleFilter = () => {
-    console.log("Filtering with query:", query);
-    const queryString = new URLSearchParams(query).toString();
-    router.push(`/all-books?${queryString}`);
+    // console.log("Filtering with query:", query);
+    // const queryString = new URLSearchParams(query).toString();
+    router.push(`/all-books`);
   };
 
   const handleCategoryChange = (genre) => {

@@ -18,79 +18,113 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { authorName } from "@/services/authorsCRUD";
+import { FilterContext } from "@/services/FilterProvider";
 import {
-  // getAllBooks,
   getBooksByPage,
   getCategories,
   getPublicationName,
 } from "@/services/getBooksData";
+import { queryClient } from "@/services/Providers";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 const AllBooks = () => {
-  const [books, setBooks] = useState([]);
+  // const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  // const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(9);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   //
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [selectedRating, setSelectedRating] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedPublishers, setSelectedPublishers] = useState([]);
-  const [selectedAuthors, setSelectedAuthors] = useState([]);
-  const searchParams = useSearchParams();
-  // eslint-disable-next-line no-unused-vars
-  const [filteredBooks, setFilteredBooks] = useState([]);
-
-  console.log("SearchParam From AllBooks", selectedRating);
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      setLoading(true);
-      try {
-        const hasFilters =
-          searchParams.toString() ||
-          selectedCategories.length ||
-          selectedAuthors.length ||
-          selectedPublishers.length ||
-          selectedRating ||
-          dateRange[0] ||
-          dateRange[1] ||
-          priceRange[0] !== 0 ||
-          priceRange[1] !== 1000;
-
-        const data = await getBooksByPage(
-          itemsPerPage,
-          page,
-          hasFilters ? searchParams : ""
-        );
-
-        setBooks(data.books);
-        setTotalPages(data.totalPages);
-      } catch (error) {
-        console.error("Error fetching books:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBooks();
-  }, [
+  const {
     dateRange,
-    itemsPerPage,
-    page,
+    setDateRange,
     priceRange,
-    searchParams,
-    selectedAuthors.length,
-    selectedCategories.length,
-    selectedPublishers.length,
+    setPriceRange,
     selectedRating,
-    setBooks,
-  ]);
+    setSelectedRating,
+    selectedCategories,
+    setSelectedCategories,
+    selectedAuthors,
+    setSelectedAuthors,
+    selectedPublishers,
+    setSelectedPublishers,
+  } = useContext(FilterContext);
+
+  // const searchParams = useSearchParams();
+  // eslint-disable-next-line no-unused-vars
+  // const [filteredBooks, setFilteredBooks] = useState([]);
+
+  // console.log("SearchParam From AllBooks", selectedRating);
+
+  // useEffect(() => {
+  //   const fetchBooks = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const hasFilters =
+  //         searchParams.toString() ||
+  //         selectedCategories.length ||
+  //         selectedAuthors.length ||
+  //         selectedPublishers.length ||
+  //         selectedRating ||
+  //         dateRange[0] ||
+  //         dateRange[1] ||
+  //         priceRange[0] !== 0 ||
+  //         priceRange[1] !== 1000;
+
+  //       const data = await getBooksByPage(
+  //         itemsPerPage,
+  //         page,
+  //         hasFilters ? searchParams : ""
+  //       );
+
+  //       setBooks(data.books);
+  //       setTotalPages(data.totalPages);
+  //     } catch (error) {
+  //       console.error("Error fetching books:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchBooks();
+  // }, [
+  //   dateRange,
+  //   itemsPerPage,
+  //   page,
+  //   priceRange,
+  //   searchParams,
+  //   selectedAuthors.length,
+  //   selectedCategories.length,
+  //   selectedPublishers.length,
+  //   selectedRating,
+  //   setBooks,
+  // ]);
+
+  const {
+    // eslint-disable-next-line no-unused-vars
+    data: { books = [], totalPages },
+    isFetching: loading,
+  } = useQuery({
+    queryKey: ["all-books", page, itemsPerPage],
+    queryFn: async () => {
+      const hasFilters = {
+        selectedCategories,
+        selectedAuthors,
+        selectedPublishers,
+        selectedRating,
+        dateRange,
+        priceRange,
+      };
+      const res = await getBooksByPage(itemsPerPage, page, hasFilters);
+      return res;
+    },
+    initialData: { books: [], totalPages: 0, totalBooks: 0 },
+  });
+
+  const handleApplyFilters = () => {
+    queryClient.invalidateQueries(["all-books", page, itemsPerPage]);
+  };
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -113,11 +147,7 @@ const AllBooks = () => {
     },
   });
 
-  const {
-    data: publicationName,
-    error: publicationError,
-    isFetching,
-  } = useQuery({
+  const { data: publicationName } = useQuery({
     queryKey: ["publicationName"],
     queryFn: async () => {
       const data = await getPublicationName();
@@ -151,18 +181,18 @@ const AllBooks = () => {
   };
 
   //Loading Or Error
-  if (isFetching) {
-    return (
-      <div className="my-10 flex justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
-      </div>
-    );
-  }
-  if (publicationError) {
-    return (
-      <div className="text-red-500">Error: {publicationError.message}</div>
-    );
-  }
+  // if (isFetching) {
+  //   return (
+  //     <div className="my-10 flex justify-center">
+  //       <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
+  //     </div>
+  //   );
+  // }
+  // if (publicationError) {
+  //   return (
+  //     <div className="text-red-500">Error: {publicationError.message}</div>
+  //   );
+  // }
 
   return (
     <div className="container mx-auto mb-10 mt-5 flex flex-col-reverse items-center justify-between gap-3 md:flex-row md:items-start">
@@ -174,8 +204,8 @@ const AllBooks = () => {
         categoryError={categoryError}
         handleAuthorChange={handleAuthorChange}
         selectedAuthors={selectedAuthors}
-        searchParams={searchParams}
-        // handleApplyFilters={handleApplyFilters}
+        // searchParams={searchParams}
+        handleApplyFilters={handleApplyFilters}
         handleCategoryChange={handleCategoryChange}
         handlePublisherChange={handlePublisherChange}
         setDateRange={setDateRange}
@@ -219,8 +249,8 @@ const AllBooks = () => {
             <CircleLoading className={"my-20"} />
           ) : (
             <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {books.length > 0 ? (
-                books.map((book) => (
+              {books?.length > 0 ? (
+                books?.map((book) => (
                   <Link
                     href={`/view-details/${book._id}`}
                     key={book._id}
