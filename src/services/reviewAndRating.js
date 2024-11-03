@@ -36,7 +36,7 @@ export const getBookReviewAndRating = async (bookId) => {
     return res.data;
   } catch (error) {
     console.log(error);
-    return {};
+    return [];
   }
 };
 
