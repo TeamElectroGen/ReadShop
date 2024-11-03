@@ -31,12 +31,9 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 
 const AllBooks = () => {
-  // const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(9);
-  // const [loading, setLoading] = useState(true);
-  //
+
   const {
     dateRange,
     setDateRange,
@@ -52,57 +49,7 @@ const AllBooks = () => {
     setSelectedPublishers,
   } = useContext(FilterContext);
 
-  // const searchParams = useSearchParams();
-  // eslint-disable-next-line no-unused-vars
-  // const [filteredBooks, setFilteredBooks] = useState([]);
-
-  // console.log("SearchParam From AllBooks", selectedRating);
-
-  // useEffect(() => {
-  //   const fetchBooks = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const hasFilters =
-  //         searchParams.toString() ||
-  //         selectedCategories.length ||
-  //         selectedAuthors.length ||
-  //         selectedPublishers.length ||
-  //         selectedRating ||
-  //         dateRange[0] ||
-  //         dateRange[1] ||
-  //         priceRange[0] !== 0 ||
-  //         priceRange[1] !== 1000;
-
-  //       const data = await getBooksByPage(
-  //         itemsPerPage,
-  //         page,
-  //         hasFilters ? searchParams : ""
-  //       );
-
-  //       setBooks(data.books);
-  //       setTotalPages(data.totalPages);
-  //     } catch (error) {
-  //       console.error("Error fetching books:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchBooks();
-  // }, [
-  //   dateRange,
-  //   itemsPerPage,
-  //   page,
-  //   priceRange,
-  //   searchParams,
-  //   selectedAuthors.length,
-  //   selectedCategories.length,
-  //   selectedPublishers.length,
-  //   selectedRating,
-  //   setBooks,
-  // ]);
-
   const {
-    // eslint-disable-next-line no-unused-vars
     data: { books = [], totalPages },
     isFetching: loading,
   } = useQuery({
@@ -179,20 +126,6 @@ const AllBooks = () => {
         : [...prev, publisherName]
     );
   };
-
-  //Loading Or Error
-  // if (isFetching) {
-  //   return (
-  //     <div className="my-10 flex justify-center">
-  //       <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
-  //     </div>
-  //   );
-  // }
-  // if (publicationError) {
-  //   return (
-  //     <div className="text-red-500">Error: {publicationError.message}</div>
-  //   );
-  // }
 
   return (
     <div className="container mx-auto mb-10 mt-5 flex flex-col-reverse items-center justify-between gap-3 md:flex-row md:items-start">
