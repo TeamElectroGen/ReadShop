@@ -36,6 +36,7 @@ const AllBooks = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(9);
   const [loading, setLoading] = useState(true);
+  //
   const [dateRange, setDateRange] = useState([null, null]);
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [selectedRating, setSelectedRating] = useState(null);

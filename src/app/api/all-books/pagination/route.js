@@ -15,19 +15,27 @@ export const GET = async (request) => {
   const skip = (page - 1) * limit;
 
   // Extract search parameters
-  const categories = searchParams.get("categories")?.split(",").filter(Boolean) || [];
+  const categories =
+    searchParams.get("categories")?.split(",").filter(Boolean) || [];
   const authors = searchParams.get("authors")?.split(",").filter(Boolean) || [];
-  const publishers = searchParams.get("publishers")?.split(",").filter(Boolean) || [];
-  const rating = searchParams.get("rating") ? parseInt(searchParams.get("rating")) : null;
+  const publishers =
+    searchParams.get("publishers")?.split(",").filter(Boolean) || [];
+  const rating = searchParams.get("rating")
+    ? parseInt(searchParams.get("rating"))
+    : null;
   const minPrice = parseFloat(searchParams.get("priceMin")) || 0;
   const maxPrice = parseFloat(searchParams.get("priceMax")) || 1000;
-  const startDate = searchParams.get("startDate") ? new Date(searchParams.get("startDate")) : null;
-  const endDate = searchParams.get("endDate") ? new Date(searchParams.get("endDate")) : null;
+  const startDate = searchParams.get("startDate")
+    ? new Date(searchParams.get("startDate"))
+    : null;
+  const endDate = searchParams.get("endDate")
+    ? new Date(searchParams.get("endDate"))
+    : null;
 
   const filters = {};
-  
+
   if (categories.length > 0) {
-    filters.Genre = { $in: categories.map(cat => new RegExp(cat, "i")) };
+    filters.Genre = { $in: categories.map((cat) => new RegExp(cat, "i")) };
   }
   if (authors.length > 0) {
     filters.AuthorName = { $in: authors };
@@ -35,7 +43,7 @@ export const GET = async (request) => {
   if (publishers.length > 0) {
     filters.PublicationName = { $in: publishers };
   }
-  if (typeof rating === "number" && !isNaN(rating)) {  
+  if (typeof rating === "number" && !isNaN(rating)) {
     filters.Rating = { $gte: rating };
   }
   if (minPrice >= 0 && maxPrice >= minPrice) {
@@ -46,7 +54,7 @@ export const GET = async (request) => {
   }
 
   // Log filters to debug
-  console.log("Constructed Filters:", filters);
+  // console.log("Constructed Filters:", filters);
 
   // Sorting options
   const sortBy = searchParams.get("sortBy") || "";

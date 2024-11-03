@@ -278,7 +278,7 @@ export const getFilteredBooks = async (filters) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/all-books/filter?${queryParams.toString()}`
     );
 
-    console.log(res.data.books);
+    // console.log(res.data.books);
     return res.data.books;
   } catch (error) {
     console.error("Error fetching filtered books:", error);
