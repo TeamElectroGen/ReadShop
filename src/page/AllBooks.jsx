@@ -34,7 +34,7 @@ const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState([null, null]);
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -46,48 +46,13 @@ const AllBooks = () => {
   // eslint-disable-next-line no-unused-vars
   const [filteredBooks, setFilteredBooks] = useState([]);
 
-  //For Apply Filter From Filter Sidebar
-  const handleApplyFilters = () => {
-    const filteredBooks = books?.filter((book) => {
-      const matchesPrice =
-        book.price >= priceRange[0] && book.price <= priceRange[1];
-      const matchesRating = selectedRating
-        ? book.rating === selectedRating
-        : true;
-      const matchesDate =
-        dateRange[0] && dateRange[1]
-          ? new Date(book.publishDate) >= dateRange[0] &&
-            new Date(book.publishDate) <= dateRange[1]
-          : true;
-      const matchesCategory = selectedCategories.length
-        ? selectedCategories.includes(book.category)
-        : true;
-      const matchesAuthor = selectedAuthors.length
-        ? selectedAuthors.includes(book.author)
-        : true;
-      const matchesPublisher = selectedPublishers.length
-        ? selectedPublishers.includes(book.publisher)
-        : true;
-
-      return (
-        matchesPrice &&
-        matchesRating &&
-        matchesDate &&
-        matchesCategory &&
-        matchesAuthor &&
-        matchesPublisher
-      );
-    });
-
-    setFilteredBooks(filteredBooks);
-  };
+  console.log("SearchParam From AllBooks", selectedRating);
 
   useEffect(() => {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        // Check if there are any search parameters or filters applied
-        if (
+        const hasFilters =
           searchParams.toString() ||
           selectedCategories.length ||
           selectedAuthors.length ||
@@ -96,18 +61,16 @@ const AllBooks = () => {
           dateRange[0] ||
           dateRange[1] ||
           priceRange[0] !== 0 ||
-          priceRange[1] !== 1000
-        ) {
-          // Fetch filtered books when there are filters or searchParams
-          const data = await getBooksByPage(itemsPerPage, page, searchParams);
-          setBooks(data.books);
-          setTotalPages(data.totalPages);
-        } else {
-          // Fetch all books when no filters or searchParams are applied
-          const data = await getBooksByPage(itemsPerPage, page);
-          setBooks(data.books);
-          setTotalPages(data.totalPages);
-        }
+          priceRange[1] !== 1000;
+
+        const data = await getBooksByPage(
+          itemsPerPage,
+          page,
+          hasFilters ? searchParams : ""
+        );
+
+        setBooks(data.books);
+        setTotalPages(data.totalPages);
       } catch (error) {
         console.error("Error fetching books:", error);
       } finally {
@@ -132,7 +95,7 @@ const AllBooks = () => {
     setPage(newPage);
   };
 
-  //For Filter SideBar Data Show
+  //For Filter SideBar Data
   const { data: categoriesName, error: categoryError } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -152,7 +115,7 @@ const AllBooks = () => {
   const {
     data: publicationName,
     error: publicationError,
-    isLoading,
+    isFetching,
   } = useQuery({
     queryKey: ["publicationName"],
     queryFn: async () => {
@@ -186,14 +149,14 @@ const AllBooks = () => {
     );
   };
 
-  if (isLoading) {
+  //Loading Or Error
+  if (isFetching) {
     return (
       <div className="my-10 flex justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
       </div>
     );
   }
-
   if (publicationError) {
     return (
       <div className="text-red-500">Error: {publicationError.message}</div>
@@ -211,7 +174,7 @@ const AllBooks = () => {
         handleAuthorChange={handleAuthorChange}
         selectedAuthors={selectedAuthors}
         searchParams={searchParams}
-        handleApplyFilters={handleApplyFilters}
+        // handleApplyFilters={handleApplyFilters}
         handleCategoryChange={handleCategoryChange}
         handlePublisherChange={handlePublisherChange}
         setDateRange={setDateRange}
@@ -226,7 +189,8 @@ const AllBooks = () => {
         dateRange={dateRange}
         selectedRating={selectedRating}
       />
-      <section className="flex-1">
+      <section className="flex min-h-[calc(100vh-80px)] flex-1 flex-col gap-4">
+        {/* Item Dropdown */}
         <div className="mb-4 flex items-center justify-between gap-4">
           <h1 className="text-2xl font-bold">All Books</h1>
           <DropdownMenu>
@@ -234,7 +198,7 @@ const AllBooks = () => {
               <Button>{itemsPerPage} items/page</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {[4, 8, 12, 40].map((size) => (
+              {[6, 9, 12, 36].map((size) => (
                 <DropdownMenuItem
                   key={size}
                   onClick={() => {
@@ -248,11 +212,12 @@ const AllBooks = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex min-h-[80vh] flex-col items-center justify-between gap-4">
+
+        <div className="flex-1">
           {loading ? (
             <CircleLoading className={"my-20"} />
           ) : (
-            <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {books.length > 0 ? (
                 books.map((book) => (
                   <Link
@@ -288,7 +253,9 @@ const AllBooks = () => {
               )}
             </div>
           )}
+        </div>
 
+        <div>
           <Pagination>
             <PaginationContent>
               <PaginationPrevious
@@ -311,7 +278,7 @@ const AllBooks = () => {
                 </PaginationItem>
               ))}
               <PaginationNext
-                className={`hover:cursor-pointer ${page === totalPages && "text-gray-500"}`}
+                className={`hover:cursor-pointer disabled:${page === totalPages && "text-gray-500"} `}
                 onClick={() => {
                   if (page !== totalPages) {
                     handlePageChange(page + 1);
