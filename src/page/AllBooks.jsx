@@ -46,7 +46,9 @@ const AllBooks = () => {
   // eslint-disable-next-line no-unused-vars
   const [filteredBooks, setFilteredBooks] = useState([]);
 
-  //For Apply Filter From Filter Sidebar
+  console.log("SearchParam From AllBooks", searchParams.toString());
+
+  // //For Apply Filter From Filter Sidebar
   const handleApplyFilters = () => {
     const filteredBooks = books?.filter((book) => {
       const matchesPrice =
@@ -86,8 +88,7 @@ const AllBooks = () => {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        // Check if there are any search parameters or filters applied
-        if (
+        const hasFilters =
           searchParams.toString() ||
           selectedCategories.length ||
           selectedAuthors.length ||
@@ -96,18 +97,16 @@ const AllBooks = () => {
           dateRange[0] ||
           dateRange[1] ||
           priceRange[0] !== 0 ||
-          priceRange[1] !== 1000
-        ) {
-          // Fetch filtered books when there are filters or searchParams
-          const data = await getBooksByPage(itemsPerPage, page, searchParams);
-          setBooks(data.books);
-          setTotalPages(data.totalPages);
-        } else {
-          // Fetch all books when no filters or searchParams are applied
-          const data = await getBooksByPage(itemsPerPage, page);
-          setBooks(data.books);
-          setTotalPages(data.totalPages);
-        }
+          priceRange[1] !== 1000;
+  
+        const data = await getBooksByPage(
+          itemsPerPage,
+          page,
+          hasFilters ? searchParams : ""
+        );
+  
+        setBooks(data.books);
+        setTotalPages(data.totalPages);
       } catch (error) {
         console.error("Error fetching books:", error);
       } finally {
@@ -127,12 +126,13 @@ const AllBooks = () => {
     selectedRating,
     setBooks,
   ]);
+  
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
 
-  //For Filter SideBar Data Show
+  //For Filter SideBar Data
   const { data: categoriesName, error: categoryError } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -152,7 +152,7 @@ const AllBooks = () => {
   const {
     data: publicationName,
     error: publicationError,
-    isLoading,
+    isFetching,
   } = useQuery({
     queryKey: ["publicationName"],
     queryFn: async () => {
@@ -186,14 +186,14 @@ const AllBooks = () => {
     );
   };
 
-  if (isLoading) {
+  //Loading Or Error
+  if (isFetching) {
     return (
       <div className="my-10 flex justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary"></div>
       </div>
     );
   }
-
   if (publicationError) {
     return (
       <div className="text-red-500">Error: {publicationError.message}</div>

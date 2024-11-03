@@ -24,7 +24,8 @@ import {
 } from "./ui/dialog";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
-const ratingStar = [1, 2, 3, 4, 5];
+const rating = [0, 1, 2, 3, 4];
+const ratingStar = rating.reverse();
 
 const FilterModal = ({
   categoryName: categoriesName,
@@ -209,13 +210,7 @@ const FilterModal = ({
                         <div className="flex flex-col">
                           <RatingStar rating={star} />
                           <span className="text-[.5rem]">
-                            {star} stars and above (
-                            {
-                              booksData?.filter(
-                                (book) => Math.floor(book.Rating) >= star
-                              ).length
-                            }
-                            )
+                            {star}.00 - 5.00
                           </span>
                         </div>
                       </div>
@@ -255,7 +250,7 @@ const FilterModal = ({
                       value={priceRange}
                       onChange={(value) => setPriceRange(value)}
                     />
-                    <div className="flex justify-between">
+                    <div className="flex justify-between pt-1">
                       <span>${priceRange[0]}</span>
                       <span>${priceRange[1]}</span>
                     </div>
