@@ -41,6 +41,21 @@ export const getBookDetails = async (id) => {
   }
 };
 
+// Delete single book data
+export const deleteBook = async (id) => {
+  console.log(id);
+  try {
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/remove-book/${id}`
+    );
+    console.log(res);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
 // Gets the read/wish status of a book for a specific user
 export const getReadWishStatusUser = async (bookId, email) => {
   try {

@@ -95,7 +95,7 @@ const ProfileForm = () => {
         email: userData.email || "",
         phone: userData.phone || "",
         address: userData.address || "",
-        dob: userData.dob? new Date(userData.dob) : new Date(),
+        dob: userData.dob ? new Date(userData.dob) : new Date(),
       });
     }
   }, [userData, form]);

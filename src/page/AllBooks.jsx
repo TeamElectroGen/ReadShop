@@ -164,7 +164,7 @@ const AllBooks = () => {
   }
 
   return (
-    <div className="container mx-auto flex flex-col-reverse items-center justify-between gap-3 md:flex-row md:items-start">
+    <div className="container mx-auto mb-10 mt-5 flex flex-col-reverse items-center justify-between gap-3 md:flex-row md:items-start">
       <FilterSidebar
         AuthorData={AuthorData}
         categoriesName={categoriesName}

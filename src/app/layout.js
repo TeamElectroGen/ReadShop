@@ -26,7 +26,21 @@ export const metadata = {
     template: "%s | ReadShop",
   },
   description:
-    "Discover a world of knowledge and entertainment at ReadShop, where we offer a vast collection of books, audiobooks, and eBooks. From timeless classics to the latest bestsellers, we have something for every reader. Whether you prefer a printed book, the convenience of an eBook, or the immersive experience of an audiobook, ReadShop is here to cater to all your reading needs.",
+    "ReadShop is an innovative ecommerce platform tailored for book enthusiasts, delivering a seamless browsing and purchasing experience. With advanced search, filter, and categorization options, users can explore a wide variety of books, create personalized wishlists and reading lists, and follow their favorite authors. A Gemini-powered AI chatbot provides real-time customer support, enhancing user assistance and experience. With trending and best-selling sections, secure payments via Stripe, and user reviews and ratings, ReadShop redefines the online bookstore experience.",
+  keywords: [
+    "ReadShop",
+    " online bookstore",
+    " digital reading",
+    " books",
+    " author follow",
+    " book reviews",
+    " secure payment",
+    " ecommerce bookstore",
+    " customer support AI chatbot",
+    " Gemini chatbot",
+    " book search",
+    " book categorization",
+  ],
 };
 
 export default function RootLayout({ children }) {
