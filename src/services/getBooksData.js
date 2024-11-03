@@ -189,10 +189,11 @@ export const getBooksByIds = async (ids) => {
 };
 
 //Get All Books with pagination
-export const getBooksByPage = async (size, page) => {
+export const getBooksByPage = async (size, page, hasfilter) => {
   try {
-    const res = await axios(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/all-books/pagination?page=${page}&limit=${size}`
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/all-books/pagination?page=${page}&limit=${size}`,
+      hasfilter
     );
     return res.data;
   } catch (error) {
@@ -277,7 +278,7 @@ export const getFilteredBooks = async (filters) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/all-books/filter?${queryParams.toString()}`
     );
 
-    console.log(res.data.books);
+    // console.log(res.data.books);
     return res.data.books;
   } catch (error) {
     console.error("Error fetching filtered books:", error);

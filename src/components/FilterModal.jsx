@@ -1,7 +1,8 @@
+import { FilterContext } from "@/services/FilterProvider";
 import { useRouter } from "next/navigation";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { useState } from "react";
+import { useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoFilter } from "react-icons/io5";
@@ -24,7 +25,8 @@ import {
 } from "./ui/dialog";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
-const ratingStar = [1, 2, 3, 4, 5];
+const rating = [0, 1, 2, 3, 4];
+const ratingStar = rating.reverse();
 
 const FilterModal = ({
   categoryName: categoriesName,
@@ -32,28 +34,37 @@ const FilterModal = ({
   AuthorData,
 }) => {
   const router = useRouter();
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [selectedRating, setSelectedRating] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedAuthors, setSelectedAuthors] = useState([]);
-  const [selectedPublishers, setSelectedPublishers] = useState([]);
 
-  const query = {
-    categories: selectedCategories.join(","),
-    authors: selectedAuthors.join(","),
-    publishers: selectedPublishers.join(","),
-    startDate: dateRange[0] ? dateRange[0].toISOString() : "",
-    endDate: dateRange[1] ? dateRange[1].toISOString() : "",
-    priceMin: priceRange[0],
-    priceMax: priceRange[1],
-    rating: selectedRating,
-  };
+  const {
+    dateRange,
+    setDateRange,
+    priceRange,
+    setPriceRange,
+    selectedRating,
+    setSelectedRating,
+    selectedCategories,
+    setSelectedCategories,
+    selectedAuthors,
+    setSelectedAuthors,
+    selectedPublishers,
+    setSelectedPublishers,
+  } = useContext(FilterContext);
+
+  // const query = {
+  //   categories: selectedCategories.join(","),
+  //   authors: selectedAuthors.join(","),
+  //   publishers: selectedPublishers.join(","),
+  //   startDate: dateRange[0] ? dateRange[0].toISOString() : "",
+  //   endDate: dateRange[1] ? dateRange[1].toISOString() : "",
+  //   priceMin: priceRange[0],
+  //   priceMax: priceRange[1],
+  //   rating: selectedRating,
+  // };
 
   const handleFilter = () => {
-    console.log("Filtering with query:", query);
-    const queryString = new URLSearchParams(query).toString();
-    router.push(`/all-books?${queryString}`);
+    // console.log("Filtering with query:", query);
+    // const queryString = new URLSearchParams(query).toString();
+    router.push(`/all-books`);
   };
 
   const handleCategoryChange = (genre) => {
@@ -108,11 +119,11 @@ const FilterModal = ({
               <BookSectionTitle title={"Filter"} />
             </DialogTitle>
 
-            <div className="max-h-[40vh] overflow-y-auto">
+            <div className="yellow-scrollbar max-h-[40vh] overflow-y-auto">
               <Accordion type="single" collapsible className="w-full">
                 {/* Categories Section */}
                 <AccordionItem value="item-1">
-                  <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
+                  <AccordionTrigger className="font-normal text-primary-foreground hover:font-bold hover:no-underline">
                     Category/Genre
                   </AccordionTrigger>
                   <AccordionContent>
@@ -121,6 +132,7 @@ const FilterModal = ({
                         <div className="flex gap-2 text-left" key={idx}>
                           <Checkbox
                             id={`category-${idx}`}
+                            className="h-4 w-4 rounded shadow-none hover:bg-primary"
                             checked={selectedCategories.includes(
                               category.Genre
                             )}
@@ -147,6 +159,7 @@ const FilterModal = ({
                       {AuthorData?.map((author, idx) => (
                         <div className="flex gap-2 text-left" key={idx}>
                           <Checkbox
+                            className="h-4 w-4 rounded shadow-none hover:bg-primary"
                             id={`authors-${idx}`}
                             checked={selectedAuthors.includes(author.name)}
                             onCheckedChange={() =>
@@ -172,6 +185,7 @@ const FilterModal = ({
                       {booksData?.map((book, idx) => (
                         <div className="flex gap-2 text-left" key={idx}>
                           <Checkbox
+                            className="h-4 w-4 rounded shadow-none hover:bg-primary"
                             id={`books-${idx}`}
                             checked={selectedPublishers.includes(
                               book.PublicationName
@@ -208,15 +222,7 @@ const FilterModal = ({
                         />
                         <div className="flex flex-col">
                           <RatingStar rating={star} />
-                          <span className="text-[.5rem]">
-                            {star} stars and above (
-                            {
-                              booksData?.filter(
-                                (book) => Math.floor(book.Rating) >= star
-                              ).length
-                            }
-                            )
-                          </span>
+                          <span className="text-[.5rem]">{star}.00 - 5.00</span>
                         </div>
                       </div>
                     ))}
@@ -255,7 +261,7 @@ const FilterModal = ({
                       value={priceRange}
                       onChange={(value) => setPriceRange(value)}
                     />
-                    <div className="flex justify-between">
+                    <div className="flex justify-between pt-1">
                       <span>${priceRange[0]}</span>
                       <span>${priceRange[1]}</span>
                     </div>
