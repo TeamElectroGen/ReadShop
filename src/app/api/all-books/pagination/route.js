@@ -1,13 +1,22 @@
 import { connectDB } from "@/lib/connectDB";
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
-export const GET = async (request) => {
+export const POST = async (request) => {
   const db = await connectDB();
   const booksCollection = db.collection("books");
 
-  const { searchParams } = new URL(request.url);
+  const {
+    selectedCategories,
+    selectedAuthors,
+    selectedPublishers,
+    selectedRating,
+    dateRange,
+    priceRange,
+  } = await request.json();
+
+  const { searchParams } = request.nextUrl;
 
   // Pagination
   const page = parseInt(searchParams.get("page")) || 1;
@@ -15,22 +24,14 @@ export const GET = async (request) => {
   const skip = (page - 1) * limit;
 
   // Extract search parameters
-  const categories =
-    searchParams.get("categories")?.split(",").filter(Boolean) || [];
-  const authors = searchParams.get("authors")?.split(",").filter(Boolean) || [];
-  const publishers =
-    searchParams.get("publishers")?.split(",").filter(Boolean) || [];
-  const rating = searchParams.get("rating")
-    ? parseInt(searchParams.get("rating"))
-    : null;
-  const minPrice = parseFloat(searchParams.get("priceMin")) || 0;
-  const maxPrice = parseFloat(searchParams.get("priceMax")) || 1000;
-  const startDate = searchParams.get("startDate")
-    ? new Date(searchParams.get("startDate"))
-    : null;
-  const endDate = searchParams.get("endDate")
-    ? new Date(searchParams.get("endDate"))
-    : null;
+  const categories = selectedCategories || [];
+  const authors = selectedAuthors || [];
+  const publishers = selectedPublishers || [];
+  const rating = selectedRating ? parseInt(selectedRating) : null;
+  const minPrice = parseFloat(priceRange[0]) || 0;
+  const maxPrice = parseFloat(priceRange[1]) || 1000;
+  const startDate = dateRange[0] ? new Date(dateRange[0]) : null;
+  const endDate = dateRange[1] ? new Date(dateRange[1]) : null;
 
   const filters = {};
 
@@ -77,7 +78,6 @@ export const GET = async (request) => {
 
     return NextResponse.json({
       books,
-      page,
       totalPages,
       totalBooks,
     });
