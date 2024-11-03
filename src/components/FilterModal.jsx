@@ -109,11 +109,11 @@ const FilterModal = ({
               <BookSectionTitle title={"Filter"} />
             </DialogTitle>
 
-            <div className="max-h-[40vh] overflow-y-auto">
+            <div className="yellow-scrollbar max-h-[40vh] overflow-y-auto">
               <Accordion type="single" collapsible className="w-full">
                 {/* Categories Section */}
                 <AccordionItem value="item-1">
-                  <AccordionTrigger className="text-primary-foreground hover:font-bold hover:no-underline">
+                  <AccordionTrigger className="font-normal text-primary-foreground hover:font-bold hover:no-underline">
                     Category/Genre
                   </AccordionTrigger>
                   <AccordionContent>
@@ -122,6 +122,7 @@ const FilterModal = ({
                         <div className="flex gap-2 text-left" key={idx}>
                           <Checkbox
                             id={`category-${idx}`}
+                            className="h-4 w-4 rounded shadow-none hover:bg-primary"
                             checked={selectedCategories.includes(
                               category.Genre
                             )}
@@ -148,6 +149,7 @@ const FilterModal = ({
                       {AuthorData?.map((author, idx) => (
                         <div className="flex gap-2 text-left" key={idx}>
                           <Checkbox
+                            className="h-4 w-4 rounded shadow-none hover:bg-primary"
                             id={`authors-${idx}`}
                             checked={selectedAuthors.includes(author.name)}
                             onCheckedChange={() =>
@@ -173,6 +175,7 @@ const FilterModal = ({
                       {booksData?.map((book, idx) => (
                         <div className="flex gap-2 text-left" key={idx}>
                           <Checkbox
+                            className="h-4 w-4 rounded shadow-none hover:bg-primary"
                             id={`books-${idx}`}
                             checked={selectedPublishers.includes(
                               book.PublicationName
@@ -209,9 +212,7 @@ const FilterModal = ({
                         />
                         <div className="flex flex-col">
                           <RatingStar rating={star} />
-                          <span className="text-[.5rem]">
-                            {star}.00 - 5.00
-                          </span>
+                          <span className="text-[.5rem]">{star}.00 - 5.00</span>
                         </div>
                       </div>
                     ))}

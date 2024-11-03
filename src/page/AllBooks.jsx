@@ -34,7 +34,7 @@ const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState([null, null]);
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -98,13 +98,13 @@ const AllBooks = () => {
           dateRange[1] ||
           priceRange[0] !== 0 ||
           priceRange[1] !== 1000;
-  
+
         const data = await getBooksByPage(
           itemsPerPage,
           page,
           hasFilters ? searchParams : ""
         );
-  
+
         setBooks(data.books);
         setTotalPages(data.totalPages);
       } catch (error) {
@@ -126,7 +126,6 @@ const AllBooks = () => {
     selectedRating,
     setBooks,
   ]);
-  
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -226,7 +225,8 @@ const AllBooks = () => {
         dateRange={dateRange}
         selectedRating={selectedRating}
       />
-      <section className="flex-1">
+      <section className="flex min-h-[calc(100vh-80px)] flex-1 flex-col gap-4">
+        {/* Item Dropdown */}
         <div className="mb-4 flex items-center justify-between gap-4">
           <h1 className="text-2xl font-bold">All Books</h1>
           <DropdownMenu>
@@ -234,7 +234,7 @@ const AllBooks = () => {
               <Button>{itemsPerPage} items/page</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {[4, 8, 12, 40].map((size) => (
+              {[6, 9, 12, 36].map((size) => (
                 <DropdownMenuItem
                   key={size}
                   onClick={() => {
@@ -249,75 +249,81 @@ const AllBooks = () => {
           </DropdownMenu>
         </div>
 
-        {loading ? (
-          <CircleLoading className={"my-20"} />
-        ) : (
-          <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {books.length > 0 ? (
-              books.map((book) => (
-                <Link
-                  href={`/view-details/${book._id}`}
-                  key={book._id}
-                  className="flex gap-4 rounded border p-4 shadow-sm"
-                >
-                  <div>
-                    <Image
-                      src={book?.CoverImage}
-                      width={70}
-                      height={100}
-                      className="h-full min-w-16 rounded-sm object-cover"
-                      alt={book?.BookName}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex-1">
-                      <h3 className="text-sm font-semibold">{book.BookName}</h3>
-                      <p className="text-xs">by {book.AuthorName}</p>
-                      <RatingStar rating={book.Rating} />
+        <div className="flex-1">
+          {loading ? (
+            <CircleLoading className={"my-20"} />
+          ) : (
+            <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {books.length > 0 ? (
+                books.map((book) => (
+                  <Link
+                    href={`/view-details/${book._id}`}
+                    key={book._id}
+                    className="flex gap-4 rounded border p-4 shadow-sm"
+                  >
+                    <div>
+                      <Image
+                        src={book?.CoverImage}
+                        width={70}
+                        height={100}
+                        className="h-full min-w-16 rounded-sm object-cover"
+                        alt={book?.BookName}
+                      />
                     </div>
-                    <p className="text-lg font-bold text-primary-foreground">
-                      ${book.Price}
-                    </p>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p>No books found.</p>
-            )}
-          </div>
-        )}
+                    <div className="flex flex-col">
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold">
+                          {book.BookName}
+                        </h3>
+                        <p className="text-xs">by {book.AuthorName}</p>
+                        <RatingStar rating={book.Rating} />
+                      </div>
+                      <p className="text-lg font-bold text-primary-foreground">
+                        ${book.Price}
+                      </p>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p>No books found.</p>
+              )}
+            </div>
+          )}
+        </div>
 
-        <Pagination>
-          <PaginationContent>
-            <PaginationPrevious
-              className={`hover:cursor-pointer ${page === 1 && "text-gray-500"}`}
-              onClick={() => {
-                if (page !== 1) {
-                  handlePageChange(page - 1);
-                }
-              }}
-            />
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <PaginationItem key={index} className="hover:cursor-pointer">
-                <PaginationLink
-                  // active={true}
-                  className={`${page === index + 1 && "bg-yellow-300"}`}
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationNext
-              className={`hover:cursor-pointer ${page === totalPages && "text-gray-500"}`}
-              onClick={() => {
-                if (page !== totalPages) {
-                  handlePageChange(page + 1);
-                }
-              }}
-            />
-          </PaginationContent>
-        </Pagination>
+        <div>
+          <Pagination>
+            <PaginationContent>
+              <PaginationPrevious
+                className={`hover:cursor-pointer ${page === 1 && "text-gray-500"}`}
+                onClick={() => {
+                  if (page !== 1) {
+                    handlePageChange(page - 1);
+                  }
+                }}
+              />
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <PaginationItem key={index} className="hover:cursor-pointer">
+                  <PaginationLink
+                    // active={true}
+                    className={`${page === index + 1 && "bg-yellow-300"}`}
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationNext
+                className={`hover:cursor-pointer disabled:${page === totalPages && "text-gray-500"} `} 
+                onClick={() => {
+                  if (page !== totalPages) {
+                    handlePageChange(page + 1);
+                  }
+                }}
+              />
+            </PaginationContent>
+          </Pagination>
+        </div>
       </section>
     </div>
   );
