@@ -24,7 +24,6 @@ export const GET = async (request) => {
   const startDate = searchParams.get("startDate") ? new Date(searchParams.get("startDate")) : null;
   const endDate = searchParams.get("endDate") ? new Date(searchParams.get("endDate")) : null;
 
-  // Build the filters object with conditions that exist
   const filters = {};
   
   if (categories.length > 0) {
@@ -36,7 +35,7 @@ export const GET = async (request) => {
   if (publishers.length > 0) {
     filters.PublicationName = { $in: publishers };
   }
-  if (typeof rating === "number" && !isNaN(rating)) {  // Check for a valid rating value
+  if (typeof rating === "number" && !isNaN(rating)) {  
     filters.Rating = { $gte: rating };
   }
   if (minPrice >= 0 && maxPrice >= minPrice) {

@@ -46,43 +46,7 @@ const AllBooks = () => {
   // eslint-disable-next-line no-unused-vars
   const [filteredBooks, setFilteredBooks] = useState([]);
 
-  console.log("SearchParam From AllBooks", searchParams.toString());
-
-  // //For Apply Filter From Filter Sidebar
-  const handleApplyFilters = () => {
-    const filteredBooks = books?.filter((book) => {
-      const matchesPrice =
-        book.price >= priceRange[0] && book.price <= priceRange[1];
-      const matchesRating = selectedRating
-        ? book.rating === selectedRating
-        : true;
-      const matchesDate =
-        dateRange[0] && dateRange[1]
-          ? new Date(book.publishDate) >= dateRange[0] &&
-            new Date(book.publishDate) <= dateRange[1]
-          : true;
-      const matchesCategory = selectedCategories.length
-        ? selectedCategories.includes(book.category)
-        : true;
-      const matchesAuthor = selectedAuthors.length
-        ? selectedAuthors.includes(book.author)
-        : true;
-      const matchesPublisher = selectedPublishers.length
-        ? selectedPublishers.includes(book.publisher)
-        : true;
-
-      return (
-        matchesPrice &&
-        matchesRating &&
-        matchesDate &&
-        matchesCategory &&
-        matchesAuthor &&
-        matchesPublisher
-      );
-    });
-
-    setFilteredBooks(filteredBooks);
-  };
+  console.log("SearchParam From AllBooks", selectedRating);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -210,7 +174,7 @@ const AllBooks = () => {
         handleAuthorChange={handleAuthorChange}
         selectedAuthors={selectedAuthors}
         searchParams={searchParams}
-        handleApplyFilters={handleApplyFilters}
+        // handleApplyFilters={handleApplyFilters}
         handleCategoryChange={handleCategoryChange}
         handlePublisherChange={handlePublisherChange}
         setDateRange={setDateRange}
@@ -314,7 +278,7 @@ const AllBooks = () => {
                 </PaginationItem>
               ))}
               <PaginationNext
-                className={`hover:cursor-pointer disabled:${page === totalPages && "text-gray-500"} `} 
+                className={`hover:cursor-pointer disabled:${page === totalPages && "text-gray-500"} `}
                 onClick={() => {
                   if (page !== totalPages) {
                     handlePageChange(page + 1);

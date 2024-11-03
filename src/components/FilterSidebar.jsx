@@ -17,7 +17,7 @@ import { Checkbox } from "./ui/checkbox";
 import BookSectionTitle from "./BookSectionTitle";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
-const ratingStar = [5, 4, 3, 2, 1];
+const ratingStar = [4, 3, 2, 1, 0];
 
 const FilterSidebar = ({
   categoriesName,
@@ -36,7 +36,6 @@ const FilterSidebar = ({
   setSelectedCategories,
   setSelectedAuthors,
   setSelectedPublishers,
-
   selectedPublishers,
   selectedAuthors,
   selectedCategories,
@@ -89,6 +88,7 @@ const FilterSidebar = ({
     setPriceRange,
     setSelectedRating,
   ]);
+
   if (authorError) {
     return (
       <div className="text-red-500">
@@ -96,7 +96,6 @@ const FilterSidebar = ({
       </div>
     );
   }
-  // Error handling for fetching categories
   if (categoryError) {
     return (
       <div className="text-red-500">
@@ -145,13 +144,13 @@ const FilterSidebar = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="grid grid-cols-2 gap-3">
-                  {AuthorData?.map((author) => (
-                    <div className="flex gap-2 text-left" key={author._id}>
+                  {AuthorData?.map((author, idx) => (
+                    <div className="flex gap-2 text-left" key={idx}>
                       <Checkbox
                         className="h-4 w-4 rounded shadow-none hover:bg-primary"
                         id={`authors-${author._id}`}
-                        checked={selectedAuthors.includes(author)}
-                        onCheckedChange={() => handleAuthorChange(author)}
+                        checked={selectedAuthors.includes(author.name)}
+                        onCheckedChange={() => handleAuthorChange(author.name)}
                       />
                       <p>{author.name}</p>
                     </div>
@@ -185,7 +184,6 @@ const FilterSidebar = ({
             </AccordionItem>
           </Accordion>
         </div>
-
         <div className="mb-3 pt-5">
           <h2 className="pb-3 text-sm font-medium text-primary-foreground hover:font-bold hover:no-underline">
             Ratings
@@ -206,7 +204,7 @@ const FilterSidebar = ({
                     <div className="flex flex-col gap-1">
                       <RatingStar rating={star} />
                       <span className="text-sm font-normal">
-                        {star - 1}.00 - 5.00
+                        {star}.00 - 5.00
                       </span>
                     </div>
                   </div>
