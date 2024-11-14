@@ -49,8 +49,8 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
         session?.user?.email,
         bookId
       );
-      setNewReviewText(reviewAndRatingData?.reviewText);
-      setSelectedRating(reviewAndRatingData?.rating);
+      setNewReviewText(reviewAndRatingData?.reviewText || "");
+      setSelectedRating(reviewAndRatingData?.rating || 0);
       return reviewAndRatingData;
     },
     enabled: !!session?.user?.email && !!bookId,
@@ -296,10 +296,10 @@ const ReviewSection = ({ bookId, rating, reviewCount }) => {
                     </div>
                   </div>
                   <div className="flex">
-                    {[...Array(review.rating)].map((_, i) => (
+                    {[...Array(review?.rating)].map((_, i) => (
                       <FaStar key={i} className="text-lg text-yellow-400" />
                     ))}
-                    {[...Array(5 - review.rating)].map((_, i) => (
+                    {[...Array(5 - review?.rating || 0)].map((_, i) => (
                       <FaStar key={i} className="text-lg text-gray-300" />
                     ))}
                   </div>
