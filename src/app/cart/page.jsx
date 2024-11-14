@@ -151,19 +151,24 @@ const Cart = () => {
                 <div className="flex items-center justify-between border-b border-dashed py-3">
                   <p>Subtotal</p>
                   <p className="text-sm font-semibold">
-                    ${subtotalPrice.toFixed(2)}
+                    $ {subtotalPrice.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex items-center justify-between border-b border-dashed py-3">
                   <p className="">Shipping</p>
-                  <p className="text-sm font-semibold">$5.00</p>
+                  <p className="text-sm font-semibold">
+                    $ {shippingFee.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex items-center justify-between border-dashed py-3">
                   <p className="">Total</p>
-                  <p className="text-sm font-semibold">${totalPrice}</p>
+                  <p className="text-sm font-semibold">$ {totalPrice}</p>
                 </div>
 
-                <Button asChild className="mt-4 flex w-full gap-2 font-semibold bg-primary">
+                <Button
+                  asChild
+                  className="mt-4 flex w-full gap-2 bg-primary font-semibold"
+                >
                   <Link href={"/checkout"}>
                     Checkout
                     <FaCircleArrowRight />
