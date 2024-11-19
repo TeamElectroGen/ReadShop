@@ -1,5 +1,6 @@
 "use client";
 import SocialLogin from "@/components/SocialLogin";
+import axios from "axios";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -34,6 +35,14 @@ const LoginContent = () => {
 
       if (res?.error) {
         if (res.error === "Please verify your email before logging in") {
+          if (!emailOrPhone.includes("@")) {
+            toast.error("Please enter your email address for verification");
+            setIsLoading(false);
+            return;
+          }
+          await axios.post("/api/resend-verification", {
+            email: emailOrPhone,
+          });
           window.location.href = `/email-verify?email=${emailOrPhone}`;
           return;
         }
