@@ -1,8 +1,8 @@
 import { connectDB } from "@/lib/connectDB";
+import { compare } from "bcrypt";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import bcrypt from "bcrypt";
 
 const handler = NextAuth({
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
@@ -17,26 +17,39 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials) {
-        const { emailOrPhone, password } = credentials;
-        if (!emailOrPhone || !password) {
-          return null;
+        try {
+          const { emailOrPhone, password } = credentials;
+          if (!emailOrPhone || !password) {
+            return null;
+          }
+          const db = await connectDB();
+
+          const user = await db.collection("users").findOne({
+            $or: [{ email: emailOrPhone }, { phone: emailOrPhone }],
+          });
+
+          if (!user) {
+            throw new Error("Invalid credentials");
+          }
+
+          if (!user.emailVerified) {
+            throw new Error("Please verify your email before logging in");
+          }
+
+          const isPasswordValid = await compare(password, user.password);
+          if (!isPasswordValid) {
+            throw new Error("Invalid credentials");
+          }
+
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (error) {
+          throw new Error(error.message);
         }
-        const db = await connectDB();
-        const currentUser = await db
-          .collection("users")
-          .findOne({ $or: [{ email: emailOrPhone }, { phone: emailOrPhone }] });
-        if (!currentUser) {
-          return null;
-        }
-        const passwordMatched = bcrypt.compareSync(
-          password,
-          currentUser.password
-        );
-        if (!passwordMatched) {
-          return null;
-        }
-        console.log(currentUser);
-        return currentUser;
       },
     }),
     GoogleProvider({
@@ -46,6 +59,7 @@ const handler = NextAuth({
   ],
   pages: {
     signIn: "/login",
+    error: "/login",
   },
   callbacks: {
     async signIn({ user, account }) {
@@ -63,7 +77,7 @@ const handler = NextAuth({
               role: "user",
               isActive: true,
               createdAt: new Date(),
-              isEmailVerified: true,
+              emailVerified: true,
               lastLogin: new Date(),
             });
             return user;
