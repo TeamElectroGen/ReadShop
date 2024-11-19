@@ -99,7 +99,8 @@ export default function EmailVerify() {
           </Link>
           <div className="mt-4 text-gray-500">
             <p>Didn&apos;t get e-mail?</p>
-            {searchParams.get("email") ? (
+            {searchParams.get("email") &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(searchParams.get("email")) ? (
               <button
                 onClick={handleResendEmail}
                 disabled={isResending}
