@@ -31,9 +31,13 @@ const LoginContent = () => {
         password,
         redirect: false,
       });
+
       if (res?.error) {
-        console.log(res.error);
-        toast.error("Invalid credentials");
+        if (res.error === "Please verify your email before logging in") {
+          window.location.href = `/email-verify?email=${emailOrPhone}`;
+          return;
+        }
+        toast.error(res.error || "Invalid credentials");
         setIsLoading(false);
       } else {
         window.location.href = path || "/";
