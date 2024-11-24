@@ -70,9 +70,7 @@ const Cart = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="hidden pl-4 sm:table-cell">
-                    PRODUCT
-                  </TableHead>
+                  <TableHead className="pl-4 sm:table-cell">PRODUCT</TableHead>
                   <TableHead>Price</TableHead>
                   <TableHead>Quantity</TableHead>
                   <TableHead>Subtotal</TableHead>
@@ -85,7 +83,7 @@ const Cart = () => {
               <TableBody>
                 {cart?.map((book, index) => (
                   <TableRow key={index}>
-                    <TableCell className="flex items-start gap-2 pl-4 font-medium">
+                    <TableCell className="flex min-w-[200px] items-start gap-2 pl-4 font-medium">
                       <Image
                         alt="Product image"
                         className="rounded-md border object-contain shadow-md"
