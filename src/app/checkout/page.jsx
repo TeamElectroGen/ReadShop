@@ -55,7 +55,7 @@ const Checkout = () => {
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [error, setError] = useState("");
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
   const shippingFee = 5;
   const subtotalPrice = cart.reduce(
@@ -123,26 +123,33 @@ const Checkout = () => {
   });
 
   const onSubmit = async (paymentIntent) => {
-    const bookIds = JSON.parse(localStorage.getItem("cart"));
+    try {
+      const bookIds = JSON.parse(localStorage.getItem("cart"));
 
-    const paymentInfo = {
-      ...form.watch(),
-      userId,
-      bookIds,
-      subtotalPrice: subtotalPrice.toFixed(2),
-      shippingFee,
-      couponDetails,
-      totalPrice,
-      payTime: new Date(),
-      status: "pending",
-      txnId: paymentIntent.id,
-    };
-    console.log(paymentInfo);
-    const res = await postPaymentData(paymentInfo);
+      const paymentInfo = {
+        ...form.watch(),
+        userId,
+        bookIds,
+        subtotalPrice: subtotalPrice.toFixed(2),
+        shippingFee,
+        couponDetails,
+        totalPrice,
+        payTime: new Date(),
+        status: "pending",
+        txnId: paymentIntent.id,
+      };
+      console.log(paymentInfo);
+      const res = await postPaymentData(paymentInfo);
 
-    if (res.insertedId) {
-      localStorage.removeItem("cart");
-      window.location.href = `/checkout/success/${paymentInfo.txnId}`;
+      if (res.insertedId) {
+        localStorage.removeItem("cart");
+        window.location.href = `/checkout/success/${paymentInfo.txnId}`;
+        setIsPaymentLoading(false);
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      setIsPaymentLoading(false);
+      toast.error("Payment failed. Please try again.");
     }
   };
 
@@ -176,6 +183,8 @@ const Checkout = () => {
                 form={form}
                 totalPrice={totalPrice}
                 onSubmit={onSubmit}
+                isPaymentLoading={isPaymentLoading}
+                setIsPaymentLoading={setIsPaymentLoading}
               />
             </div>
             {/* summary card */}

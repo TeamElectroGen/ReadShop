@@ -19,7 +19,7 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
 
-const ShippingInfoForm = ({ form, totalPrice, onSubmit }) => {
+const ShippingInfoForm = ({ form, totalPrice, onSubmit, isPaymentLoading, setIsPaymentLoading }) => {
   return (
     <Form {...form}>
       <form className="space-y-5">
@@ -157,7 +157,9 @@ const ShippingInfoForm = ({ form, totalPrice, onSubmit }) => {
             <CheckoutForm
               totalPrice={totalPrice}
               onSubmit={onSubmit}
-            ></CheckoutForm>
+              isLoading={isPaymentLoading}
+              setIsLoading={setIsPaymentLoading}
+            />
           </Elements>
         </div>
       </Card>
