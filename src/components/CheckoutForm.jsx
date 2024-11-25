@@ -3,15 +3,13 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 import { CgSpinner } from "react-icons/cg";
 import { Button } from "./ui/button";
 import { CardFooter } from "./ui/card";
 
-const CheckoutForm = ({ totalPrice, onSubmit }) => {
+const CheckoutForm = ({ totalPrice, onSubmit, isLoading, setIsLoading }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [loading, setLoading] = useState(false);
   const { data: session } = useSession() || {};
 
   // get clientSecret from server
@@ -38,15 +36,14 @@ const CheckoutForm = ({ totalPrice, onSubmit }) => {
     if (!card) {
       return;
     }
-
-    setLoading(true);
+    setIsLoading(true);
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
 
     if (error) {
-      setLoading(false);
+      setIsLoading(false);
       console.log("error", error);
       return;
     } else {
@@ -67,12 +64,11 @@ const CheckoutForm = ({ totalPrice, onSubmit }) => {
     );
 
     if (cardError) {
-      setLoading(false);
+      setIsLoading(false);
       console.log("cardError", cardError);
     } else {
       console.log("payment intent", paymentIntent);
       if (paymentIntent.status === "succeeded") {
-        setLoading(false);
         onSubmit(paymentIntent);
       }
     }
@@ -101,10 +97,10 @@ const CheckoutForm = ({ totalPrice, onSubmit }) => {
         <CardFooter className="flex justify-end">
           <Button
             type="submit"
-            disabled={!stripe || !clientSecret || loading || !session?.user}
+            disabled={!stripe || !clientSecret || isLoading || !session?.user}
             className="mt-4 font-semibold"
           >
-            {loading ? (
+            {isLoading ? (
               <CgSpinner className="w-8 animate-spin text-xl" />
             ) : (
               `Confirm Order $${totalPrice}`
