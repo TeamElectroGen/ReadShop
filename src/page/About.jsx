@@ -74,7 +74,7 @@ const About = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         </header>
         {/*  pb-12  lg:pb-[90px]  */}
-        <section className="dark:bg-dark pt-20lg:pt-[120px] overflow-hidden">
+        <section className="dark:bg-dark overflow-hidden pt-20 lg:pt-[120px]">
           <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full px-4 lg:w-6/12">
