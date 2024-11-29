@@ -1,8 +1,50 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { FaAward, FaBook, FaHandshake, FaUsers } from "react-icons/fa";
 
 const About = () => {
+  // eslint-disable-next-line no-unused-vars
+  const stats = [
+    {
+      icon: <FaBook className="h-6 w-6" />,
+      number: "50,000+",
+      title: "Books Available",
+    },
+    {
+      icon: <FaUsers className="h-6 w-6" />,
+      number: "100,000+",
+      title: "Active Readers",
+    },
+    {
+      icon: <FaAward className="h-6 w-6" />,
+      number: "15+",
+      title: "Years Experience",
+    },
+    {
+      icon: <FaHandshake className="h-6 w-6" />,
+      number: "500+",
+      title: "Publisher Partners",
+    },
+  ];
+
+  const values = [
+    {
+      title: "Curated Selection",
+      description:
+        "Every book in our collection is carefully chosen to ensure quality and relevance.",
+    },
+    {
+      title: "Reader-First Approach",
+      description:
+        "We prioritize our readers' experience and continuously improve based on feedback.",
+    },
+    {
+      title: "Literary Community",
+      description:
+        "Join a vibrant community of book lovers, share recommendations, and discover new reads.",
+    },
+  ];
+
   return (
     <section>
       <div className="container mx-auto px-4 2xl:px-36">
@@ -31,8 +73,8 @@ const About = () => {
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         </header>
-
-        <section className="dark:bg-dark overflow-hidden pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]">
+        {/*  pb-12  lg:pb-[90px]  */}
+        <section className="dark:bg-dark pt-20lg:pt-[120px] overflow-hidden">
           <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full px-4 lg:w-6/12">
@@ -672,89 +714,52 @@ const About = () => {
           </div>
         </section>
 
-        {/* team here */}
-        {/* <section className="bg-white py-12">
-          <div className="container mx-auto text-center">
-            <h2 className="mb-8 text-3xl font-bold">
-              Our Professional <span className="text-blue-600">Members</span>
-            </h2>
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-              <div className="transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                <Image
-                  src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Rayna Torff"
-                  className="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
-                  width={100}
-                  height={100}
-                />
-                <h3 className="text-lg font-semibold text-white">Ayuib Ali</h3>
-                <p className="text-sm text-gray-400">Lead, Design Systems</p>
-                <a
-                  href="#"
-                  className="mt-4 inline-block text-sm font-medium text-blue-400 hover:text-blue-500 hover:underline"
-                >
-                  Read more &rarr;
-                </a>
-              </div>
-
-              <div className="mt-8 transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                <Image
-                  src="https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Gustavo Workman"
-                  className="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
-                  width={100}
-                  height={100}
-                />
-                <h3 className="text-lg font-semibold text-white">Abdullah</h3>
-                <p className="text-sm text-gray-400">Head, Product Design</p>
-                <a
-                  href="#"
-                  className="mt-4 inline-block text-sm font-medium text-blue-400 hover:text-blue-500 hover:underline"
-                >
-                  Read more &rarr;
-                </a>
-              </div>
-
-              <div className="transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                <Image
-                  src="	https://images.pexels.com/photos/1212984/pexels-photo-1212984.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Marcus Dorwart"
-                  className="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
-                  width={100}
-                  height={100}
-                />
-                <h3 className="text-lg font-semibold text-white">Nazrul</h3>
-                <p className="text-sm text-gray-400">VP, Operations</p>
-                <a
-                  href="#"
-                  className="mt-4 inline-block text-sm font-medium text-blue-400 hover:text-blue-500 hover:underline"
-                >
-                  Read more &rarr;
-                </a>
-              </div>
-
-              <div className="mt-12 transform rounded-2xl bg-[#4B5563] p-6 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                <Image
-                  src="	https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Casy Camilari Marx"
-                  className="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
-                  width={100}
-                  height={100}
-                />
-                <h3 className="text-lg font-semibold text-white">albab ibne</h3>
-                <p className="text-sm text-gray-400">
-                  Digital Marketing Director
-                </p>
-                <a
-                  href="#"
-                  className="mt-4 inline-block text-sm font-medium text-blue-400 hover:text-blue-500 hover:underline"
-                >
-                  Read more &rarr;
-                </a>
-              </div>
+        {/* Add Statistics Section */}
+        {/* <div className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                    {stat.icon}
+                  </div>
+                  <h3 className="text-3xl font-bold text-gray-900">{stat.number}</h3>
+                  <p className="text-sm text-gray-600">{stat.title}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </section> */}
+        </div> */}
+
+        {/* Add Mission Section */}
+        <div className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="mb-8 text-3xl font-bold text-gray-900">
+                Our Mission
+              </h2>
+              <p className="mb-12 text-lg text-gray-600">
+                At ReadShop, we&apos;re dedicated to making quality literature
+                accessible to everyone. We believe that books have the power to
+                transform lives, spark imagination, and foster understanding
+                across cultures.
+              </p>
+            </div>
+            <div className="grid gap-8 md:grid-cols-3">
+              {values.map((value, index) => (
+                <div
+                  key={index}
+                  className="rounded-lg bg-gray-50 p-6 text-center shadow-sm transition-transform duration-300 hover:scale-105"
+                >
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600">{value.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
