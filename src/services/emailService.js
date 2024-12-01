@@ -44,3 +44,40 @@ export const sendVerificationEmail = async (email, verificationToken) => {
     throw error;
   }
 };
+
+export const sendPasswordResetEmail = async (email, resetToken) => {
+  try {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Reset Your Password - ReadShop",
+      html: `
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
+          <h1 style="color: #2563eb; text-align: center;">Password Reset</h1>
+          <p style="font-size: 16px; line-height: 1.5; color: #374151;">
+            You requested to reset your password. Click the button below to create a new password:
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${resetToken}&email=${email}"
+              style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+              Reset Password
+            </a>
+          </div>
+          <p style="font-size: 14px; color: #6b7280; text-align: center;">
+            If you didn't request this, please ignore this email.
+          </p>
+          <p style="font-size: 14px; color: #6b7280; text-align: center;">
+            This link will expire in 1 hour.
+          </p>
+        </div>
+      `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Reset email sent:", info.messageId);
+    return info;
+  } catch (error) {
+    console.error("Failed to send reset email:", error);
+    throw error;
+  }
+};

@@ -96,13 +96,12 @@ const LoginContent = () => {
                 <label className="text-base font-medium text-gray-900">
                   Password
                 </label>
-                <a
+                <Link
+                  href="/forgot-password"
                   className="text-sm font-semibold text-black hover:underline"
-                  title=""
-                  href="#"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
               <div className="mt-2">
                 <input
