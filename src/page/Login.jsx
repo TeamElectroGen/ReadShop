@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CgSpinnerTwo } from "react-icons/cg";
 
@@ -19,13 +20,15 @@ const Login = () => {
 const LoginContent = () => {
   const path = useSearchParams().get("redirect");
   const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setIsLoading(true);
-    const form = e.target;
-    const emailOrPhone = form.emailOrPhone.value;
-    const password = form.password.value;
+    const { emailOrPhone, password } = data;
     try {
       const res = await signIn("credentials", {
         emailOrPhone,
@@ -72,7 +75,7 @@ const LoginContent = () => {
             Sign up
           </Link>
         </p>
-        <form onSubmit={handleSubmit} className="mt-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
           <div className="space-y-5">
             {/*Email or phone*/}
             <div>
@@ -80,13 +83,15 @@ const LoginContent = () => {
                 Email Or Phone
               </label>
               <div className="mt-2">
-                {/* TODO: REGEX like for email type and phone type and others if needed */}
                 <input
                   placeholder="Enter Email or Phone Number"
                   type="text"
-                  name="emailOrPhone"
+                  {...register("emailOrPhone", { required: true })}
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                 />
+                {errors.emailOrPhone && (
+                  <span className="text-red-500">This field is required</span>
+                )}
               </div>
             </div>
 
@@ -107,9 +112,12 @@ const LoginContent = () => {
                 <input
                   placeholder="Enter Password"
                   type="password"
-                  name="password"
+                  {...register("password", { required: true })}
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                 />
+                {errors.password && (
+                  <span className="text-red-500">This field is required</span>
+                )}
               </div>
             </div>
 
