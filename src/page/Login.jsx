@@ -22,6 +22,7 @@ const LoginContent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm();
@@ -102,7 +103,13 @@ const LoginContent = () => {
                   Password
                 </label>
                 <Link
-                  href="/forgot-password"
+                  href={
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                      watch("emailOrPhone") || ""
+                    )
+                      ? `/forgot-password?email=${watch("emailOrPhone")}`
+                      : `/forgot-password`
+                  }
                   className="text-sm font-semibold text-black hover:underline"
                 >
                   Forgot password?
