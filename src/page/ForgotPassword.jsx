@@ -1,9 +1,10 @@
 "use client";
+import axios from "axios";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CgSpinnerTwo } from "react-icons/cg";
-import axios from "axios";
 
 const ForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,13 +14,16 @@ const ForgotPassword = () => {
     formState: { errors },
   } = useForm();
 
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
       const res = await axios.post("/api/forgot-password", {
         email: data.email,
       });
-      
+
       if (res.data.status === 200) {
         toast.success("Password reset link sent to your email!");
       } else {
@@ -39,14 +43,18 @@ const ForgotPassword = () => {
           Reset Your Password
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Enter your email address and we&apos;ll send you a link to reset your password
+          Enter your email address and we&apos;ll send you a link to reset your
+          password
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
           <div className="space-y-5">
             <div>
-              <label className="text-base font-medium text-gray-900">Email</label>
+              <label className="text-base font-medium text-gray-900">
+                Email
+              </label>
               <div className="mt-2">
                 <input
+                  defaultValue={email || ""}
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -83,4 +91,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword; 
+export default ForgotPassword;
